@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Borel σ-algebra | I’ll write blogs related to what I am currenlty learning.</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Borel σ-algebra" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="I’ll write blogs related to what I am currenlty learning." />
+<meta property="og:description" content="I’ll write blogs related to what I am currenlty learning." />
+<link rel="canonical" href="http://localhost:4000/gaussian_samples/" />
+<meta property="og:url" content="http://localhost:4000/gaussian_samples/" />
+<meta property="og:site_name" content="Borel σ-algebra" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Borel σ-algebra" />
+<script type="application/ld+json">
+{"@type":"WebPage","headline":"Borel σ-algebra","url":"http://localhost:4000/gaussian_samples/","description":"I’ll write blogs related to what I am currenlty learning.","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Borel σ-algebra" /></head>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Borel σ-algebra</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About me</a><a class="page-link" href="/contact/">Contact</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <p><strong>Abstract:</strong></p>
+
+<p>In this tutorial blog, we’ll prove the correctness of the method animated above in a general setting. Elaborate on how we can use it to sample from the multi-variate Gaussian (MVN). Finally, we will discuss a practical approach and illustrate it with some code snippets from the Scipy and Numpy.</p>
+
+<p><strong>Outline:</strong></p>
+
+<ol>
+  <li><a href="#1">Correctness: The transformation Law</a>
+    <ol>
+      <li><a href="#11">Generating the exponential law from the uniform distribution</a></li>
+    </ol>
+  </li>
+  <li><a href="#2">MVN case: Normal x Normal = Normal</a></li>
+  <li><a href="#3">Practical implementation:</a>
+    <ol>
+      <li><a href="#31">Cholsky decomposition</a></li>
+      <li><a href="#32">Open Source</a></li>
+    </ol>
+  </li>
+</ol>
+
+<hr />
+<h3 id="1-correctness-">**1. Correctness **<a name="1"></a></h3>
+
+<p>Put in simple terms, if \(F_N^{-1}\) is the reverse of the CDF \(F_N\) of the standard normal distribution and \(U\) is a uniformely distributed RV on the interval \([0,1]\). The animation above claims that \(F_N^{-1}(U)\) is normally distributed.</p>
+
+<p><strong>Proof:</strong></p>
+
+<p>Let’s define a new RV  \(Y = F_N^{-1}(U)\) . We need to prove that \(Y = N(0,1)\)</p>
+
+\[\begin{align*}
+   F_Y(y) &amp;= P(Y&lt;y) \\
+&amp;= P(F_N^{-1}(U) &lt; y) \\
+&amp;= P(U &lt; F_N(y)) \\
+&amp;= F_N(y)
+\end{align*}\]
+
+<p>Where the third equality follows from the fact that \(F_N^{-1}\) is strictly increasing on the range \([0,1]\)</p>
+
+<p>Note:  This actually is a simple version of the transformation law, i.e., when \(Y = g(X)\) s.t \(g\) is strictly monotonic and differentiallable  on the range of \(X\)  , we can simply prove the following \(F_Y(y)  = f_X(g^{-1}(y)) \abs{\frac{d g^{-1} }{dy}(y)}\)</p>
+
+\[\abs{x}\]
+
+<h4 id="11-example-the-exponential-law-"><strong>1.1. Example: The exponential law:</strong> <a name="11"></a></h4>
+<p>This example is very recurrent, mainly because we can simply compute the CDF \(F_{Exp}\) and its inverse \(F_{Exp}^{-1}\)</p>
+
+<p>Samples could be generated easily using the following approach:
+So for the exponential case, \(F_X(x) = 1- e^{-\lambda x}\)  , we can easily derive the inverse and get \(F_X^{-1}=\) and now, \(X = F_X^{-1}(U)\) is definitely going to be distributed as an exponential distribution.</p>
+
+<hr />
+<h3 id="2-multi-variate-case"><strong>2. Multi-variate case:</strong><a name="2"></a></h3>
+
+<p><strong>Fancy Gaussian Features:</strong></p>
+
+<p>The Gaussian distribution is known for many features. The “fanciest” ones to cite Including being the distribution that maximises the entropy for a given mean and variance, and namely how it weirdly appears in many asymptotic behaviours of the sums of i.i.d  RVs.</p>
+
+<p><strong>Practical (and real) reasons:</strong></p>
+
+<p>The key reason why we keep using the normal distribution is its very convenient mathematical properties, including:</p>
+
+<ul>
+  <li>An affine transformation of a Gaussian distribution is still Gaussian</li>
+  <li>Product of many Gaussian is Gaussian</li>
+  <li>Sub-sample of Gaussian is Gaussian</li>
+  <li>Conditional Gaussian are Gaussian …</li>
+</ul>
+
+<p><strong>Sampling from \(N(0_{R^{N}},I_N)\)  :</strong></p>
+
+<p>The product property let us conclude that sampling \(N\) one-dimensional  \(X_i ~ N(0,1)\) is actually th same as sampling  an \(N\)-dimensional RV \(X = [X_1, .., X_N] ~ N(0_{R^{N}},I_N)\)</p>
+
+<p>**Sampling from \(N(Nu,Sigma)\) **</p>
+
+<hr />
+<h3 id="3-practical-implementation-"><strong>3. Practical implementation:</strong> <a name="3"></a></h3>
+
+<h4 id="31-the-cholseky-decomposition-"><strong>3.1. The Cholseky decomposition:</strong> <a name="31"></a></h4>
+<p>One of the most famous decompositions in linear algbra is the Cholsky decompostion. In fact it is one of the most useful techniques in ML practice. Not only is it used for sam</p>
+
+<p>The cholsky decompostion of a matrxi should be thought intuitively as the square root of a matrix</p>
+
+<p>By the way, I’ll devote a tutorial blog for the Cholsky decomposition and dive deeper in the theory and application of it. You can find it here when It’s done:</p>
+
+<h4 id="32-illustration-from-scipy-and-numpy"><strong>3.2. Illustration from Scipy and Numpy:</strong><a name="32"></a></h4>
+
+<hr />
+
+<p><strong>Some useful resources:</strong></p>
+
+<ul>
+  <li>Some serious</li>
+  <li>Philthinglip Hennig leklek erkejr</li>
+  <li>Nando de Freitas course on</li>
+</ul>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+  <div class="wrapper">
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+              Borel σ-algebra
+          </li>
+        </ul>
+      </div>
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/a17benayad"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">a17benayad</span></a></li><li><a href="https://www.twitter.com/a17benayad"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">a17benayad</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>I&#39;ll write blogs related to what I am currenlty learning. </p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+</body>
+
+</html>
