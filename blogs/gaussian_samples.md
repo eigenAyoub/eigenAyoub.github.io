@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title:
 permalink: /blogs/gaussian_samples/
 ---
