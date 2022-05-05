@@ -1,0 +1,108 @@
+I"H<p>Exact inference algorithms are mainly split into two categories, variational methods and sampling based methods. In this blog, I’ll dive into the latter (and OG) part. I’ll be mainly using Bishop (Chapter 11) and Mackay (Chapter 29), and try to focus more on the intuitive side.</p>
+
+<h2 id="content">Content:</h2>
+<ol>
+  <li><a href="#sampling-an-introduction">Sampling: An introduction</a></li>
+  <li><a href="#simple-techniques">Simple techniques</a></li>
+  <li><a href="#monte-carlo">Monte Carlo</a></li>
+  <li><a href="#monte-carlo-markov-chain">Monte Carlo Markov Chain</a></li>
+  <li><a href="#miscellaneous">Miscellaneous</a></li>
+  <li><a href="#references">References</a></li>
+</ol>
+
+<h2 id="sampling-an-introduction">Sampling: An introduction</h2>
+
+<p>Sampling and simulation based methods are key to many scientific advances that occured in the 20th century, including some unfortunate events (<a href="https://en.wikipedia.org/wiki/Monte_Carlo_method#History">History</a>, <a href="https://en.wikipedia.org/wiki/Manhattan_Project">Manhatten Project</a>). Let’s jump to the heart of it.</p>
+
+<p>Without a doubt, the most used sentences in every bayesian stats textbook or paper are:</p>
+<div style="text-align: center;">
+  It's good BUT it's <b>intractable</b> and ineficient to compute the evidence. <br />
+  The <b>integral</b>, is... hard to compute.  <br />
+</div>
+
+<p>Fortunetely, MC methods are one possbile way out.</p>
+
+<p><strong>Problem setting and key idea:</strong></p>
+
+<p>$ P = $</p>
+
+<p>We want:</p>
+<ul>
+  <li>Genrate samples <em>\(\{x_{r}\}\)</em>
+    <ul>
+      <li>Usual problem: We don’t have access to P, but we can evaluate it efficiently.</li>
+      <li>Why is it relevant:
+        <ul>
+          <li>Aspect 1</li>
+          <li>Aspect 2</li>
+          <li>Aspect 3</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Compute the \(E = 1\),  usually in ML, It is a nasty (Like how Mackay used to say) Posterior distibution.
+    <ul>
+      <li>For instance, the famous DQN objective in Reifocement Learning:
+        <ul>
+          <li>\(E\) , from the famous Mnih et al</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Why is sampling hard?</strong></p>
+
+<p><strong>Correctness: Law of Large numbers</strong></p>
+
+<h2 id="simple-techniques">Simple techniques</h2>
+
+<ul>
+  <li>
+    <p>Transformation of variables:</p>
+  </li>
+  <li>
+    <p>Inverse CDF</p>
+  </li>
+  <li>
+    <p>Fancy transformations: Normalizing Flows</p>
+  </li>
+</ul>
+
+<h2 id="monte-carlo">Monte Carlo</h2>
+
+<p>Rejection sampling and Importance sampling</p>
+
+<h2 id="monte-carlo-markov-chain">Monte Carlo Markov Chain</h2>
+
+<p>Markov Chain:</p>
+
+<p>Ergodocity:</p>
+
+<p>Run it long enough, you’ll eventually get a point that comes from P ?</p>
+
+<p>Theorem:
+if X_0, X_1, .. in an irreducible, time-homogeneous, discret Markov Chain with a stationary distribution pi, then:</p>
+
+<p>In other words, we could use the state that the Markov Chain converges as a sample of pi! Let it sink in.</p>
+
+<h2 id="misc">Misc</h2>
+
+<p>Application:</p>
+<ul>
+  <li>RL methods?</li>
+  <li>Inverse methods?</li>
+</ul>
+
+<h2 id="references">References</h2>
+
+<ul>
+  <li>Mackay (), Chapter 29</li>
+  <li>Bishop (2006), Chapter 6</li>
+  <li>
+    <p>Normalizing Flows</p>
+  </li>
+  <li>Mackay course on Youtube, Lecture 12 and 13</li>
+  <li>Phillip Hennig course, Lecture 3 and 4</li>
+</ul>
+:ET

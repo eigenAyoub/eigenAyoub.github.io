@@ -45,13 +45,17 @@ $$\begin{align*}
 
 
 
+
+
 Where the third equality follows from the fact that $$F_N^{-1}$$ is strictly increasing on the range $$[0,1]$$
 
 Since the CDF completely determines a distribution, we conclude that $$Y$$ is equal to $$N$$, which completes our proof.
 
 
+# Anything below is TO-DO:
 
-Note:  This actually is a simple version of the transformation law, i.e., when $$ Y = g(X)$$ s.t $$g$$ is strictly monotonic and differentiallable  on the range of $$X$$  , we can prove the following $$F_Y(y)  = f_X(g^{-1}(y)) \abs{\frac{d g^{-1} }{dy}(y)}  $$ 
+
+Note:  This actually is a simple version of the transformation law, i.e., when $$ Y = g(X)$$ s.t $$g$$ is strictly monotonic and differentiallable  on the range of $$X$$  , we can prove the following $$F_Y(y)  = f_X(g^{-1}(y)) |\frac{d g^{-1} }{dy} (y)| $$ 
 
 In this case, $$X$$ is the uniform distribution and $$g$$ is the inverse CDF of the normal distribution.
 
@@ -100,9 +104,8 @@ The product property let us conclude that sampling $$N$$ one-dimensional  $$ X_i
 #### **3.1. The Cholseky decomposition:** <a name="31"></a>
 One of the most famous decompositions in linear algbra is the Cholsky decompostion. In fact it is one of the most useful techniques in ML practice. Not only is it used for sam
 
-The cholsky decompostion of a matrxi should be thought intuitively as the square root of a matrix
+The cholsky decompostion of a matrix should be thought of intuitively as the square root of a matrix.
 
-By the way, I'll devote a tutorial blog for the Cholsky decomposition and dive deeper in the theory and application of it. You can find it here when It's done: 
 
 #### **3.2. Illustration from Scipy and Numpy:**<a name="32"></a>
 
@@ -113,8 +116,4 @@ By the way, I'll devote a tutorial blog for the Cholsky decomposition and dive d
 ---
 
 **Some useful resources:**
-
-* Some serious
-* Philthinglip Hennig leklek erkejr
-* Nando de Freitas course on
 

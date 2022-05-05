@@ -1,0 +1,56 @@
+I""<h1 id="quick--practical-latex-development">Quick &amp; Practical Latex Development:</h1>
+
+<p>Latex had always halted my progress/productivity in the past. As I’m 
+maintaining a healthy relationship with it now, I’ll try to collect some tips&amp;tricks that could help you avoid some bottlenecks and quickly get you to the point.</p>
+
+<h2 id="contents">Contents:</h2>
+<ul>
+  <li><a href="#minimal-settings">Minimal settings</a> Minimal configs, scripts to run and compile latex.</li>
+  <li><a href="#abbreviations">Abbreviations</a></li>
+  <li><a href="#vim">VIM</a> My vimrc, snippets and configs for Latex</li>
+  <li><a href="#misc">Misc</a></li>
+  <li><a href="#references">References</a></li>
+</ul>
+
+<h2 id="minimal-settings">Minimal settings:</h2>
+
+<p>A minimal document:</p>
+
+<p>Command line to run:</p>
+
+<p>Wait, I dont want those .ps, .this .that files post-compilation:</p>
+
+<p>Wait, I want this and that : 
+	Enough, You need a Makefile</p>
+
+<h2 id="makefile">Makefile:</h2>
+
+<h2 id="abbreviations">Abbreviations:</h2>
+
+<p>Abbreviations are crutial in ..</p>
+
+<p>Here you can find</p>
+
+<p>Also, this is .sty used by Sutton &amp; Barto. In case you were into Reinforcement Learning. Hopefully you are.</p>
+
+<p>How to add them to your makefile:</p>
+
+<h2 id="vim">VIM:</h2>
+
+<h2 id="misc">Misc:</h2>
+
+<p>One very underated skill that I have found useful is to increase my typing speed, I went from 30 wpm (yes, I was awful), to approx. 60wpm. This was really a game-changer. I recommend using <a href="https://www.keybr.com/">keybr</a>, a random words generator that calibrates each letter apart.</p>
+
+<h2 id="references">References:</h2>
+<ul>
+  <li>Coolest blog in the {VIM+LATEX} business: <a href="https://castel.dev/post/lecture-notes-1/">https Link</a></li>
+  <li>Tutorial on makefiles »</li>
+  <li>
+    <p>latex for .. book</p>
+  </li>
+  <li>Good blog on makefiles: https://scaron.info/blog/makefiles-for-latex.html</li>
+</ul>
+
+<p>Dont addd this but check it out » https://web.ma.utexas.edu/users/vandyke/notes/getting_started_latex_vim/getting_started.pdf</p>
+
+:ET

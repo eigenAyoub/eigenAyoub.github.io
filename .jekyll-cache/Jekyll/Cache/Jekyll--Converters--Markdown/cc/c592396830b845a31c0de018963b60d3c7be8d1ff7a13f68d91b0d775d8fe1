@@ -1,0 +1,50 @@
+I"E<p align="center">
+
+  <img src="src/GAUSSIAN.gif" alt="Gaussian" style="width: 600px" />
+  <br /><b>Figure 1:</b> 1D Gaussian samples from pseudo-random samples 
+  (<a href="https://github.com/3b1b/manim/">Created with Manim</a>)
+
+</p>
+
+<p>A few - out of context - equations to fight your boredome:</p>
+
+<ul>
+  <li>
+\[\nabla_\phi \mathbb{E}_{q(\mathbf{z}|\phi)}\left[ f(\mathbf{z}) \right] ~=~ \mathbb{E}_{q(\mathbf{z}|\phi)}\,[ f(\mathbf{z})\, \nabla_{q(\mathbf{z}|\phi)} \log q(\mathbf{z}|\phi) ] \hspace{41mm}(1)\]
+  </li>
+  <li>
+\[\nabla_\phi \mathbb{E}_{q(\mathbf{z}|\phi)}\left[ f(\mathbf{z}) \right] ~=~ \mathbb{E}_{q(\mathbf{z}|\phi)}\,[ f(\mathbf{z})\, \nabla_{q(\mathbf{z}|\phi)} \log q(\mathbf{z}|\phi) ] \hspace{41mm}(1)\]
+  </li>
+  <li>$$ X ##</li>
+</ul>
+
+<h3 id="blogs">Blogs:</h3>
+
+<ul>
+  <li>Gaussian Sampling and more. Expected publication date: 07/05/2022
+    <ul>
+      <li>Link: <a href="/blogs/gaussian_samples">Gaussian</a></li>
+    </ul>
+  </li>
+  <li>Matrix calculus, tricks to sav the day:
+    <ul>
+      <li>Link: <a href="/blogs/matrix_wow">Matrix-WoW</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="technical">Technical:</h3>
+<ul>
+  <li>Speed up your latex dev.  Expected publication date: 10/05/2022
+    <ul>
+      <li>Lin »</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="news">News:</h3>
+<ul>
+  <li>Nothing to show yet.</li>
+</ul>
+
+:ET

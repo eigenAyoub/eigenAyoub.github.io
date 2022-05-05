@@ -18,20 +18,22 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Borel σ-algebra
+title: Not uniform, at all.
 email: 
 description: >- # this means to ignore newlines until "baseurl:"
-  I'll write blogs related to what I am currenlty learning. 
+  What You See Is What You Get!
 baseurl: "" 
 url: "" 
-twitter_username: a17benayad
-github_username:  a17benayad
+twitter_username: eigenAyoub
+github_username:  eigenAyoub
 
 # Build settings
 theme: minima
 plugins:
   - jekyll-feed
 markdown: kramdown
+
+
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to
