@@ -4,7 +4,7 @@ title:
 permalink: /blogs/enter_the_matrix/
 ---
 
-# Matrix differential Calculus
+## Abstract
 
 Matrix manipulation is a crucial skill in modern ML practices. In this blog I'll collect some of the most known transformations/operations that I have encountered and used.
 
