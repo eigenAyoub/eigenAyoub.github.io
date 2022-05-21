@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Not uniform, at all. | What You See Is What You Get!</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Not uniform, at all." />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="What You See Is What You Get!" />
+<meta property="og:description" content="What You See Is What You Get!" />
+<link rel="canonical" href="http://localhost:4000/blogs/SGD/" />
+<meta property="og:url" content="http://localhost:4000/blogs/SGD/" />
+<meta property="og:site_name" content="Not uniform, at all." />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Not uniform, at all." />
+<script type="application/ld+json">
+{"@type":"WebPage","headline":"Not uniform, at all.","url":"http://localhost:4000/blogs/SGD/","description":"What You See Is What You Get!","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Not uniform, at all." /></head>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Not uniform, at all.</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About me</a><a class="page-link" href="/contact/">Contact</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <p>Is this blog post, I will prove some results regarding the convergence of Stochastic Gradient Descent (SGD) in both non-convex and convex case, assuming an \(L\)-smooth \(\nabla f\).</p>
+
+<p>This was inspired by my personal work for the CMU course “Convex Optimization”, taught by Ryan Tibshirani (<a href="https://www.stat.cmu.edu/~ryantibs/convexopt-F16/">link to course</a>). Besides, the techniques presented here are pretty much textbook and present in every introductory course.</p>
+
+<h2 id="contents">Contents</h2>
+<ul>
+  <li><a href="#problem-setting">Problem Setting</a></li>
+  <li><a href="#nonconvex-case">Non convex case</a></li>
+  <li><a href="#convex-case">Convex case</a></li>
+</ul>
+
+<hr />
+<h2 id="problem-setting">Problem setting:</h2>
+
+<p>The goal is to minimize a differentiable function \(f\) with
+\(\mathrm{dom}(f)=\mathbb{R}^n\), with an \(L\)-Lipschitz continuous gradient, i.e., for \(L&gt;0\):</p>
+
+\[\| \nabla f(x) - \nabla f(y)\|_2 \leq L \|x - y\|_2, \;\;\; \text{for all $x,y$}.\]
+
+<p>Using the followig iterative procedure: starting from a point \(x^{(0)}\), with each \(t_k \leq 1/L\) :</p>
+
+\[x^{(k)} = x^{(k-1)} - t_k \cdot \nabla f(x^{(k-1)}), \;\;\;
+k=1,2,3,\ldots,\]
+
+<p>Generically written as follows: \(x^+ = x - t \nabla f(x)\), where \(t \leq 1/L\).</p>
+
+<hr />
+<h2 id="nonconvex-case">Nonconvex case:</h2>
+
+<p>In this section, we will not assume that \(f\) is convex. We will show that the gradient descent reaches a point \(x\), such that \(\|\nabla f(x)\|_2 \leq \epsilon\), in \(O(1/\epsilon^2)\) iterations.</p>
+
+<blockquote>
+  <p><strong>Show that:</strong> \(\, \, \,\,\, f(x^+) \leq f(x) - \Big(1-\frac{Lt}{2} \Big) t \|\nabla f(x)\|_2^2\)</p>
+</blockquote>
+
+<p><span style="font-size:20px;">▶</span> <strong>Proof:</strong></p>
+
+<p>At first, we prove this “101” property of \(L\)-lipschitz functions:</p>
+
+\[\forall x,y \in \mathbb{R}^n \;\; f(y) \leq f(x) + \nabla f(x)^\intercal (y-x)  + \frac{1}{L} \|x-y\|^2 \;\;\;\;\;\;\textbf{(1)}\]
+
+<p>Let \(x,y\) be in \(\mathbb{R}^n\), Let’s define the function \(g_{x,y}: \mathbb{R} \rightarrow \mathbb{R}\) (we’ll ommit the subscripts for simplicity) as \(g(t)=f(t x+(1-t) y)\).
+The function \(g\) always appears in mysterious places, this is definitely one of them.</p>
+
+<p>Some results regarding the function \(g\):</p>
+<ul>
+  <li>\(g(0)=f(y)\) and \(g(1)=f(x)\)</li>
+  <li>Using the chain rule we get: \(g'(t) = \nabla f(tx +(1-t)y) ^\intercal (x-y)\)</li>
+  <li>Using the past line, we get: \(f(y)-f(x) = g(0) - g(1) = \int_1^0 \! g'(t) \mathrm{d}t\)</li>
+</ul>
+
+<p>Building on the last property:</p>
+
+\[\begin{align*}
+f(y)-f(x) &amp;= \int_1^0 \! g'(t) \, \mathrm{d}t \\
+&amp;= \int_1^0 \! \nabla f(tx +(1-t)y) ^\intercal (x-y) \, \mathrm{d}t \\
+&amp;= \int_0^1 \! \nabla f(tx +(1-t)y) ^\intercal (y-x) \, \mathrm{d}t \\
+&amp;= \int_0^1 \! (\nabla f(tx +(1-t)y)-\nabla f(x)+ \nabla f(x))^\intercal (y-x) \, \mathrm{d}t \\
+&amp;= \int_0^1 \! \nabla f(x)^\intercal (y-x) \, \mathrm{d}t + \int_0^1 \! \nabla (f(tx +(1-t)y)-\nabla f(x))^\intercal (y-x) \, \mathrm{d}t\\
+&amp;= \nabla f(x)^\intercal (y-x) + \int_0^1 \! (\nabla f(tx +(1-t)y)-\nabla f(x))^\intercal (y-x) \, \mathrm{d}t \\
+&amp;\leq \nabla f(x)^\intercal (y-x) + \int_0^1 \! \|\nabla (f(tx +(1-t)y)-\nabla f(x))\| \| (y-x)\| \, \mathrm{d}t  \\
+&amp;\leq \nabla f(x)^\intercal (y-x) + \int_0^1 \! L \|tx +(1-t)y-x\| \| (y-x)\| \, \mathrm{d}t  \\
+&amp;= \nabla f(x)^\intercal (y-x) + L\| (y-x)\|^2\int_0^1 \! \vert t-1 \vert \, \mathrm{d}t  \\
+&amp;= \nabla f(x)^\intercal (y-x) + \frac{L}{2}\| (y-x)\|^2 \\
+\end{align*}\]
+
+<p>The first inequality is a direct application of Cauchy-Schwarz, and the following one, comes from the \(L\)-smoothness of \(\nabla f\). This completes the proof of the inequality <strong>(1)</strong>.</p>
+
+<p>Now, by plugging \(x^+ = x - t \nabla f(x)\) in the placeholder \(y\) and re-arranging, we complete our proof:</p>
+
+\[\begin{align*}
+f(x^+) &amp;\leq f(x) + \nabla f(x)^\intercal (-t \nabla f(x))  + \frac{L}{2} \|-t \nabla f(x)\|^2 \\
+&amp;= f(x) - (1 - \frac{Lt}{2}) t \|\nabla f(x)\|^2 
+\end{align*}\]
+
+<p><span style="font-size:32px;">■</span></p>
+
+<blockquote>
+  <p><strong>Prove that:</strong> \(\, \, \,\,\, \sum_{i=0}^k \|\nabla f(x^{(i)})\|_2^2 \leq \frac{2}{t} ( f(x^{(0)}) - f^\star)\).</p>
+</blockquote>
+
+<p><span style="font-size:20px;">▶</span> <strong>Proof:</strong></p>
+
+<p>Using the definition of \(\{x^{(i)}\}\) in the problem setting, and using the past result, we get for each \(i \in \{0, \ldots , k-1\}\) :</p>
+
+\[\|\nabla f(x^{(i)})\|_2^2 \leq \frac{2}{t} ( f(x^{(i)}) - f(x^{(i+1)}) )\]
+
+<p>By summing each term, the RHS, cancels (Telescopes?), we get:</p>
+
+\[\, \, \,\,\, \sum_{i=0}^k \|\nabla f(x^{(i)})\|_2^2 \leq \frac{2}{t} ( f(x^{(0)}) - f(x^{(k)}))\]
+
+<p>Finally, we have (by definition), \(f^\star \leq f(x^{(k)})\). We complete the proof (just upper bound the above mentioned inequality).</p>
+
+<p><span style="font-size:32px;">■</span></p>
+
+<blockquote>
+  <p>Conclude that this lower bound holds:</p>
+</blockquote>
+
+\[\min_{i=0,\ldots,k} \|\nabla f(x^{(i)}) \|_2 
+\leq \sqrt{\frac{2}{t(k+1)} (f(x^{(0)}) - f^\star)},\]
+
+<p><span style="font-size:20px;">▶</span> <strong>Proof:</strong></p>
+
+<p>We have for each \(i \in \{0, \ldots , k-1\}\)</p>
+
+\[\min_{i=0,\ldots,k} \|\nabla f(x^{(i)}) \|^2 \leq \|\nabla f(x^{(i)})\|^2\]
+
+<p>Which implies</p>
+
+\[\begin{align}
+(k+1) \min_{i=0,\ldots,k} \|\nabla f(x^{(i)}) \|^2  &amp;\leq \sum_{i=0}^k \|\nabla f(x^{(i)})\|_2^2 \\
+&amp;\leq \frac{2}{t} ( f(x^{(0)}) - f^\star)\\
+\implies \\
+\min_{i=0,\ldots,k} \|\nabla f(x^{(i)}) \|^2  &amp;\leq \frac{2}{t (k+1)} (f(x^{(0)}) - f^\star) \\
+\implies \\
+\sqrt{\min_{i=0,\ldots,k} \|\nabla f(x^{(i)}) \|^2}  &amp;\leq \sqrt{\frac{2}{t (k+1)} (f(x^{(0)}) - f^\star)} \\
+\end{align}\]
+
+<p>We complete the proof by simply verifying that:</p>
+
+\[\min_{i=0,\ldots,k} \|\nabla f(x^{(i)}) \| = \sqrt{\min_{i=0,\ldots,k} \|\nabla f(x^{(i)}) \|^2}\]
+
+<p>Which proves that we could achieve \(\epsilon\)-substationarity in \(O(1/\epsilon^2)\) iterations.</p>
+
+<p><span style="font-size:32px;">■</span></p>
+
+<hr />
+<h2 id="convex-case">Convex case</h2>
+
+<p>Assuming now that \(f\) is convex.  We prove that we can achieve \(\epsilon\)-optimality in \(O(1/\epsilon)\) steps of SGD, i.e.,  \(f(x)-f^\star \leq \epsilon\)</p>
+
+<blockquote>
+  <ul>
+    <li>Show that:
+\(\,\,\, f(x^+) \leq f^\star + \nabla f(x)^T (x-x^\star) -
+\frac{t}{2}\|\nabla f(x)\|^2.\)</li>
+  </ul>
+</blockquote>
+
+<p><span style="font-size:20px;">▶</span> <strong>Proof:</strong></p>
+
+<p>Using the first-order condition of convexity, we have \(f(x) + \nabla f(x)^T (x^\star - x) \leq f^\star \,\,\)</p>
+
+<p>which implies that \(f(x) \leq f^\star + \nabla f(x)^T (x - x^\star) \,\,\) <strong>(2)</strong></p>
+
+<p>We have proved the follwing from the non-convex case:</p>
+
+\[\, \, \,\,\, f(x^+) \leq f(x) - \Big(1-\frac{Lt}{2} \Big) t \|\nabla f(x)\|_2^2\]
+
+<p>By re-arranging and then using the inequality <strong>(2)</strong>, we complete the proof:</p>
+
+\[\begin{align}
+f(x^+) &amp;\leq f(x) - \Big(1-\frac{Lt}{2} \Big) t \|\nabla f(x)\|^2 \\
+&amp;\leq f(x) - \frac{t}{2} \|\nabla f(x)\|^2 \\
+&amp;\leq f^\star + \nabla f(x)^T (x-x^\star) - \frac{t}{2} \|\nabla f(x)\|^2 \\
+\end{align}\]
+
+<p><span style="font-size:32px;">■</span></p>
+
+<blockquote>
+  <p>Show the following:
+\(\,\,\, \sum_{i=1}^k ( f(x^{(i)}) - f^\star ) \leq
+\frac{1}{2t} \|x^{(0)} - x^\star\|^2.\)</p>
+</blockquote>
+
+<p><span style="font-size:20px;">▶</span> <strong>Proof:</strong></p>
+
+<p>We first prove the following:</p>
+
+\[f(x^+) \leq f^\star + \frac{1}{2t} \big( \|x-x^\star\|^2 - \|x^+ - x^\star\|^2 \big).\]
+
+<p>Starting from the result we have proved in the past question, we use the generic update \(t \nabla f(x) = x - x^+\), and a few arrangements to get the following:</p>
+
+\[\begin{align*}
+f(x^+) &amp;\leq f^\star + \nabla f(x)^T (x-x^\star) -
+\frac{t}{2}\|\nabla f(x)\|^2 \\
+&amp;= f^\star + \frac{1}{2t} ( 2t \nabla f(x)^T (x-x^\star) - t^2 \|\nabla f(x)\|^2 ) \\
+&amp;= f^\star + \frac{1}{2t} (2 (x-x^+)^\intercal (x-x^\star) - \|x - x^+\|^2 ) \\
+&amp;= f^\star + \frac{1}{2t} (\|x\|^2 - 2x^\intercal x^\star + 2(x^+)^\intercal x^\star - \|x^+\|^2 ) \\
+&amp;= f^\star + \frac{1}{2t} ((\|x\|^2 - 2x^\intercal x^\star + \|x^*\|^2) -( \|x^*\|^2 - 2(x^+)^\intercal x^\star + \|x^+\|^2 )) \\
+&amp;= f^\star + \frac{1}{2t} (\|x - x^*\|^2 - \|x^+ - x^*\|^2 ) \\
+\end{align*}\]
+
+<p>By summing the inequalities for each \(i \in \{0, \ldots , k-1\}\), the RHS “telescopes”, we are left with:</p>
+
+\[\sum_{i=1}^k ( f(x^{(i)}) - f^\star ) \leq
+\frac{1}{2t} (\|x^{(0)} - x^\star\|^2 - \|x^{(k)} - x^\star\|^2  )\]
+
+<p>Since \(0 \leq \|x^{(k)} - x^\star\|^2\), we upper bound the RHS to complete the proof.</p>
+
+<p><span style="font-size:32px;">■</span></p>
+
+<blockquote>
+  <p>Conclude with the following:
+\(\,\,\, f(x^{(k)}) - f^\star \leq \frac{\|x^{(0)} - x^\star\|^2}{2tk},\)</p>
+</blockquote>
+
+<p><span style="font-size:20px;">▶</span> <strong>Proof:</strong></p>
+
+<p>This is pretty straightforward, every update from \(x^{(i)}\) to \(x^{(i+1)}\) makes the gap \(f(x^{(i)}) - f^\star\) smaller, and hence, \(f(x^{(k)}) - f^\star = \min \{f(x^{(i)}) - f^\star\}_{i=1}^{i=k}\), which justifies the following:</p>
+
+\[\begin{align}
+k(f(x^{(k)}) - f^\star) &amp;\leq \sum_{i=1}^k ( f(x^{(i)})-f^\star ) \\
+&amp;\leq \frac{1}{2t} \|x^{(0)} - x^\star\|^2. 
+\end{align}\]
+
+<p>Second inequality follows from the past question. We complete the proof by deviding both sides by \(k\).</p>
+
+<p><span style="font-size:32px;">■</span></p>
+
+<p>This final result establishes the \(O(1/\epsilon)\) rate for achieving \(\epsilon\)-suboptimality.</p>
+
+<h2 id="summary">Summary:</h2>
+
+<p>In this blog post, we have prove the following:</p>
+
+<ul>
+  <li>For a non-convex function \(f\) with a Lipschitz \(\nabla f\):
+    <ul>
+      <li>\(\epsilon\)-substationarity (i.e., \(\|\nabla f\| \leq \epsilon\) ) is achieved in \(O(1/\epsilon^2)\) steps</li>
+    </ul>
+  </li>
+  <li>For a convex function with a Lipschitz \(\nabla f\):
+    <ul>
+      <li>\(\epsilon\)-optimality (AKA convergence) is achieved with \(O(1/\epsilon)\) steps.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="to-do">TO-DO</h2>
+<ul>
+  <li>Proof checking
+    <ul>
+      <li>Proof checking 1 [Done]</li>
+      <li>Proof checking 2 [TO-DO]</li>
+      <li>Proof checking 3 [TO-DO]</li>
+    </ul>
+  </li>
+  <li>Convergence Rate for Proximal Gradient Descent [TO-DO]</li>
+</ul>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+  <div class="wrapper">
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+              Not uniform, at all.
+          </li>
+        </ul>
+      </div>
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/eigenAyoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">eigenAyoub</span></a></li><li><a href="https://www.twitter.com/eigenAyoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">eigenAyoub</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>What You See Is What You Get!</p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+</body>
+
+</html>

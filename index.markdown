@@ -18,15 +18,25 @@ layout: home
 A few - out of context - equations to fight your boredome:
 
 $$
-\nabla_\phi \mathbb{E}_{q(\mathbf{z}|\phi)}\left[ f(\mathbf{z}) \right] ~=~ \mathbb{E}_{q(\mathbf{z}|\phi)}\,[ f(\mathbf{z})\, \nabla_{q(\mathbf{z}|\phi)} \log q(\mathbf{z}|\phi) ] 
+\nabla_\phi \mathbb{E}_{q(\mathbf{z}|\phi)}\left[ f(\mathbf{z}) \right] ~=~ \mathbb{E}_{q(\mathbf{z}|\phi)}\,[ f(\mathbf{z})\, \nabla_{\phi} \log q(\mathbf{z}|\phi) ] 
+$$
+
+$$
+\,\,\, f(x^{(k)}) - f^\star \leq \frac{\|x^{(0)} - x^\star\|^2}{2tk}, 
 $$
 
 
 
-## Blogs:
+## Blog-posts:
 
-* A small blog discussing the correctness of the plot above
-  * Link: [Gaussian](/blogs/gaussian_samples)
+* Convex Optimization:
+  * [Convergence Rates of SGD in convex and non-convex cases](/blogs/SGD)
+
+* Reinforcemnt learning:
+  * Stochastic Approximation and (Asymptotic) Convergence of Q-learning. [Soon, 24/05]
+
+* Random:
+  * A small blog discussing the correctness of the plot above [Gaussian Samples](/blogs/gaussian_samples)
 
 
 ## News:

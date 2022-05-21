@@ -15,7 +15,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Not uniform, at all." />
 <script type="application/ld+json">
-{"@type":"WebSite","url":"http://localhost:4000/","name":"Not uniform, at all.","description":"What You See Is What You Get!","headline":"Not uniform, at all.","@context":"https://schema.org"}</script>
+{"@type":"WebSite","headline":"Not uniform, at all.","url":"http://localhost:4000/","name":"Not uniform, at all.","description":"What You See Is What You Get!","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Not uniform, at all." /></head>
 
@@ -47,14 +47,26 @@
 
 <p>A few - out of context - equations to fight your boredome:</p>
 
-\[\nabla_\phi \mathbb{E}_{q(\mathbf{z}|\phi)}\left[ f(\mathbf{z}) \right] ~=~ \mathbb{E}_{q(\mathbf{z}|\phi)}\,[ f(\mathbf{z})\, \nabla_{q(\mathbf{z}|\phi)} \log q(\mathbf{z}|\phi) ]\]
+\[\nabla_\phi \mathbb{E}_{q(\mathbf{z}|\phi)}\left[ f(\mathbf{z}) \right] ~=~ \mathbb{E}_{q(\mathbf{z}|\phi)}\,[ f(\mathbf{z})\, \nabla_{\phi} \log q(\mathbf{z}|\phi) ]\]
 
-<h2 id="blogs">Blogs:</h2>
+\[\,\,\, f(x^{(k)}) - f^\star \leq \frac{\|x^{(0)} - x^\star\|^2}{2tk},\]
+
+<h2 id="blog-posts">Blog-posts:</h2>
 
 <ul>
-  <li>A small blog discussing the correctness of the plot above
+  <li>Convex Optimization:
     <ul>
-      <li>Link: <a href="/blogs/gaussian_samples">Gaussian</a></li>
+      <li><a href="/blogs/SGD">Convergence Rates of SGD in convex and non-convex cases</a></li>
+    </ul>
+  </li>
+  <li>Reinforcemnt learning:
+    <ul>
+      <li>Stochastic Approximation and (Asymptotic) Convergence of Q-learning. [Soon, 24/05]</li>
+    </ul>
+  </li>
+  <li>Random:
+    <ul>
+      <li>A small blog discussing the correctness of the plot above <a href="/blogs/gaussian_samples">Gaussian Samples</a></li>
     </ul>
   </li>
 </ul>
