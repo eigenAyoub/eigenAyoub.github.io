@@ -10,15 +10,7 @@ Matrix manipulation is a crucial skill in modern ML practices. In this blog I'll
 
 ## Content:
 1. [The Passepartout](#the-passpartout)
-2. [The exotics](#the-exotics)
-3. [The smth](#the-smth)
 2. [References](#references)
-
-
-$$\begin{equation}
-a \times b \times c = 0 \\ j=1 \\ k=2 
-\end{equation} $$
-
 
 
 
@@ -26,25 +18,25 @@ a \times b \times c = 0 \\ j=1 \\ k=2
 ## The Passepartout:
 
 
+1.  $$\frac{\partial b^\intercal a}{\partial a} = b$$
 
-Some Applications:
+2.  $$\frac{\partial a^\intercal A a}{\partial a} = (A^\intercal + A)a$$
 
-* The cool logarithm trick, highly used in RL:
+3.  $$\frac{\partial \log (\det A) }{\partial A}= (A^{-1})^\intercal$$
 
-
-* The regression trick:
-
+4.  $$\frac{\partial tr(BA)}{\partial A}= B^\intercal $$
 
 
-## The exotics:
 
-## The Smth
+
 
 ## References:
 
-* The matrix 
-* Stephan dfjsjdfj, Lecture 08
+* Stefan Harmeling, ML course, lecture 08/28. [Link](https://www.youtube.com/watch?v=uQ8Q9B1LMVw)
 
 
-$$\mathbb{N} = \{ a \in \mathbb{Z} : a > 0 \}$$
+
+Note: This is only the initial push. 
+
+
 

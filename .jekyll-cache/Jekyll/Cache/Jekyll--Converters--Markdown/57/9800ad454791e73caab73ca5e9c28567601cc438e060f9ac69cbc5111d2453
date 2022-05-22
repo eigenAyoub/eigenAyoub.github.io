@@ -1,35 +1,29 @@
-I"Ö<p><strong>Abstract</strong></p>
+I"(<p><strong>Abstract</strong></p>
 
 <p>Matrix manipulation is a crucial skill in modern ML practices. In this blog Iâ€™ll collect some of the most known transformations/operations that I have encountered and used.</p>
 
 <h2 id="content">Content:</h2>
 <ol>
   <li><a href="#the-passpartout">The Passepartout</a></li>
-  <li><a href="#the-exotics">The exotics</a></li>
-  <li><a href="#the-smth">The smth</a></li>
   <li><a href="#references">References</a></li>
 </ol>
 
-\[\begin{equation}
-a \times b \times c = 0 \\ j=1 \\ k=2 
-\end{equation}\]
-
 <h2 id="the-passepartout">The Passepartout:</h2>
-
-<p>Some Applications:</p>
 
 <ul>
   <li>
-    <p>The cool logarithm trick, highly used in RL:</p>
+\[\frac{\partial b^\intercal a}{\partial a} = b\]
   </li>
   <li>
-    <p>The regression trick:</p>
+\[\frac{\partial a^\intercal A a}{\partial a} = (A^\intercal + A)a\]
+  </li>
+  <li>
+\[\frac{\partial \log \det A }{\partial A}= A^{-1}\]
+  </li>
+  <li>
+\[\frac{\partial f}{\partial x}=\]
   </li>
 </ul>
-
-<h2 id="the-exotics">The exotics:</h2>
-
-<h2 id="the-smth">The Smth</h2>
 
 <h2 id="references">References:</h2>
 
@@ -37,7 +31,5 @@ a \times b \times c = 0 \\ j=1 \\ k=2
   <li>The matrix</li>
   <li>Stephan dfjsjdfj, Lecture 08</li>
 </ul>
-
-\[\mathbb{N} = \{ a \in \mathbb{Z} : a &gt; 0 \}\]
 
 :ET

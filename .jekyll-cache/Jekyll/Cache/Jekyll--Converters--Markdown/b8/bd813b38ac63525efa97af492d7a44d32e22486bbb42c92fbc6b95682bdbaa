@@ -1,0 +1,35 @@
+I"6<p><strong>Abstract</strong></p>
+
+<p>Matrix manipulation is a crucial skill in modern ML practices. In this blog I’ll collect some of the most known transformations/operations that I have encountered and used.</p>
+
+<h2 id="content">Content:</h2>
+<ol>
+  <li><a href="#the-passpartout">The Passepartout</a></li>
+  <li><a href="#references">References</a></li>
+</ol>
+
+<h2 id="the-passepartout">The Passepartout:</h2>
+
+<ul>
+  <li>
+\[\frac{\partial b^\intercal a}{\partial a} = b\]
+  </li>
+  <li>
+\[\frac{\partial a^\intercal A a}{\partial a} = (A^\intercal + A)a\]
+  </li>
+  <li>
+\[\frac{\partial \log (\det A) }{\partial A}= (A^{-1})^\intercal\]
+  </li>
+  <li>
+\[\frac{\partial f}{\partial x}=\]
+  </li>
+</ul>
+
+<h2 id="references">References:</h2>
+
+<ul>
+  <li>The matrix</li>
+  <li>Stephan dfjsjdfj, Lecture 08</li>
+</ul>
+
+:ET

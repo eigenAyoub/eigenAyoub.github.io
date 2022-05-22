@@ -15,7 +15,7 @@ layout: home
 
 
 
-A few - out of context - equations to fight your boredome:
+A few -out of context- equations to fight your boredome:
 
 $$
 \nabla_\phi \mathbb{E}_{q(\mathbf{z}|\phi)}\left[ f(\mathbf{z}) \right] ~=~ \mathbb{E}_{q(\mathbf{z}|\phi)}\,[ f(\mathbf{z})\, \nabla_{\phi} \log q(\mathbf{z}|\phi) ] 
@@ -32,11 +32,17 @@ $$
 * Convex Optimization:
   * [Convergence Rates of SGD in convex and non-convex cases](/blogs/SGD)
 
-* Reinforcemnt learning:
+
+* Reinforcement learning:
   * Stochastic Approximation and (Asymptotic) Convergence of Q-learning. [Soon, 24/05]
 
+
+* Tips and Tricks:
+  * [Matrix Differential Calculus](/blogs/enter_the_matrix) -- A few trick to save the day, AKA, enter the matrix.
+
+
 * Random:
-  * A small blog discussing the correctness of the plot above [Gaussian Samples](/blogs/gaussian_samples)
+  * Discussing the correctness of the plot above. [Gaussian Samples](/blogs/gaussian_samples)
 
 
 ## News:

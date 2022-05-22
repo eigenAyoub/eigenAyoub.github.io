@@ -1,0 +1,55 @@
+I"_<p><strong>Abstract:</strong></p>
+
+<p>In this tutorial blog, we’ll prove the correctness of the method animated above in a general setting. Elaborate on how we can use it to sample from the multi-variate Gaussian (MVN). Finally, we will discuss a practical approach and illustrate it with some code snippets from the Scipy and Numpy.</p>
+
+<p><strong>Outline:</strong></p>
+
+<ol>
+  <li><a href="#1">Correctness: The transformation Law</a>
+Anything below is still in TO-DO
+    <ol>
+      <li><a href="#11">Generating the exponential law from the uniform distribution</a></li>
+    </ol>
+  </li>
+  <li><a href="#2">MVN case: Normal x Normal = Normal</a></li>
+  <li><a href="#3">Practical implementation:</a>
+    <ol>
+      <li><a href="#31">Cholsky decomposition</a></li>
+      <li><a href="#32">Open Source</a></li>
+    </ol>
+  </li>
+</ol>
+
+<hr />
+
+<p><strong>Notation:</strong></p>
+
+<p>If \(X\) is a random variable (RV), we’ll denote its CDF (and resp. density function) by \(F_X\) (resp. \(f_X\)).</p>
+
+<p><strong>Idea:</strong></p>
+
+<p>Let \(F_\mathcal{N}^{-1}\) be the reverse of \(F_\mathcal{N}\), the CDF of the standard normal distribution and \(\mathcal{U}\) be a uniformely distributed RV on the interval \([0,1]\). The animation above claims that \(F_\mathcal{N}^{-1}(\mathcal{U})\) is normally distributed.</p>
+
+<p><strong>Proof:</strong></p>
+
+<p>Let’s define the RV \(Y\) as  \(Y = F_\mathcal{N}^{-1}(\mathcal{U})\)   and let’s prove that \(Y = \mathcal{N}[0,1]\) by proving that \(F_\mathcal{N} = F_Y\)</p>
+
+<p>For \(y \in \mathbb{R}\) :</p>
+
+\[\begin{align*}
+F_Y(y) &amp;= P(Y \leq y) \\
+&amp;= P(F_\mathcal{N}^{-1}(\mathcal{U}) \leq y) \\
+&amp;= P(\mathcal{U} \leq F_\mathcal{N}(y)) \\
+&amp;= F_\mathcal{N}(y)
+\end{align*}\]
+
+<p>Where the third equality follows from the fact that \(F_N^{-1}\) is strictly increasing on the range \([0,1]\)</p>
+
+<p>Since the CDF completely determines a distribution, we conclude that \(Y\) is equal to \(N\), which completes our proof.</p>
+
+<p>To-Do:</p>
+<ul>
+  <li>Fix N, R and all notation, dummy!!!</li>
+  <li>Complete the blog post, make it interesting!!! (Before June 2022)</li>
+</ul>
+:ET
