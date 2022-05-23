@@ -1,0 +1,46 @@
+I"<p><strong>Abstract</strong></p>
+
+<p>Matrix manipulation is a crucial skill in modern ML practices. In this blog I’ll collect some of the most known transformations/operations that I have encountered and used.</p>
+
+<h2 id="content">Content:</h2>
+<ol>
+  <li><a href="#the-passpartout">The Passepartout</a></li>
+  <li><a href="#references">References</a></li>
+</ol>
+
+<h2 id="the-passepartout">The Passepartout:</h2>
+
+<ol>
+  <li>
+\[\frac{\partial b^\intercal a}{\partial a} = b\]
+  </li>
+  <li>
+\[\frac{\partial a^\intercal A a}{\partial a} = (A^\intercal + A)a\]
+  </li>
+  <li>
+\[\frac{\partial \log (\det A) }{\partial A}= (A^{-1})^\intercal\]
+  </li>
+  <li>
+\[\frac{\partial tr(BA)}{\partial A}= B^\intercal\]
+  </li>
+  <li>
+\[\frac{\partial A^{-1}}{\partial x} = - A^{-1} \frac{\partial A}{\partial x} A^{-1}\]
+  </li>
+</ol>
+
+<h2 id="references">References:</h2>
+
+<ul>
+  <li>Stefan Harmeling, ML course, lecture 08/28. <a href="https://www.youtube.com/watch?v=uQ8Q9B1LMVw">Link</a></li>
+</ul>
+
+<hr />
+<p>DONE / TO-DO:</p>
+<ul>
+  <li>First skeleton [Done]</li>
+  <li>Diffentiate between scalars / vectors / matrices when it’s not clear from the context [TO-DO]</li>
+  <li>Keep adding formulas.  [TO-DO]</li>
+  <li>Add the generic procedure (Differential / Identification rules) [TO-DO]</li>
+</ul>
+
+:ET

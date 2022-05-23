@@ -15,7 +15,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Not uniform, at all." />
 <script type="application/ld+json">
-{"@type":"WebPage","url":"http://localhost:4000/blogs/enter_the_matrix/","description":"What You See Is What You Get!","headline":"Not uniform, at all.","@context":"https://schema.org"}</script>
+{"@type":"WebPage","headline":"Not uniform, at all.","url":"http://localhost:4000/blogs/enter_the_matrix/","description":"What You See Is What You Get!","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Not uniform, at all." /></head>
 
@@ -39,7 +39,7 @@
       <div class="wrapper">
         <p><strong>Abstract</strong></p>
 
-<p>Matrix manipulation is a crucial skill in modern ML practices. In this blog I’ll collect some of the most known transformations/operations that I have encountered and used.</p>
+<p>Maintaining a healthy relationship with matrices is a crucial asset in modern ML practices. In this blog I’ll collect some of the most known transformations/operations that I have encountered and used. Perhaps make it a “bigger” project, as I’m currenlty learning JAX. We’ll see!</p>
 
 <h2 id="content">Content:</h2>
 <ol>
@@ -62,6 +62,12 @@
   <li>
 \[\frac{\partial tr(BA)}{\partial A}= B^\intercal\]
   </li>
+  <li>
+\[\frac{\partial A^{-1}}{\partial \alpha} = - A^{-1} \frac{\partial A}{\partial \alpha} A^{-1}\]
+  </li>
+  <li>
+\[\frac{\partial \det A }{\partial A}= (\det A) A^{-1} \;\;\;\; \text{Such a beauty!}\]
+  </li>
 </ol>
 
 <h2 id="references">References:</h2>
@@ -70,7 +76,20 @@
   <li>Stefan Harmeling, ML course, lecture 08/28. <a href="https://www.youtube.com/watch?v=uQ8Q9B1LMVw">Link</a></li>
 </ul>
 
-<p>Note: This is only the initial push.</p>
+<p> 
+ </p>
+
+<hr />
+
+<p><strong>Progress:</strong></p>
+
+<ul>
+  <li>First skeleton [Done]</li>
+  <li>Polish the latex (scalars / vectors / matrices) when it’s not clear from the context [TO-DO]</li>
+  <li>Keep adding formulas.  [TO-DO]</li>
+  <li>Add the generic procedure to compute complicated forms (Differential / Identification rules) [TO-DO]</li>
+  <li>Perhaps add some JAX and make it a worthy bog-post [Really TO-DO]</li>
+</ul>
 
 
       </div>
