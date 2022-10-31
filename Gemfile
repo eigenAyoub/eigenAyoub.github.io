@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-# Live loading     bundle exec jekyll serve
+#  HERE >>   bundle exec jekyll serve
 
 
 

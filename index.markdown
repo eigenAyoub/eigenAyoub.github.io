@@ -26,6 +26,10 @@ $$
 $$
 
 
+## News:
+
+* **[04 July 2022]** I'm officially enrolled at the university of PASSAU, Computational Mathematics M.Sc.
+
 
 ## Blog-posts:
 
@@ -33,18 +37,15 @@ $$
   * [Convergence Rates of SGD in convex and non-convex cases](/blogs/SGD)
 
 
-* Reinforcement learning:
-  * Stochastic Approximation and (Asymptotic) Convergence of Q-learning. [Soon, 24/05]
-
-
 * Tips and Tricks:
   * [Matrix Differential Calculus](/blogs/enter_the_matrix) -- A few trick to save the day, AKA, enter the matrix.
 
+* Reinforcement learning:
+  * Stochastic Approximation and (Asymptotic) Convergence of Q-learning. [Soon]
 
 * Random:
   * Discussing the correctness of the plot above. [Gaussian Samples](/blogs/gaussian_samples)
 
 
-## News:
-* Nothing to show yet, coming soon though!
+
 

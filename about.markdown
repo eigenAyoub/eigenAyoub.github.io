@@ -4,9 +4,17 @@ title: About me
 permalink: /about/
 ---
 
-* I'm Ayoub. I'm 25, Moroccan. I got a Master's degree in July 2019 (software engineering major).
-* **[November 2021]** I decided to switch careers and pursue ML research. 
-* Right now, I'm purely devoted to learning (at home). It's tough but I'm happier now.
-* I'll start writing about what I'm learning, mainly **Probabilistic ML** and **RL**.
-  * At first I started writing in Markdown but then I decided to switch over to Latex since I'll be forced to use in the future.
-  * I'll be writing a lot of notes/tutorial-blogs.
+* Hey there, I'm Ayoub. I'm a **Postgraduate** at the **Computational Mathematics M.Sc** at the **University of PASSAU, Germany.**
+
+* I'll start writing about what interests me, mainly **Optimization**, **Probabilistic ML** and **RL**.
+
+Quick timeline regarding my educational path:
+
+* **[July 2019]** I graduated with a Software Engineering Master degree from ENSIAS, Morocoo. I followed it with a year of pre-doctoral studies and R&D at UM6P, Morocco.
+
+* **[September 2021]** I decided to focus career on Machine Learning research.
+
+* **[Begining of 2022]** I started applying for Master's degrees across Europe, in Mathematics and ML.
+
+* **[July 2022]** I got enrolled at PASSAU University. 
+
