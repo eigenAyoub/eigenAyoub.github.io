@@ -1,4 +1,4 @@
-I"‚<p align="center">
+I"e<p align="center">
 
   <img src="src/GAUSSIAN.gif" alt="Gaussian" style="width: 600px" />
   <br /><b>Figure 1:</b> 1D Gaussian samples from pseudo-random samples 
@@ -6,7 +6,7 @@
 
 </p>
 
-<p>A few -out of context- equations to fight your boredome:</p>
+<p>A few random equations to fight your boredome:</p>
 
 \[\nabla_\phi \mathbb{E}_{q(\mathbf{z}|\phi)}\left[ f(\mathbf{z}) \right] ~=~ \mathbb{E}_{q(\mathbf{z}|\phi)}\,[ f(\mathbf{z})\, \nabla_{\phi} \log q(\mathbf{z}|\phi) ]\]
 
@@ -20,6 +20,16 @@
 
 <h2 id="blog-posts">Blog-posts:</h2>
 
+<ul>
+  <li>Find my work for the Randomized Algorithms that Iâ€™m undertaking at the University of Passau.
+    <ul>
+      <li>Github Link:  https://github.com/eigenAyoub/randomised-algorithms
+}</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Course</p>
 <ul>
   <li>Convex Optimization:
     <ul>

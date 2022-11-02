@@ -14,8 +14,8 @@ layout: home
 
 
 
-
-A few -out of context- equations to fight your boredome:
+---
+**A few random equations to fight your boredome:**
 
 $$
 \nabla_\phi \mathbb{E}_{q(\mathbf{z}|\phi)}\left[ f(\mathbf{z}) \right] ~=~ \mathbb{E}_{q(\mathbf{z}|\phi)}\,[ f(\mathbf{z})\, \nabla_{\phi} \log q(\mathbf{z}|\phi) ] 
@@ -26,12 +26,18 @@ $$
 $$
 
 
-## News:
+---
+## Content:
+* [Blog posts](#blog-posts)
+* [News section](#news)
 
-* **[04 July 2022]** I'm officially enrolled at the university of PASSAU, Computational Mathematics M.Sc.
 
-
+---
 ## Blog-posts:
+
+* Find my work for the **Randomized Algorithms** course that I'm undertaking at the **University of Passau**.
+  * [Github repository](https://github.com/eigenAyoub/randomised-algorithms). 
+
 
 * Convex Optimization:
   * [Convergence Rates of SGD in convex and non-convex cases](/blogs/SGD)
@@ -41,11 +47,17 @@ $$
   * [Matrix Differential Calculus](/blogs/enter_the_matrix) -- A few trick to save the day, AKA, enter the matrix.
 
 * Reinforcement learning:
+  * [Github repository.](https://github.com/eigenAyoub/reinforcement-learning)
   * Stochastic Approximation and (Asymptotic) Convergence of Q-learning. [Soon]
 
 * Random:
   * Discussing the correctness of the plot above. [Gaussian Samples](/blogs/gaussian_samples)
 
 
+---
+## News:
+
+* **[04 July 2022]** I'm officially enrolled at the university of PASSAU, Computational Mathematics M.Sc.
 
 
+---
