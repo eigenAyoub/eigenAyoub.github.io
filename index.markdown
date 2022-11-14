@@ -15,7 +15,7 @@ layout: home
 
 
 ---
-**A few random equations to fight your boredome:**
+**It never hurts to see some random mathematics with no context:**
 
 $$
 \nabla_\phi \mathbb{E}_{q(\mathbf{z}|\phi)}\left[ f(\mathbf{z}) \right] ~=~ \mathbb{E}_{q(\mathbf{z}|\phi)}\,[ f(\mathbf{z})\, \nabla_{\phi} \log q(\mathbf{z}|\phi) ] 
@@ -23,6 +23,12 @@ $$
 
 $$
 \,\,\, f(x^{(k)}) - f^\star \leq \frac{\|x^{(0)} - x^\star\|^2}{2tk}, 
+$$
+
+Most importantly, when can you say the following:
+
+$$
+f(y) \leq f(x) + \nabla f(x)^\intercal (x-y) + \frac{L}{2}\|x-y\|^2
 $$
 
 

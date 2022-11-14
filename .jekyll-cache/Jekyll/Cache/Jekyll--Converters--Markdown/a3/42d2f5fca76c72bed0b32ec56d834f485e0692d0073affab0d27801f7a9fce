@@ -1,4 +1,4 @@
-I"I<p align="center">
+I"b<p align="center">
 
   <img src="src/GAUSSIAN.gif" alt="Gaussian" style="width: 600px" />
   <br /><b>Figure 1:</b> 1D Gaussian samples from pseudo-random samples 
@@ -6,24 +6,33 @@
 
 </p>
 
-<p>A few random equations to fight your boredome:</p>
+<hr />
+<p><strong>It never hurts to see some random maths with no context:</strong></p>
 
 \[\nabla_\phi \mathbb{E}_{q(\mathbf{z}|\phi)}\left[ f(\mathbf{z}) \right] ~=~ \mathbb{E}_{q(\mathbf{z}|\phi)}\,[ f(\mathbf{z})\, \nabla_{\phi} \log q(\mathbf{z}|\phi) ]\]
 
 \[\,\,\, f(x^{(k)}) - f^\star \leq \frac{\|x^{(0)} - x^\star\|^2}{2tk},\]
 
-<h2 id="news">News:</h2>
+<p>Most importantly, when can you say:</p>
 
+\[\,\,\, f(x^{(k)}) - f^\star \leq \frac{\|x^{(0)} - x^\star\|^2}{2tk}, 
+
+f(y) \lee f(x) + \nable f(x) (x-y) + \frac{L}{2}\|x-y\|^2\]
+
+<hr />
+<h2 id="content">Content:</h2>
 <ul>
-  <li><strong>[04 July 2022]</strong> I’m officially enrolled at the university of PASSAU, Computational Mathematics M.Sc.</li>
+  <li><a href="#blog-posts">Blog posts</a></li>
+  <li><a href="#news">News section</a></li>
 </ul>
 
+<hr />
 <h2 id="blog-posts">Blog-posts:</h2>
 
 <ul>
-  <li>Find my work for the Randomized Algorithms that I’m undertaking at the University of Passau.
+  <li>Find my work for the <strong>Randomized Algorithms</strong> course that I’m undertaking at the <strong>University of Passau</strong>.
     <ul>
-      <li>Github Link:  https://github.com/eigenAyoub/randomised-algorithms</li>
+      <li><a href="https://github.com/eigenAyoub/randomised-algorithms">Github repository</a>.</li>
     </ul>
   </li>
   <li>Convex Optimization:
@@ -38,6 +47,7 @@
   </li>
   <li>Reinforcement learning:
     <ul>
+      <li><a href="https://github.com/eigenAyoub/reinforcement-learning">Github repository.</a></li>
       <li>Stochastic Approximation and (Asymptotic) Convergence of Q-learning. [Soon]</li>
     </ul>
   </li>
@@ -48,4 +58,12 @@
   </li>
 </ul>
 
+<hr />
+<h2 id="news">News:</h2>
+
+<ul>
+  <li><strong>[04 July 2022]</strong> I’m officially enrolled at the university of PASSAU, Computational Mathematics M.Sc.</li>
+</ul>
+
+<hr />
 :ET

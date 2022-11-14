@@ -1,4 +1,4 @@
-I"¥<p align="center">
+I"<p align="center">
 
   <img src="src/GAUSSIAN.gif" alt="Gaussian" style="width: 600px" />
   <br /><b>Figure 1:</b> 1D Gaussian samples from pseudo-random samples 
@@ -7,11 +7,15 @@
 </p>
 
 <hr />
-<p><strong>A few random equations to fight your boredome:</strong></p>
+<p><strong>It never hurts to see some random maths with no context:</strong></p>
 
 \[\nabla_\phi \mathbb{E}_{q(\mathbf{z}|\phi)}\left[ f(\mathbf{z}) \right] ~=~ \mathbb{E}_{q(\mathbf{z}|\phi)}\,[ f(\mathbf{z})\, \nabla_{\phi} \log q(\mathbf{z}|\phi) ]\]
 
 \[\,\,\, f(x^{(k)}) - f^\star \leq \frac{\|x^{(0)} - x^\star\|^2}{2tk},\]
+
+<p>Most importantly, when can you say:</p>
+
+\[f(y) \leq f(x) + \nabla f(x) (x-y) + \frac{L}{2}\|x-y\|^2\]
 
 <hr />
 <h2 id="content">Content:</h2>
