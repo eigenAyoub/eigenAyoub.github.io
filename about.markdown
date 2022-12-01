@@ -11,7 +11,7 @@ permalink: /about/
 
 
 Quick timeline regarding my educational path:
-* **[July 2019]** I graduated with a Software Engineering Master degree from ENSIAS, Morocoo. I followed it with a year of pre-doctoral studies and R&D at UM6P, Morocco.
+* **[July 2019]** I graduated with a Software Engineering Master degree from ENSIAS, Morocco. I followed it with a year of pre-doctoral studies and R&D at UM6P, Morocco.
 * **[September 2021]** I decided to focus my career on Machine Learning research.
 * **[Begining of 2022]** I started applying for Master's degrees across Europe, in Mathematics and ML.
 * **[July 2022]** I got enrolled at PASSAU University. 
