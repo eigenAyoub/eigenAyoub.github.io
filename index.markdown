@@ -48,6 +48,9 @@ $$
 * Convex Optimization:
   * [Convergence Rates of SGD in convex and non-convex cases](/blogs/SGD)
 
+* I started a DL project, I'm trying to build an Autodiff "library".
+    * [Github repository](https://github.com/eigenAyoub/check-your-gradients)
+
 
 * Tips and Tricks:
   * [Matrix Differential Calculus](/blogs/enter_the_matrix) -- A few trick to save the day, AKA, enter the matrix.
