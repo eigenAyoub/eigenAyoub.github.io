@@ -7,12 +7,15 @@ layout: home
 <p align="center">
 
   <img src="src/GAUSSIAN.gif" alt="Gaussian" style="width: 600px" />
-  <br><b>Figure 1:</b> 1D Gaussian samples from pseudo-random samples 
+  <br><b>Figure 1:</b> Gaussian samples from pseudo-uniform samples 
   (<a href="https://github.com/3b1b/manim/">Created with Manim</a>)
 
 </p>
 
-
+<p align="center">
+  <img src="src/erdos-reyni.gif" alt="Gaussian" style="width: 600px" />
+  <br><b>Figure 2:</b> Erdos-Reyni Random Graph. Construction of a hub (blog comming soon!).
+</p>
 
 ---
 **It never hurts to see some random mathematics with no context:**

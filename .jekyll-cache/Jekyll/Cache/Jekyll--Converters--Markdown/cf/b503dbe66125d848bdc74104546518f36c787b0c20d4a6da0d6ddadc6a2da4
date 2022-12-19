@@ -1,6 +1,14 @@
-I"8<p align="center">
+I"�	<p align="center">
 
   <img src="src/GAUSSIAN.gif" alt="Gaussian" style="width: 600px" />
+  <br /><b>Figure 1:</b> 1D Gaussian samples from pseudo-random samples 
+  (<a href="https://github.com/3b1b/manim/">Created with Manim</a>)
+
+</p>
+
+<p align="center">
+
+  <img src="src/erdos-reyni.gif" alt="Gaussian" style="width: 600px" />
   <br /><b>Figure 1:</b> 1D Gaussian samples from pseudo-random samples 
   (<a href="https://github.com/3b1b/manim/">Created with Manim</a>)
 
@@ -36,6 +44,11 @@
   <li>Convex Optimization:
     <ul>
       <li><a href="/blogs/SGD">Convergence Rates of SGD in convex and non-convex cases</a></li>
+    </ul>
+  </li>
+  <li>I started a DL project, I’m trying to build an Autodiff “library”.
+    <ul>
+      <li><a href="https://github.com/eigenAyoub/check-your-gradients">Github repository</a></li>
     </ul>
   </li>
   <li>Tips and Tricks:
