@@ -3,7 +3,15 @@ layout: home
 ---
 
 
+---
+# Content:
+* [Gallery](#gallery)
+* [Blog posts](#blog-posts)
+* [News section](#news)
 
+
+---
+## Gallery:
 <p align="center">
 
   <img src="src/GAUSSIAN.gif" alt="Gaussian" style="width: 600px" />
@@ -14,10 +22,11 @@ layout: home
 
 <p align="center">
   <img src="src/erdos-reyni.gif" alt="Gaussian" style="width: 600px" />
-  <br><b>Figure 2:</b> Erdos-Reyni Random Graph. Construction of a hub (blog comming soon!).
+  <br><b>Figure 2:</b> Erdos-Renyi Random Graph. Construction of a hub as the E[deg(v_i)] approaches 1.
 </p>
 
----
+
+
 **It never hurts to see some random mathematics with no context:**
 
 $$
@@ -33,12 +42,6 @@ Most importantly, when can you say the following:
 $$
 f(y) \leq f(x) + \nabla f(x)^\intercal (x-y) + \frac{L}{2}\|x-y\|^2
 $$
-
-
----
-## Content:
-* [Blog posts](#blog-posts)
-* [News section](#news)
 
 
 ---

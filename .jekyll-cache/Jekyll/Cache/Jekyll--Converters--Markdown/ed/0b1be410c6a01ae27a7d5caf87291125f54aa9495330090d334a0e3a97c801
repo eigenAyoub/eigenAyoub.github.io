@@ -1,4 +1,15 @@
-I"Â	<p align="center">
+I"/
+<hr />
+<h1 id="content">Content:</h1>
+<ul>
+  <li><a href="#gallery">Gallery</a></li>
+  <li><a href="#blog-posts">Blog posts</a></li>
+  <li><a href="#news">News section</a></li>
+</ul>
+
+<hr />
+<h2 id="gallery">Gallery:</h2>
+<p align="center">
 
   <img src="src/GAUSSIAN.gif" alt="Gaussian" style="width: 600px" />
   <br /><b>Figure 1:</b> Gaussian samples from pseudo-uniform samples 
@@ -8,10 +19,9 @@
 
 <p align="center">
   <img src="src/erdos-reyni.gif" alt="Gaussian" style="width: 600px" />
-  <br /><b>Figure 2:</b> Erdos-Reyni Random Graph. Construction of a hub (blog comming soon!).
+  <br /><b>Figure 2:</b> Erdos-Renyi Random Graph. Construction of a hub as the Expected degree approaches 1 (blog comming soon!).
 </p>
 
-<hr />
 <p><strong>It never hurts to see some random mathematics with no context:</strong></p>
 
 \[\nabla_\phi \mathbb{E}_{q(\mathbf{z}|\phi)}\left[ f(\mathbf{z}) \right] ~=~ \mathbb{E}_{q(\mathbf{z}|\phi)}\,[ f(\mathbf{z})\, \nabla_{\phi} \log q(\mathbf{z}|\phi) ]\]
@@ -21,13 +31,6 @@
 <p>Most importantly, when can you say the following:</p>
 
 \[f(y) \leq f(x) + \nabla f(x)^\intercal (x-y) + \frac{L}{2}\|x-y\|^2\]
-
-<hr />
-<h2 id="content">Content:</h2>
-<ul>
-  <li><a href="#blog-posts">Blog posts</a></li>
-  <li><a href="#news">News section</a></li>
-</ul>
 
 <hr />
 <h2 id="blog-posts">Blog-posts:</h2>
