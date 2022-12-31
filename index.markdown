@@ -47,6 +47,8 @@ $$
 ---
 ## Blog-posts:
 
+* To kick-start 2023, 2 micro blogs for my past and future self:
+    1. [Speed up your migration to VIM.](/blogs/vim)
 * Find my work for the **Randomized Algorithms** course that I'm undertaking at the **University of Passau**.
   * [Github repository](https://github.com/eigenAyoub/randomised-algorithms). 
 

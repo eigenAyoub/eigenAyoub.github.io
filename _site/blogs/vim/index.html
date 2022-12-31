@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Not uniform, at all. | Kaizen.</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Not uniform, at all." />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Kaizen." />
+<meta property="og:description" content="Kaizen." />
+<link rel="canonical" href="http://localhost:4000/blogs/vim/" />
+<meta property="og:url" content="http://localhost:4000/blogs/vim/" />
+<meta property="og:site_name" content="Not uniform, at all." />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Not uniform, at all." />
+<script type="application/ld+json">
+{"@type":"WebPage","headline":"Not uniform, at all.","url":"http://localhost:4000/blogs/vim/","description":"Kaizen.","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Not uniform, at all." /></head>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Not uniform, at all.</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About me</a><a class="page-link" href="/contact/">Contact</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline"></h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="" itemprop="datePublished">
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h3 id="my-number-1-rule"><a href="https://www.youtube.com/watch?v=XDdDQQ8uLhY">My number 1 rule</a>:</h3>
+<blockquote>
+  <p>Something in your VIM workflow that sounds inefficient? too long? \(\implies\)Then yes, you’re right, and there is a trick within VIM that solves it quickly and efficiently. Google it, trust me.</p>
+</blockquote>
+
+<h3 id="my-favorite-hacks">My favorite hacks:</h3>
+<ul>
+  <li><a href="#hack-1">Switch your <code class="language-plaintext highlighter-rouge">&lt;ESC&gt;</code> and <code class="language-plaintext highlighter-rouge">&lt;CAPS&gt;</code> keys</a></li>
+  <li><a href="#hack-2">Disable your arrow keys</a></li>
+  <li><a href="#hack-3">Make your visual search</a></li>
+  <li><a href="#hack-4">Faster navigation between splits inside VIM</a></li>
+  <li><a href="#hack-5">Move between local visual lines</a></li>
+  <li><a href="#hack-6">Embrace the power of  Registers 0, 1</a></li>
+  <li><a href="#hack-7">Ditch w for W</a></li>
+  <li><a href="#hack-8">Quickly source your files from VIM</a></li>
+</ul>
+
+<h3 id="content">Content:</h3>
+
+<h4 id="switch-your-esc-and-caps-keys-"><strong>Switch your <code class="language-plaintext highlighter-rouge">&lt;ESC&gt;</code> and <code class="language-plaintext highlighter-rouge">&lt;CAPS&gt;</code> keys</strong> <a name="hack-1"></a></h4>
+<ul>
+  <li>How? Add the following to your <strong>.bashrc</strong>:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">setxkbmap -option caps:swapescape</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="disable-your-arrow-keys"><strong>Disable your arrow keys:</strong><a name="hack-2"></a></h4>
+<p>If you are serious about learning VIM, then please disable your arrow keys.</p>
+<ul>
+  <li>How: Add the following to your <strong>.vimrc</strong>:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">noremap &lt;Up&gt; &lt;Nop&gt;</code></li>
+      <li><code class="language-plaintext highlighter-rouge">noremap &lt;Down&gt; &lt;Nop&gt;</code></li>
+      <li><code class="language-plaintext highlighter-rouge">noremap &lt;Left&gt; &lt;Nop&gt;</code></li>
+      <li><code class="language-plaintext highlighter-rouge">noremap &lt;Right&gt; &lt;Nop&gt;</code></li>
+      <li><code class="language-plaintext highlighter-rouge">inoremap &lt;Left&gt;  &lt;NOP&gt;</code></li>
+      <li><code class="language-plaintext highlighter-rouge">inoremap &lt;Right&gt; &lt;NOP&gt;</code></li>
+      <li><code class="language-plaintext highlighter-rouge">inoremap &lt;Up&gt;    &lt;NOP&gt;</code></li>
+      <li><code class="language-plaintext highlighter-rouge">inoremap &lt;Down&gt;  &lt;NOP&gt;</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>P.S: “If you’re really about that life”</strong></p>
+<blockquote>
+  <p>You should only use<code class="language-plaintext highlighter-rouge">&lt;H-J-K-L&gt;</code> for local changes/movements,  and use VIM advanced motions for big jumps. I personally don’t think I’m there yet.</p>
+</blockquote>
+
+<h4 id="let-the-cursor-move-to-your-search-pattern-while-typing--"><strong>Let the cursor move to your search pattern while typing:</strong>  <a name="hack-3"></a></h4>
+<p>Search in VIM is usually handled by <code class="language-plaintext highlighter-rouge">/</code> and <code class="language-plaintext highlighter-rouge">?</code>, one drawback is that you have type the pattern you’re looking for then press <code class="language-plaintext highlighter-rouge">&lt;ENTER&gt;</code> to move to your target. <code class="language-plaintext highlighter-rouge">incsearch</code> let you move to your target while typing. Add the following to your <strong>.vimrc</strong>:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">set incsearch</code></li>
+</ul>
+
+<h4 id="faster-navigation-between-splits-inside-vim--"><strong>Faster navigation between splits inside VIM:</strong>  <a name="hack-4"></a></h4>
+<p>In your <strong>.vimrc</strong> add the following:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">nnoremap &lt;C-J&gt; &lt;C-W&gt;&lt;C-J&gt;</code></li>
+  <li><code class="language-plaintext highlighter-rouge">nnoremap &lt;C-K&gt; &lt;C-W&gt;&lt;C-K&gt;</code></li>
+  <li><code class="language-plaintext highlighter-rouge">nnoremap &lt;C-L&gt; &lt;C-W&gt;&lt;C-L&gt;</code></li>
+  <li><code class="language-plaintext highlighter-rouge">nnoremap &lt;C-H&gt; &lt;C-W&gt;&lt;C-H&gt;</code></li>
+</ul>
+
+<h4 id="move-between-local-visual-lines--"><strong>Move between local visual lines:</strong>  <a name="hack-5"></a></h4>
+<p>VIM splits a long line into multiple “visual” lines, yet, <code class="language-plaintext highlighter-rouge">&lt;h,j,k,l&gt;</code>, still jumps the whole line. If you want move vertically through the virtual lines, the you can use <code class="language-plaintext highlighter-rouge">gi</code> and <code class="language-plaintext highlighter-rouge">gk</code>. I personally have the keys <code class="language-plaintext highlighter-rouge">j</code> and <code class="language-plaintext highlighter-rouge">k</code> remaped indefinetely as follows:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">noremap j gj</code></li>
+  <li><code class="language-plaintext highlighter-rouge">noremap k gk</code></li>
+</ul>
+
+<h4 id="embrace-the-power-of--registers-0-1--"><strong>Embrace the power of  Registers 0, 1:</strong>  <a name="hack-6"></a></h4>
+<p>If you just started using VIM, then you might face this situation every damn day:</p>
+<ol>
+  <li>You yank the word w1</li>
+  <li>You move to another word w2</li>
+  <li>You delete w2</li>
+  <li>Click on <code class="language-plaintext highlighter-rouge">p</code> (in your mind, you wish to paste the word w1)</li>
+  <li>VIM yanks the word w2 instead.</li>
+  <li>You should normally start swearing at VIM.</li>
+</ol>
+
+<p>The hack is to start embracing the world of REGISTERS. It’s okay if you don’t want to use them for general purposes (MACROS), but you should know that <strong>Register 0</strong> is your friend. It holds the last yanked thing.  Which you can quickly access using <strong><code class="language-plaintext highlighter-rouge">"0p</code></strong>.</p>
+
+<h4 id="ditch-wbe-for-w-b-and-e--"><strong>Ditch w,b,e for W, B and E</strong>  <a name="hack-7"></a></h4>
+<p>Most of the time, I find myself wanting to use a motion or action on a “Big-Word”. Which you can access using <code class="language-plaintext highlighter-rouge">W</code> (resp. <code class="language-plaintext highlighter-rouge">E</code>, and <code class="language-plaintext highlighter-rouge">B</code>) instead of <code class="language-plaintext highlighter-rouge">w</code> (resp. <code class="language-plaintext highlighter-rouge">e</code>, and <code class="language-plaintext highlighter-rouge">b</code>). What I refered to as a “Big-Word” is the concatenation of any non-empty/ non-whitespace characters.</p>
+
+<h4 id="quickly-source-your-vimrc-from-vim"><strong>Quickly source your .vimrc from VIM</strong><a name="hack-8"></a></h4>
+<p>Type the following in normal mode, duuh:  <code class="language-plaintext highlighter-rouge">:so%</code></p>
+
+<h2 id="to-do">TO-DO:</h2>
+<ul>
+  <li>REgisters?</li>
+  <li>Plugins?</li>
+  <li>cp paste between files?</li>
+</ul>
+
+  </div><a class="u-url" href="/blogs/vim/" hidden></a>
+</article>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+  <div class="wrapper">
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+              Not uniform, at all.
+          </li>
+        </ul>
+      </div>
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/eigenAyoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">eigenAyoub</span></a></li><li><a href="https://www.twitter.com/benAyad01"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">benAyad01</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Kaizen.  </p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+</body>
+
+</html>

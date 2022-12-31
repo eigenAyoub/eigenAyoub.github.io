@@ -1,4 +1,4 @@
-I"
+I"¾
 <hr />
 <h1 id="content">Content:</h1>
 <ul>
@@ -19,7 +19,7 @@
 
 <p align="center">
   <img src="src/erdos-reyni.gif" alt="Gaussian" style="width: 600px" />
-  <br /><b>Figure 2:</b> Erdos-Reyni Random Graph. Construction of a hub (blog comming soon!).
+  <br /><b>Figure 2:</b> Erdos-Renyi Random Graph. Construction of a hub as the E[deg(v_i)] approaches 1.
 </p>
 
 <p><strong>It never hurts to see some random mathematics with no context:</strong></p>
@@ -36,6 +36,11 @@
 <h2 id="blog-posts">Blog-posts:</h2>
 
 <ul>
+  <li>To kick-start 2023, 2 micro blogs for my past and future self:
+    <ol>
+      <li><a href="/blogs/vim">Speed up your migration to VIM.</a></li>
+    </ol>
+  </li>
   <li>Find my work for the <strong>Randomized Algorithms</strong> course that Iâ€™m undertaking at the <strong>University of Passau</strong>.
     <ul>
       <li><a href="https://github.com/eigenAyoub/randomised-algorithms">Github repository</a>.</li>
