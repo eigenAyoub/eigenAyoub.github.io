@@ -4,7 +4,7 @@ title:
 permalink: /blogs/vim/
 ---
 
-# Speed up your migration to VIM.
+## **Speed up your migration to VIM.**
 
 
 ### [My number 1 rule](https://www.youtube.com/watch?v=XDdDQQ8uLhY):
@@ -77,12 +77,12 @@ The hack is to start embracing the world of REGISTERS. It's okay if you don't wa
 Most of the time, I find myself wanting to use a motion or action on a "Big-Word". Which you can access using `W` (resp. `E`, and `B`) instead of `w` (resp. `e`, and `b`). What I refered to as a "Big-Word" is the concatenation of any non-empty/ non-whitespace characters.
 
 #### **Quickly source your .vimrc (or .bashrc) from VIM**<a name="hack-8"></a>
-Type the following in normal mode of course (duuuuh):  `:so%`
+Type the following:  `:so%`
 
 
 #### **Quickly save and quit VIM** <a name="hack-9"></a>
 
-VIM has a quick way to save and quit, you simply type `shift`+`ZZ`. But I'm not sure if there is something built-in to just save a file in normal mode without quitting (~ `:w`). good news though, you can do so by mapping `shift`+`ZS` to `:w`.
+VIM has a quick way to save and quit, you simply type `shift`+`ZZ`. But I'm not sure if there is something built-in to just save a file in normal mode without quitting (~ `:w`). Good news though, you can do so by mapping `shift`+`ZS` to `:w`.
 You can achieve so by adding the following line to your **.vimrc**:
 
 * `nnoremap ZS :w<cr>`
