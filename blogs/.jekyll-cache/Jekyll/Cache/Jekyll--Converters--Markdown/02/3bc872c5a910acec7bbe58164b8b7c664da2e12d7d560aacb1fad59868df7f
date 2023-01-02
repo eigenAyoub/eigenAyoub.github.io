@@ -1,0 +1,55 @@
+I"�<p><strong>Abstract</strong></p>
+
+<p>Maintaining a healthy relationship with matrices is a crucial asset in modern ML practices. In this blog I’ll collect some of the most known transformations/operations that I have encountered and used. Perhaps make it a “bigger” project, as I’m currenlty learning JAX. We’ll see!</p>
+
+<h2 id="content">Content:</h2>
+<ol>
+  <li><a href="#the-passpartout">The Passepartout</a></li>
+  <li><a href="#references">References</a></li>
+</ol>
+
+<h2 id="the-passepartout">The Passepartout:</h2>
+
+<ol>
+  <li>
+\[\frac{\partial b^\intercal a}{\partial a} = b\]
+  </li>
+  <li>
+\[\frac{\partial a^\intercal A a}{\partial a} = (A^\intercal + A)a\]
+  </li>
+  <li>
+\[\frac{\partial \log (\det A) }{\partial A}= (A^{-1})^\intercal\]
+  </li>
+  <li>
+\[\frac{\partial tr(BA)}{\partial A}= B^\intercal\]
+  </li>
+  <li>
+\[\frac{\partial A^{-1}}{\partial \alpha} = - A^{-1} \frac{\partial A}{\partial \alpha} A^{-1}\]
+  </li>
+  <li>
+\[\frac{\partial \det A }{\partial A}= (\det A) A^{-1} \;\;\;\; \text{Such a beauty!}\]
+  </li>
+</ol>
+
+<h2 id="references">References:</h2>
+
+<ul>
+  <li>Stefan Harmeling, ML course, lecture 08/28. <a href="https://www.youtube.com/watch?v=uQ8Q9B1LMVw">Link</a></li>
+</ul>
+
+<p> 
+ </p>
+
+<hr />
+
+<p><strong>Progress:</strong></p>
+
+<ul>
+  <li>First skeleton [Done]</li>
+  <li>Polish the latex (scalars / vectors / matrices) when it’s not clear from the context [TO-DO]</li>
+  <li>Keep adding formulas.  [TO-DO]</li>
+  <li>Add the generic procedure to compute complicated forms (Differential / Identification rules) [TO-DO]</li>
+  <li>Perhaps add some JAX and make it a worthy bog-post [Really TO-DO]</li>
+</ul>
+
+:ET

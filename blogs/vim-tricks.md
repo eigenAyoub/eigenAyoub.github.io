@@ -1,15 +1,17 @@
 ---
-layout: post
-title:
+layout: default
+title: 
 permalink: /blogs/vim/
 ---
+
+# Speed up your migration to VIM.
 
 
 ### [My number 1 rule](https://www.youtube.com/watch?v=XDdDQQ8uLhY):
 > Something in your VIM workflow that sounds inefficient? too long? $$\implies$$Then yes, you're right, and there is a trick within VIM that solves it quickly and efficiently. Google it, trust me.
 
 
-### My favorite hacks:
+### **My favorite hacks:**
 * [Switch your `<ESC>` and `<CAPS>` keys](#hack-1)
 * [Disable your arrow keys](#hack-2)
 * [Make your visual search](#hack-3)
@@ -18,8 +20,9 @@ permalink: /blogs/vim/
 * [Embrace the power of  Registers 0, 1](#hack-6)
 * [Ditch w for W](#hack-7)
 * [Quickly source your files from VIM](#hack-8)
+* [Quickly save and quit VIM](#hack-9)
 
-### Content:
+### **Content:**
 
 #### **Switch your `<ESC>` and `<CAPS>` keys** <a name="hack-1"></a>
 * How? Add the following to your **.bashrc**:    
@@ -73,10 +76,20 @@ The hack is to start embracing the world of REGISTERS. It's okay if you don't wa
 #### **Ditch w,b,e for W, B and E**  <a name="hack-7"></a>
 Most of the time, I find myself wanting to use a motion or action on a "Big-Word". Which you can access using `W` (resp. `E`, and `B`) instead of `w` (resp. `e`, and `b`). What I refered to as a "Big-Word" is the concatenation of any non-empty/ non-whitespace characters.
 
-#### **Quickly source your .vimrc from VIM**<a name="hack-8"></a>
-Type the following in normal mode, duuh:  `:so%`
+#### **Quickly source your .vimrc (or .bashrc) from VIM**<a name="hack-8"></a>
+Type the following in normal mode of course (duuuuh):  `:so%`
+
+
+#### **Quickly save and quit VIM** <a name="hack-9"></a>
+
+VIM has a quick way to save and quit, you simply type `shift`+`ZZ`. But I'm not sure if there is something built-in to just save a file in normal mode without quitting (~ `:w`). good news though, you can do so by mapping `shift`+`ZS` to `:w`.
+You can achieve so by adding the following line to your **.vimrc**:
+
+* `nnoremap ZS :w<cr>`
+
+
 
 ## TO-DO:
-* REgisters?
+* registers?
 * Plugins?
 * cp paste between files?

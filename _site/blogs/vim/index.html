@@ -32,27 +32,19 @@
           </span>
         </label>
 
-        <div class="trigger"><a class="page-link" href="/about/">About me</a><a class="page-link" href="/contact/">Contact</a></div>
+        <div class="trigger"><a class="page-link" href="/about/">About me</a><a class="page-link" href="/contact/">Contact</a><a class="page-link" href="/gal/">Cuties</a></div>
       </nav></div>
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+        <h1 id="speed-up-your-migration-to-vim">Speed up your migration to VIM.</h1>
 
-  <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline"></h1>
-    <p class="post-meta">
-      <time class="dt-published" datetime="" itemprop="datePublished">
-      </time></p>
-  </header>
-
-  <div class="post-content e-content" itemprop="articleBody">
-    <h3 id="my-number-1-rule"><a href="https://www.youtube.com/watch?v=XDdDQQ8uLhY">My number 1 rule</a>:</h3>
+<h3 id="my-number-1-rule"><a href="https://www.youtube.com/watch?v=XDdDQQ8uLhY">My number 1 rule</a>:</h3>
 <blockquote>
   <p>Something in your VIM workflow that sounds inefficient? too long? \(\implies\)Then yes, you’re right, and there is a trick within VIM that solves it quickly and efficiently. Google it, trust me.</p>
 </blockquote>
 
-<h3 id="my-favorite-hacks">My favorite hacks:</h3>
+<h3 id="my-favorite-hacks"><strong>My favorite hacks:</strong></h3>
 <ul>
   <li><a href="#hack-1">Switch your <code class="language-plaintext highlighter-rouge">&lt;ESC&gt;</code> and <code class="language-plaintext highlighter-rouge">&lt;CAPS&gt;</code> keys</a></li>
   <li><a href="#hack-2">Disable your arrow keys</a></li>
@@ -62,9 +54,10 @@
   <li><a href="#hack-6">Embrace the power of  Registers 0, 1</a></li>
   <li><a href="#hack-7">Ditch w for W</a></li>
   <li><a href="#hack-8">Quickly source your files from VIM</a></li>
+  <li><a href="#hack-9">Quickly save and quit VIM</a></li>
 </ul>
 
-<h3 id="content">Content:</h3>
+<h3 id="content"><strong>Content:</strong></h3>
 
 <h4 id="switch-your-esc-and-caps-keys-"><strong>Switch your <code class="language-plaintext highlighter-rouge">&lt;ESC&gt;</code> and <code class="language-plaintext highlighter-rouge">&lt;CAPS&gt;</code> keys</strong> <a name="hack-1"></a></h4>
 <ul>
@@ -135,19 +128,24 @@
 <h4 id="ditch-wbe-for-w-b-and-e--"><strong>Ditch w,b,e for W, B and E</strong>  <a name="hack-7"></a></h4>
 <p>Most of the time, I find myself wanting to use a motion or action on a “Big-Word”. Which you can access using <code class="language-plaintext highlighter-rouge">W</code> (resp. <code class="language-plaintext highlighter-rouge">E</code>, and <code class="language-plaintext highlighter-rouge">B</code>) instead of <code class="language-plaintext highlighter-rouge">w</code> (resp. <code class="language-plaintext highlighter-rouge">e</code>, and <code class="language-plaintext highlighter-rouge">b</code>). What I refered to as a “Big-Word” is the concatenation of any non-empty/ non-whitespace characters.</p>
 
-<h4 id="quickly-source-your-vimrc-from-vim"><strong>Quickly source your .vimrc from VIM</strong><a name="hack-8"></a></h4>
-<p>Type the following in normal mode, duuh:  <code class="language-plaintext highlighter-rouge">:so%</code></p>
+<h4 id="quickly-source-your-vimrc-or-bashrc-from-vim"><strong>Quickly source your .vimrc (or .bashrc) from VIM</strong><a name="hack-8"></a></h4>
+<p>Type the following in normal mode of course (duuuuh):  <code class="language-plaintext highlighter-rouge">:so%</code></p>
+
+<h4 id="quickly-save-and-quit-vim-"><strong>Quickly save and quit VIM</strong> <a name="hack-9"></a></h4>
+
+<p>VIM has a quick way to save and quit, you simply type <code class="language-plaintext highlighter-rouge">shift</code>+<code class="language-plaintext highlighter-rouge">ZZ</code>. But I’m not sure if there is something built-in to just save a file in normal mode without quitting (~ <code class="language-plaintext highlighter-rouge">:w</code>). good news though, you can do so by mapping <code class="language-plaintext highlighter-rouge">shift</code>+<code class="language-plaintext highlighter-rouge">ZS</code> to <code class="language-plaintext highlighter-rouge">:w</code>.
+You can achieve so by adding the following line to your <strong>.vimrc</strong>:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">nnoremap ZS :w&lt;cr&gt;</code></li>
+</ul>
 
 <h2 id="to-do">TO-DO:</h2>
 <ul>
-  <li>REgisters?</li>
+  <li>registers?</li>
   <li>Plugins?</li>
   <li>cp paste between files?</li>
 </ul>
-
-  </div><a class="u-url" href="/blogs/vim/" hidden></a>
-</article>
-
 
       </div>
     </main><footer class="site-footer h-card">

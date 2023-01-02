@@ -1,0 +1,50 @@
+I"�<p><a href="https://www.youtube.com/watch?v=c-MU_5VkjtE">Hey You</a>, find me <a href="/about/">here</a> and <a href="/contact/">there</a>.</p>
+
+<h2 id="blog-posts">Blog-posts:</h2>
+
+<ul>
+  <li>Quick hacks that you might find useful:
+    <ul>
+      <li><a href="/blogs/vim">Speed up your migration to VIM.</a></li>
+    </ul>
+  </li>
+  <li>Find my work for the <strong>Randomized Algorithms</strong> course that I’m undertaking at the <strong>University of Passau</strong>.
+    <ul>
+      <li><a href="https://github.com/eigenAyoub/randomised-algorithms">Github repository</a>.</li>
+    </ul>
+  </li>
+  <li>Convex Optimization:
+    <ul>
+      <li><a href="/blogs/SGD">Convergence Rates of SGD in convex and non-convex cases</a></li>
+    </ul>
+  </li>
+  <li>I started a DL project, I’m trying to build an Autodiff “library”.
+    <ul>
+      <li><a href="https://github.com/eigenAyoub/check-your-gradients">Github repository</a></li>
+    </ul>
+  </li>
+  <li>Tips and Tricks:
+    <ul>
+      <li><a href="/blogs/enter_the_matrix">Matrix Differential Calculus</a> – A few trick to save the day, AKA, enter the matrix.</li>
+    </ul>
+  </li>
+  <li>Reinforcement learning:
+    <ul>
+      <li><a href="https://github.com/eigenAyoub/reinforcement-learning">Github repository.</a></li>
+      <li>Stochastic Approximation and (Asymptotic) Convergence of Q-learning. [Soon]</li>
+    </ul>
+  </li>
+  <li>Random:
+    <ul>
+      <li>Discussing the correctness of the plot above. <a href="/blogs/gaussian_samples">Gaussian Samples</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="news">News:</h2>
+
+<ul>
+  <li><strong>[04 July 2022]</strong> I’m officially enrolled at the university of PASSAU, Computational Mathematics M.Sc.</li>
+</ul>
+
+:ET
