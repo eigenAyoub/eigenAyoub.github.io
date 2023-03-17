@@ -4,7 +4,9 @@ title:
 permalink: /blogs/vim/
 ---
 
-## **Speed up your migration to VIM.**
+
+In this blog post, I'll share some tips that helped speed up my VIM learning trajectory. 
+
 
 
 ### [My number 1 rule](https://www.youtube.com/watch?v=XDdDQQ8uLhY):
