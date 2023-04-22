@@ -27,8 +27,6 @@ layout: home
   * [Github repository.](https://github.com/eigenAyoub/reinforcement-learning)
   * Stochastic Approximation and (Asymptotic) Convergence of Q-learning. [Soon]
 
-* Random:
-  * Discussing the correctness of the plot above. [Gaussian Samples](/blogs/gaussian_samples)
 
 
 ## News:
