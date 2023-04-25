@@ -16,7 +16,7 @@ layout: home
 * Convex Optimization:
   * [Convergence Rates of SGD in convex and non-convex cases](/blogs/SGD)
 
-* I started a DL project, I'm trying to build an Autodiff "library".
+* I'm building an auto-differentiation library (for NNs) from scratch.
     * [Github repository](https://github.com/eigenAyoub/check-your-gradients)
 
 
