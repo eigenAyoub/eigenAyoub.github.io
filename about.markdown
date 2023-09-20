@@ -4,15 +4,7 @@ title: About me
 permalink: /about/
 ---
 
-* Hey there, I'm Ayoub. I'm a **Postgraduate** at the **Computational Mathematics M.Sc** at the **University of PASSAU, Germany.**
-* I'll start writing about what interests me, mainly **Optimization**, **Probabilistic ML** and **RL**.
-* On a personal level, I like boxing, cooking, and I'm definetely still trying to become a [VIM](https://en.wikipedia.org/wiki/Vim_(text_editor)) Ninja.
 
 
 
-Quick timeline regarding my educational path:
-* **[July 2019]** I graduated with a Software Engineering Master degree from ENSIAS, Morocco. I followed it with a year of pre-doctoral studies and R&D at UM6P, Morocco.
-* **[September 2021]** I decided to focus my career on Machine Learning research.
-* **[Begining of 2022]** I started applying for Master's degrees across Europe, in Mathematics and ML.
-* **[July 2022]** I got enrolled at PASSAU University. 
 

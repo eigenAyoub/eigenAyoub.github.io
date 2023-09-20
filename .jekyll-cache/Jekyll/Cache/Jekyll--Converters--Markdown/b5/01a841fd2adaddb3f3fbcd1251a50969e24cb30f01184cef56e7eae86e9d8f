@@ -1,7 +1,10 @@
-I"�<p><a href="https://www.youtube.com/watch?v=c-MU_5VkjtE">Hey You</a>, find me <a href="/about/">here</a> and <a href="/contact/">there</a>.</p>
+I"�<h2 id="about-me">About me:</h2>
+<ul>
+  <li><a href="https://www.youtube.com/watch?v=c-MU_5VkjtE">Hey You</a>, I’m Ayoub. I’m a <strong>Computational Mathematics</strong> Master’s student at the <strong>University of PASSAU, Germany.</strong> The Winter Semester 2023/2024 would be my third semester. I also hold a Master’s degree in Software Engineering, from ENSIAS, Morocco in 2019.</li>
+  <li>I am interested (and have a strong background) in Mathematics, Machine Learning, and Programming.</li>
+</ul>
 
 <h2 id="blog-posts">Blog-posts:</h2>
-
 <ul>
   <li>Quick hacks that you might find useful:
     <ul>
@@ -18,7 +21,7 @@
       <li><a href="/blogs/SGD">Convergence Rates of SGD in convex and non-convex cases</a></li>
     </ul>
   </li>
-  <li>I started a DL project, I’m trying to build an Autodiff “library”.
+  <li>I’m building an auto-differentiation library (for NNs) from scratch.
     <ul>
       <li><a href="https://github.com/eigenAyoub/check-your-gradients">Github repository</a></li>
     </ul>
@@ -34,17 +37,13 @@
       <li>Stochastic Approximation and (Asymptotic) Convergence of Q-learning. [Soon]</li>
     </ul>
   </li>
-  <li>Random:
-    <ul>
-      <li>Discussing the correctness of the plot above. <a href="/blogs/gaussian_samples">Gaussian Samples</a></li>
-    </ul>
-  </li>
 </ul>
 
-<h2 id="news">News:</h2>
+<h2 id="contact">Contact:</h2>
 
 <ul>
-  <li><strong>[04 July 2022]</strong> I’m officially enrolled at the university of PASSAU, Computational Mathematics M.Sc.</li>
+  <li>Email: <code class="language-plaintext highlighter-rouge">ayoub.benayad.467</code> + <code class="language-plaintext highlighter-rouge">'at'</code> + <code class="language-plaintext highlighter-rouge">gmail</code> + <code class="language-plaintext highlighter-rouge">'dot'</code> + <code class="language-plaintext highlighter-rouge">com</code></li>
+  <li>Reach out in LinkedIn:  https://www.linkedin.com/in/benayad7/</li>
 </ul>
 
 :ET

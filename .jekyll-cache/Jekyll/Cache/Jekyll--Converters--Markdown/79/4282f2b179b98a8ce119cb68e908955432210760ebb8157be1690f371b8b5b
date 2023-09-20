@@ -1,0 +1,41 @@
+I"�<p>In this task, we are asked to clean, and process a dataset.</p>
+
+<h3 id="a-quick-manual-inspection-a-few-remarques"><em>A quick (manual) inspection. A few remarques:</em></h3>
+
+<ul>
+  <li>The first dummy columns, kind of looks obsolute?!</li>
+  <li>The the other columns</li>
+  <li>Then everything seems to be regular</li>
+</ul>
+
+<h3 id="loading-the-dataset"><em>Loading the dataset:</em></h3>
+<p>As the default separator in Pandas’ <code class="language-plaintext highlighter-rouge">read_csv()</code> method is <code class="language-plaintext highlighter-rouge">sep=","</code>, we have to specify the correct separator, in this case <code class="language-plaintext highlighter-rouge">sep = ';'</code> does the job.</p>
+
+<h3 id="some-quick-eda"><em>Some quick EDA:</em></h3>
+
+<ul>
+  <li>Shape: <code class="language-plaintext highlighter-rouge">data.shape</code> outputs:  <code class="language-plaintext highlighter-rouge">2009 x 40</code></li>
+  <li>Head:  <code class="language-plaintext highlighter-rouge">data.head(20)</code> outputs:</li>
+</ul>
+
+<p><img src="/src/head_20.png" alt="Head" /></p>
+
+<p>Apparently, there are 3 <code class="language-plaintext highlighter-rouge">dummy_header</code> columns, the first one got (default behavior of Pandas). We can fix this by adding <code class="language-plaintext highlighter-rouge">header=None</code> as an argument to <code class="language-plaintext highlighter-rouge">read_csv()</code>. Reading the csv is done as follows:</p>
+
+<p>&amp;nbsp <code class="language-plaintext highlighter-rouge">data = pd.read_csv("input.csv", sep = ';', header=None)</code></p>
+
+<h3 id="next-step-babyyyy">Next step babyyyy</h3>
+
+<h2 id="loading-the-dataset-1">Loading the dataset:</h2>
+
+<p>As the default separator in Pandas’ read_csv method is “,”, we have to specify the correct separator, in this case “separator = “;” ” does the job.</p>
+
+<h2 id="some-inspections">Some inspections:</h2>
+
+<p>Trying to load the csv file simply using the “pd.read_csv” gives an error. WE will try to skip the bad lines</p>
+
+<p>Using the following argument on_bad_lines = ‘skip’</p>
+
+<p>But this method apparently skipped everything almost all lines.</p>
+
+:ET
