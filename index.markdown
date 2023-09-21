@@ -2,11 +2,12 @@
 layout: home
 ---
 
-## About me:
+
+### About me:
 * [Hey You](https://www.youtube.com/watch?v=c-MU_5VkjtE), I'm Ayoub. I'm a **Computational Mathematics** Master's student at the **University of PASSAU, Germany.** The Winter Semester 2023/2024 would be my third semester. I also hold a Master's degree in Software Engineering, from ENSIAS, Morocco in 2019.
 * I am interested (and have a strong background) in Mathematics, Machine Learning, and Programming.
 
-## Blog-posts:
+### Blog-posts:
 * Quick hacks that you might find useful: 
     * [Speed up your migration to VIM.](/blogs/vim)
     
@@ -28,7 +29,7 @@ layout: home
   * [Github repository.](https://github.com/eigenAyoub/reinforcement-learning)
   * Stochastic Approximation and (Asymptotic) Convergence of Q-learning. [Soon]
 
-## Contact:
+### Contact:
 
 * Email: `ayoub.benayad.467` + `'at'` + `gmail` + `'dot'` + `com`
 * Reach out in LinkedIn:  https://www.linkedin.com/in/benayad7/

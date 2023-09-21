@@ -1,0 +1,73 @@
+I"�<p>In this task, we are asked to clean, and process a dataset.</p>
+
+<h3 id="a-quick-manual-inspection-a-few-remarques"><em>A quick (manual) inspection. A few remarques:</em></h3>
+
+<ul>
+  <li>The first dummy columns, kind of looks obsolute?!</li>
+  <li>The the other columns</li>
+  <li>Then everything seems to be regular</li>
+</ul>
+
+<h3 id="loading-the-dataset"><em>Loading the dataset:</em></h3>
+<p>As the default separator in Pandas’ <code class="language-plaintext highlighter-rouge">read_csv()</code> method is <code class="language-plaintext highlighter-rouge">sep=","</code>, we have to specify the correct separator, in this case <code class="language-plaintext highlighter-rouge">sep = ';'</code> does the job.</p>
+
+<h3 id="some-quick-eda"><em>Some quick EDA:</em></h3>
+
+<ul>
+  <li>Shape: <code class="language-plaintext highlighter-rouge">data.shape</code> outputs:  <code class="language-plaintext highlighter-rouge">2009 x 40</code></li>
+  <li>Head:  <code class="language-plaintext highlighter-rouge">data.head(20)</code> outputs:</li>
+</ul>
+
+<p><img src="/src/head_20.png" alt="Head" /></p>
+
+<p>Apparently, there are 3 <code class="language-plaintext highlighter-rouge">dummy_header</code> columns, the first got picked as the <code class="language-plaintext highlighter-rouge">data.columns</code> (default behavior of Pandas). We can fix this by adding <code class="language-plaintext highlighter-rouge">header=None</code> as an argument to <code class="language-plaintext highlighter-rouge">read_csv()</code>. Reading the csv is done as follows:</p>
+
+<p><code class="language-plaintext highlighter-rouge">data = pd.read_csv("input.csv", sep = ';', header=None)</code></p>
+
+<h3 id="create-a-new-header-clean-rows-and-reset-index"><em>Create a new header, clean rows, and reset index.</em></h3>
+
+<p>Code:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>data = pd.read_csv("input.csv", sep = ';', header=None)`
+data.columns = data.iloc[6,:]+'_'+data.iloc[7,:]
+data = data.iloc[9:,].reset_index(drop = True)
+</code></pre></div></div>
+
+<p>Result:</p>
+
+<p><img src="/src/head_clean.png" alt="Head" /></p>
+
+<p><em>P.S:</em> the focus here is to get stuff done quickly, without worrying much about efficiency, as the dataset is small. For bigger datasets, I would’ve probably thought of more efficient ways.</p>
+
+<h3 id="some-final-touches"><em>Some final touches</em></h3>
+<p>Clearly, all columns are to be numerical. We have two problems here:</p>
+<ol>
+  <li>Columns types are object (we can easily check this using <code class="language-plaintext highlighter-rouge">data.dtypes</code>)</li>
+  <li>Each entry is a <code class="language-plaintext highlighter-rouge">str</code> type.</li>
+  <li>Decimal part is represented by a <code class="language-plaintext highlighter-rouge">,</code>, and <code class="language-plaintext highlighter-rouge">.</code> represents thousands separator.</li>
+</ol>
+
+<p>We fix this with the following  code snipit:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>data.to_csv("data2.csv", sep = ";")
+data = pd.read_csv("data2.csv", sep=";" , decimal = ",", thousands='.').drop(["Unnamed: 0"], axis=1)
+</code></pre></div></div>
+
+<p>And now, we get the following <code class="language-plaintext highlighter-rouge">data.head()</code>:</p>
+
+<p><img src="/src/head_clean2.png" alt="Head" /></p>
+
+<p>And all types are now either <code class="language-plaintext highlighter-rouge">float</code> or <code class="language-plaintext highlighter-rouge">int</code>:</p>
+
+<p><img src="/src/head_types.png" alt="Head" /></p>
+
+<p><em>P.S</em>: This is absolutely not efficient, as I’m saving and loading the same data. I’ll try later on to come up with a second method.</p>
+
+<h3 id="some-visual"><em>Some visual:</em></h3>
+
+<p>Below we plot a few variables:</p>
+
+<p><img src="/src/head_visual.png" alt="Head" /></p>
+
+<p>Obviously, the third variables has a lot of volatility, let’s visulize it better using a moving average:</p>
+
+:ET
