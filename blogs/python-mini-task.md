@@ -4,14 +4,13 @@ title:
 permalink: /blogs/python-mini-task
 ---
 
-In this task, we are asked to clean, and process a dataset.
+I'll detail in this mini-blog the steps that I took to pre-precess/clean the data.
 
-
-### *A quick (manual) inspection. A few remarques:*
+### *A quick (manual) inspection. A few remarks:*
     
-* The first dummy columns, kind of looks obsolute?!
-* The the other columns
-* Then everything seems to be regular
+* The first dummy columns, kind of looks useless?
+* The the other columns up row 8/9 do not seem in sync with the rest of the columns.
+* Then everything seems to be regular starting from row 8/9.
 
 
 ### *Loading the dataset:*
@@ -24,7 +23,7 @@ As the default separator in Pandas’ `read_csv()` method is `sep=","`, we have 
 
 ![Head](/src/head_20.png)
 
-Apparently, there are 3 `dummy_header` columns, the first got picked as the `data.columns` (default behavior of Pandas). We can fix this by adding `header=None` as an argument to `read_csv()`. Reading the csv is done as follows: 
+Apparently, there are 3 `dummy_header` columns, the first got picked as the `data.columns` (default behavior of Pandas). We can fix this by adding `header=None` as an argument to `read_csv()`. Reading the csv (for now) is done as follows : 
 
 `data = pd.read_csv("input.csv", sep = ';', header=None)` 
 
@@ -44,19 +43,21 @@ Result:
 
 ![Head](/src/head_clean.png) 
 
-*P.S:* the focus here is to get stuff done quickly, without worrying much about efficiency, as the dataset is small. For bigger datasets, I would've probably thought of more efficient ways.
+*P.S:* The focus here is to get stuff done quickly, without worrying much about efficiency, as the dataset is small. For bigger datasets, I would've probably thought of more efficient ways.
 
 ### *Some final touches*
 Clearly, all columns are to be numerical. We have two problems here:
-1. Columns types are object (we can easily check this using `data.dtypes`)
+1. Columns types are object (we can easily check this using `data.dtypes`), we would rather want the true type to be reflected.
 2. Each entry is a `str` type.
 3. Decimal part is represented by a `,`, and `.` represents thousands separator.
 
 We fix this with the following  code snipit:
+
 ```
 data.to_csv("data2.csv", sep = ";")
 data = pd.read_csv("data2.csv", sep=";" , decimal = ",", thousands='.').drop(["Unnamed: 0"], axis=1)
 ```
+*Remark:* This can't be done from the first call, as the dataset is mixed.
 
 And now, we get the following `data.head()`:
 
@@ -72,9 +73,9 @@ And all types are now either `float` or `int`:
 
 Below we plot a few variables:
 
-![Head](/src/head_visual.png) 
+![Head](/) 
 
-Obviously, the third variables has a lot of volatility, let's visulize it better using a moving average or resampling:
+Obviously, the third variables has a lot of volatility, let's visulize it better using a moving average or resampling. 
 
 ![Head](/src/head_avg.png)
 
@@ -82,6 +83,8 @@ Obviously, the third variables has a lot of volatility, let's visulize it better
 
 
 
+### *Final touches:*
 
+The notebook, has some other improvements that I didn't include here. 
 
 

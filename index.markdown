@@ -6,10 +6,11 @@ layout: home
 
 
 
-* [Hey You](https://www.youtube.com/watch?v=c-MU_5VkjtE), I'm Ayoub. I'm a **Computational Mathematics** Master's student at the **University of PASSAU, Germany**. I also hold a Master's degree in Software Engineering, from ENSIAS, Morocco in 2019.
-* I am interested (and have a strong background) in Mathematics, Machine Learning, and Programming.
+[Hey You](https://www.youtube.com/watch?v=c-MU_5VkjtE), I'm Ayoub. I'm a **Computational Mathematics** Master's student at the **University of PASSAU, Germany**. I also hold a Master's Degree in **Software Engineering**, 2019.
 
-### Blog-posts:
+* I am interested, and have a strong background, in Mathematics, Machine Learning, and Programming.
+
+### *Blog-posts:*
 * Quick hacks that you might find useful: 
     * [Speed up your migration to VIM.](/blogs/vim)
     * [Matrix Differential Calculus](/blogs/enter_the_matrix)
@@ -27,7 +28,7 @@ layout: home
   * [Github repository.](https://github.com/eigenAyoub/reinforcement-learning)
   * Stochastic Approximation and (Asymptotic) Convergence of Q-learning. [Soon]
 
-### Contact:
+### *Contact:*
 
 * Email: `ayoub.benayad.467` + `'at'` + `gmail` + `'dot'` + `com`
 * Reach out in LinkedIn:  https://www.linkedin.com/in/benayad7/ 
