@@ -30,8 +30,12 @@ layout: home
 
 ### *Contact:*
 
-* Email: `ayoub.benayad.467` + `'at'` + `gmail` + `'dot'` + `com`
-* Reach out in LinkedIn:  https://www.linkedin.com/in/benayad7/ 
-
+* *Email:* `ayoub.benayad.467` + `'at'` + `gmail` + `'dot'` + `com`
+* *DM:* 
+[LinkedIn(\in\eigenAyoub)](https://www.linkedin.com/in/eigenAyoub/)
+ |--|
+[Twitter(@eigenAyoub)](https://twitter.com/eigenayoub)
+ |--|
+[Instagram(@curl.ayoub)](https://www.instagram.com/curl.ayoub/)
 
 
