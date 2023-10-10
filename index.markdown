@@ -32,10 +32,10 @@ layout: home
 
 * *Email:* `ayoub.benayad.467` + `'at'` + `gmail` + `'dot'` + `com`
 * *DM:* 
-[LinkedIn(\in\eigenAyoub)](https://www.linkedin.com/in/eigenAyoub/)
- |--|
-[Twitter(@eigenAyoub)](https://twitter.com/eigenayoub)
- |--|
-[Instagram(@curl.ayoub)](https://www.instagram.com/curl.ayoub/)
+[LinkedIn](https://www.linkedin.com/in/eigenAyoub/)
+ ||
+[Twitter](https://twitter.com/eigenayoub)
+ ||
+[Instagram](https://www.instagram.com/curl.ayoub/)
 
 
