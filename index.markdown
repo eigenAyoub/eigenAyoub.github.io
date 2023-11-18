@@ -23,11 +23,10 @@ Research Interests: Efficient ML, NNs Compression, LLMs.
 * Convex Optimization:
   * [Convergence Rates of SGD in convex and non-convex cases](/blogs/SGD)
 
-A few repos:
+### *A few repos:*
 
-* A Neural Nets auto-differentiation library from scratch.
+* A Neural Nets auto-diff library from scratch.
     * [Github repository](https://github.com/eigenAyoub/check-your-gradients)
-
 
 * **Randomized Algorithms**, course work @UniPassau.
   * [Github repository](https://github.com/eigenAyoub/randomised-algorithms). 
@@ -38,9 +37,8 @@ A few repos:
 ### *Contact:*
 
 * *Email:* `ayoub.benayad.467` + `'at'` + `gmail` + `'dot'` + `com`
-* *DM:* 
+*  
 [LinkedIn](https://www.linkedin.com/in/eigenAyoub/), 
-[Twitter](https://twitter.com/eigenayoub), 
 [Instagram](https://www.instagram.com/curl.ayoub/)
 
 

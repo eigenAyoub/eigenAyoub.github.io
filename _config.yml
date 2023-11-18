@@ -25,7 +25,6 @@ description: >- # this means to ignore newlines until "baseurl:"
 baseurl: "" 
 url: "" 
 github_username:  eigenAyoub
-twitter_username: eigenAyoub
 linkedin_username: eigenAyoub
 instagram_username:  curl.ayoub
 
