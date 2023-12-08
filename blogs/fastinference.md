@@ -20,7 +20,7 @@ I'll collect in the blog a few recent trends that help speed up inference of aut
 * [Speculative decoding.](#speculative-decoding)
 
 ---
-### **> What happened to "Transformers are very optimal/parallelizable** <a name="built-different"></a>
+### **> What happened to "Transformers are very optimal/parallelizable"** <a name="built-different"></a>
 
 Ok, chill! 
 
