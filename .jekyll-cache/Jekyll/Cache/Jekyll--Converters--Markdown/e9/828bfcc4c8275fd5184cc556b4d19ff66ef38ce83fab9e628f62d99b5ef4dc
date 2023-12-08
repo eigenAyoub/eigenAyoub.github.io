@@ -1,0 +1,134 @@
+I"�<p>This is for now a Q&amp;A based blog regarding the transformer architecture.</p>
+
+<p>Jump to:</p>
+<ul>
+  <li><a href="#ref">References</a></li>
+  <li><a href="#q2">Q: KV cache</a></li>
+  <li><a href="#q7">Q: Cross Attention, Masked Attention</a></li>
+  <li><a href="#q4">Q: How to compute Transformer weights?</a></li>
+  <li><a href="#q5">Q: Masking in BERT vs Masking in GPT</a></li>
+  <li><a href="#q6">Q: Flash Attention, Mistral 7B</a></li>
+  <li><a href="#q7">Q: Intuition behind Multi-head-attention</a></li>
+</ul>
+
+<p>TO-DO:</p>
+
+<ul>
+  <li>Q: Multiple norm layers, why?</li>
+  <li>Q: Training Vs Inferencing, differences?</li>
+  <li>Q: If encoders-based model are good at understanding language, then why are decoder-only (e.g., GPT-family) models outperforming..</li>
+  <li>Q:</li>
+</ul>
+
+<p>References</p>
+
+<hr />
+<p><a name="q2"></a><strong>Question:</strong> What’s the KV cache:</p>
+
+<p>It’s the memory that is built up in the decoder during the generation (decoding) process, with every generated token \(t_i\), its key (resp. value) \(k_i = x_i W_k\), (resp. \(v_i = x_i W_v\)) gets appended to the right most column of \(K\) matrix (resp.  bottom row of \(V\).
+ (typically context + prompt + generated tokens).</p>
+
+<p>This is for instance one of the key tricks to speed up training/inference. For instance, FlashAttention</p>
+
+<p>XXXX</p>
+
+<p>This is a pretty advanced term. KV cache is the matrix KV that encoder builds as he decodes a se</p>
+
+<p>At inference, at each time we sample a new toked, we are provided with a sequence that consists of a [promt + past  generated tokens].</p>
+
+<p>At each step, the decoder requires self-attention of all these ast tokens, and hence, requires their KV.</p>
+
+<p>What are universal transformers.</p>
+
+<hr />
+<p><strong>Question:</strong>  How Cross Attention Head (CAH) different form Multi-Head-Attention (MHA)?</p>
+
+<p>In the CAH, we are fed the \(Q\)’s, and \(K\)’s from the decoder and \(V\)’s are fed the past MHA in the same attention layer.</p>
+
+<hr />
+<p><a name="q4"></a><strong>Question:</strong> The Transformer base archictecture has 65M parameters, how did we come up with it?</p>
+
+<p>Let’s first define the following terms:</p>
+<ul>
+  <li>\(V\): vocab size</li>
+  <li>\(N\): number of layers.</li>
+  <li>\(h\): number of heads per Multi-Head-Attention block.</li>
+  <li>\(d_{model}\): hidden size, aka, model dimension or embedding size.</li>
+  <li>\(d_v, d_k, d_q\): Output dimension of the Weight Matrices (\(W_V, W_K, W_Q\)).
+    <ul>
+      <li>We’ll assume that \(hd_v = h d_k = h d_q = d_{model}\) (A practice that is largely followed in most papers/implementations)</li>
+    </ul>
+  </li>
+  <li>\(W_o\): This is the matrix that is multiplied after the contacatenation of the heads, has size \(d_{model}^2\)</li>
+</ul>
+
+<p>The general formula could be derived as follows, I’ll ignore the biases and normalizartion params:</p>
+
+\[T = E +  N \underbrace{(  \overbrace{8 A + d_{model}^2}^\text{Multi-head-attention} + F)}_\text{1 Enc. Block} + N( \underbrace{2(8 A + d_{model}^2) + F}_\text{1 Dec. Block})\]
+
+<p>\(F\) is the feed forward layer, historically, It has always been assumed tobe a one hidden layer, of \(4 d_{model}\) size. \(\rightarrow F  = 4 d_{model} d_{model} +\)</p>
+
+<p>Plugging the numbers  for Transfor based (\(N=6, h=12, d_{model} = 512, d_v = 64\)) would lead to \(T = 6xM\)</p>
+
+<p>For the larger model (\(N=6, h=12, d_{model} = 512, d_v = 64\)) I get \(T = 114M\) which X over the paper numbers…</p>
+
+<p>A few notes:</p>
+
+<ul>
+  <li>The embedding matrix \(E\) represents X% of the weights of the base \(65M\) Transformer model. Let that sink in!</li>
+</ul>
+
+<hr />
+<p><a name="q6"></a><strong>Question:</strong> What’s so special about Mistral 7B.</p>
+
+<p>Mistral 7B is a model that came up recently (Oct 2023). It has a few new ways</p>
+
+<hr />
+<p><a name="q7"></a><strong>Question:</strong> What are some of the drawbacks of single-headed attention?</p>
+
+<p>Some vectors could take over. I.e., \(q^T k_i\) could way larger for certain key $i$. And hence, get more (undeserved?) attention.</p>
+
+<p>Let’s consider three sets of vectors, Values, Queries and Keys:  ${v_1, \dots , v_n } \sub R^d$</p>
+
+<p>${q_1, \dots , q_n } \sub R^d$, and ${k_1, \dots , k_n } \sub R^d$</p>
+
+<p>It was first used in it’s modern context in the paper » Check Karpathy video. An LSTM also uses a similar attention mechanism.</p>
+
+<hr />
+<p><a name="q5"></a><strong>Question:</strong> What is masking? How is it different in BERT vs GPT-based models.</p>
+
+<ul>
+  <li>Masking in a decoder mean one thing: you can’t the future tokens in the cross attention  layer.</li>
+  <li>
+    <p>Usually implemeted using this underrated trick:</p>
+  </li>
+  <li>Masking in BERT is more general, in fact it is the heart of BERT (hence why BERT is called an MLM, i.e., masked language model).</li>
+</ul>
+
+<p>Masking in decoders is a trick to not cheat while training the model. During training, we usually feed a whole sequence into the model, a train the model to predict the next token. Let’s say the we have a training sequence of the following length \((x_1, \dots, x_L)\)</p>
+
+<p>Masking in decoders is a way to prevents the present token of accessing information about the future tokens.</p>
+
+<p>What is usually done during training is to map this single coherent sentence to multiple training inputs, like the following:</p>
+
+<ul>
+  <li>\((x_1)\)  \(\rightarrow\) We “wish” the decoder could generate \(x_2\)</li>
+  <li>\((x_1,x_2)\)  \(\rightarrow\) We “wish” the decoder could generate \(x_3\)</li>
+  <li>\((x_1, \dots, x_{L-1})\) \(\rightarrow\) We “wish” the decoder could generate \(x_L\)</li>
+  <li>\((x_1, \dots, x_{L})\) \(\rightarrow\) We “wish” the decoder could generate  <EOS> token (End Of Sequence).</EOS></li>
+</ul>
+
+<p>Masking in BERT is what makes BERT… BERT. BERT is <em>NOT</em> pre-trained to generate the next token (i.e., it not an auto-regressive model). It’s a MLM (Masked Language Model).</p>
+
+<p>Worth mentioning that BERT is also trained using a NSP (next sentence prediction), but it was shown later on that is almost obsolete, longer MLM training with longer sequence was enough (Check <a href="https://arxiv.org/abs/1907.11692">RoBERTa</a>)</p>
+
+<hr />
+<h3 id="-references"><a name="ref"></a> References:</h3>
+
+<ul>
+  <li>Original Transformer Paper [<a href="https://arxiv.org/abs/1706.03762">Link</a>]</li>
+  <li>BERT [<a href="https://arxiv.org/abs/1810.04805">Link</a>]</li>
+  <li>RoBERTa</li>
+  <li>Kipply’s great blog on ..</li>
+</ul>
+:ET

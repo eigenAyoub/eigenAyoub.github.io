@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Kaizen | 10k</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Kaizen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="10k" />
+<meta property="og:description" content="10k" />
+<link rel="canonical" href="http://localhost:4000/blogs/transformer/" />
+<meta property="og:url" content="http://localhost:4000/blogs/transformer/" />
+<meta property="og:site_name" content="Kaizen" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Kaizen" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Kaizen","url":"http://localhost:4000/blogs/transformer/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kaizen" /></head>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Kaizen</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/gal/">Cuties</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <p>This is for now a Q&amp;A based blog regarding the transformer architecture.</p>
+
+<p>Jump to:</p>
+<ul>
+  <li><a href="#ref">References</a></li>
+  <li><a href="#q2">Q: KV cache</a></li>
+  <li><a href="#q7">Q: Cross Attention, Masked Attention</a></li>
+  <li><a href="#q4">Q: How to compute Transformer weights?</a></li>
+  <li><a href="#q5">Q: Masking in BERT vs Masking in GPT</a></li>
+  <li><a href="#q6">Q: Flash Attention, Mistral 7B</a></li>
+  <li><a href="#q7">Q: Intuition behind Multi-head-attention</a></li>
+</ul>
+
+<p>TO-DO:</p>
+
+<ul>
+  <li>Q: Multiple norm layers, why?</li>
+  <li>Q: Training Vs Inferencing, differences?</li>
+  <li>Q: If encoders-based model are good at understanding language, then why are decoder-only (e.g., GPT-family) models outperforming..</li>
+  <li>Q:</li>
+</ul>
+
+<p>References</p>
+
+<hr />
+<p><a name="q2"></a><strong>Question:</strong> What’s the KV cache:</p>
+
+<p>It’s the memory that is built up in the decoder during the generation (decoding) process, with every generated token \(t_i\), its key (resp. value) \(k_i = x_i W_k\), (resp. \(v_i = x_i W_v\)) gets appended to the right most column of \(K\) matrix (resp.  bottom row of \(V\).
+ (typically context + prompt + generated tokens).</p>
+
+<p>This is for instance one of the key tricks to speed up training/inference. For instance, FlashAttention</p>
+
+<p>XXXX</p>
+
+<p>This is a pretty advanced term. KV cache is the matrix KV that encoder builds as he decodes a se</p>
+
+<p>At inference, at each time we sample a new toked, we are provided with a sequence that consists of a [promt + past  generated tokens].</p>
+
+<p>At each step, the decoder requires self-attention of all these ast tokens, and hence, requires their KV.</p>
+
+<p>What are universal transformers.</p>
+
+<hr />
+<p><strong>Question:</strong>  How Cross Attention Head (CAH) different form Multi-Head-Attention (MHA)?</p>
+
+<p>In the CAH, we are fed the \(Q\)’s, and \(K\)’s from the decoder and \(V\)’s are fed the past MHA in the same attention layer.</p>
+
+<hr />
+<p><a name="q4"></a><strong>Question:</strong> The Transformer base archictecture has 65M parameters, how did we come up with it?</p>
+
+<p>Let’s first define the following terms:</p>
+<ul>
+  <li>\(V\): vocab size</li>
+  <li>\(N\): number of layers.</li>
+  <li>\(h\): number of heads per Multi-Head-Attention block.</li>
+  <li>\(d_{model}\): hidden size, aka, model dimension or embedding size.</li>
+  <li>\(d_v, d_k, d_q\): Output dimension of the Weight Matrices (\(W_V, W_K, W_Q\)).
+    <ul>
+      <li>We’ll assume that \(hd_v = h d_k = h d_q = d_{model}\) (A practice that is largely followed in most papers/implementations)</li>
+    </ul>
+  </li>
+  <li>\(W_o\): This is the matrix that is multiplied after the contacatenation of the heads, has size \(d_{model}^2\)</li>
+</ul>
+
+<p>The general formula could be derived as follows, I’ll ignore the biases and normalizartion params:</p>
+
+\[T = E +  N \underbrace{(  \overbrace{8 A + d_{model}^2}^\text{Multi-head-attention} + F)}_\text{1 Enc. Block} + N( \underbrace{2(8 A + d_{model}^2) + F}_\text{1 Dec. Block})\]
+
+<p>\(F\) is the feed forward layer, historically, It has always been assumed tobe a one hidden layer, of \(4 d_{model}\) size. \(\rightarrow F  = 4 d_{model} d_{model} +\)</p>
+
+<p>Plugging the numbers  for Transfor based (\(N=6, h=12, d_{model} = 512, d_v = 64\)) would lead to \(T = 6xM\)</p>
+
+<p>For the larger model (\(N=6, h=12, d_{model} = 512, d_v = 64\)) I get \(T = 114M\) which X over the paper numbers…</p>
+
+<p>A few notes:</p>
+
+<ul>
+  <li>The embedding matrix \(E\) represents X% of the weights of the base \(65M\) Transformer model. Let that sink in!</li>
+</ul>
+
+<hr />
+<p><a name="q6"></a><strong>Question:</strong> What’s so special about Mistral 7B.</p>
+
+<p>Mistral 7B is a model that came up recently (Oct 2023). It has a few new ways</p>
+
+<hr />
+<p><a name="q7"></a><strong>Question:</strong> What are some of the drawbacks of single-headed attention?</p>
+
+<p>Some vectors could take over. I.e., \(q^T k_i\) could way larger for certain key $i$. And hence, get more (undeserved?) attention.</p>
+
+<p>Let’s consider three sets of vectors, Values, Queries and Keys:  ${v_1, \dots , v_n } \sub R^d$</p>
+
+<p>${q_1, \dots , q_n } \sub R^d$, and ${k_1, \dots , k_n } \sub R^d$</p>
+
+<p>It was first used in it’s modern context in the paper » Check Karpathy video. An LSTM also uses a similar attention mechanism.</p>
+
+<hr />
+<p><a name="q5"></a><strong>Question:</strong> What is masking? How is it different in BERT vs GPT-based models.</p>
+
+<ul>
+  <li>Masking in a decoder mean one thing: you can’t the future tokens in the cross attention  layer.</li>
+  <li>
+    <p>Usually implemeted using this underrated trick:</p>
+  </li>
+  <li>Masking in BERT is more general, in fact it is the heart of BERT (hence why BERT is called an MLM, i.e., masked language model).</li>
+</ul>
+
+<p>Masking in decoders is a trick to not cheat while training the model. During training, we usually feed a whole sequence into the model, a train the model to predict the next token. Let’s say the we have a training sequence of the following length \((x_1, \dots, x_L)\)</p>
+
+<p>Masking in decoders is a way to prevents the present token of accessing information about the future tokens.</p>
+
+<p>What is usually done during training is to map this single coherent sentence to multiple training inputs, like the following:</p>
+
+<ul>
+  <li>\((x_1)\)  \(\rightarrow\) We “wish” the decoder could generate \(x_2\)</li>
+  <li>\((x_1,x_2)\)  \(\rightarrow\) We “wish” the decoder could generate \(x_3\)</li>
+  <li>\((x_1, \dots, x_{L-1})\) \(\rightarrow\) We “wish” the decoder could generate \(x_L\)</li>
+  <li>\((x_1, \dots, x_{L})\) \(\rightarrow\) We “wish” the decoder could generate  <EOS> token (End Of Sequence).</EOS></li>
+</ul>
+
+<p>Masking in BERT is what makes BERT… BERT. BERT is <em>NOT</em> pre-trained to generate the next token (i.e., it not an auto-regressive model). It’s a MLM (Masked Language Model).</p>
+
+<p>Worth mentioning that BERT is also trained using a NSP (next sentence prediction), but it was shown later on that is almost obsolete, longer MLM training with longer sequence was enough (Check <a href="https://arxiv.org/abs/1907.11692">RoBERTa</a>)</p>
+
+<hr />
+<h3 id="-references"><a name="ref"></a> References:</h3>
+
+<ul>
+  <li>Original Transformer Paper [<a href="https://arxiv.org/abs/1706.03762">Link</a>]</li>
+  <li>BERT [<a href="https://arxiv.org/abs/1810.04805">Link</a>]</li>
+  <li>RoBERTa</li>
+  <li>Kipply’s great blog on ..</li>
+</ul>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+  <div class="wrapper">
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+              Kaizen
+          </li>
+        </ul>
+      </div>
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/eigenAyoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">eigenAyoub</span></a></li><li><a href="https://instagram.com/curl.ayoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#instagram"></use></svg> <span class="username">curl.ayoub</span></a></li><li><a href="https://www.linkedin.com/in/eigenAyoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">eigenAyoub</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>10k</p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+</body>
+
+</html>

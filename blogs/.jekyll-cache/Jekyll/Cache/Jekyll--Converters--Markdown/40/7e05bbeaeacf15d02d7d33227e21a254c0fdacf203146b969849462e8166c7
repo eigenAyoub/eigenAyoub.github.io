@@ -1,0 +1,134 @@
+I"�<p>This is for now a Q&amp;A based blog regarding the transformer architecture.</p>
+
+<hr />
+<p><strong>Question:</strong> What’s the KV cache:</p>
+
+<p>It’s the momory that is built up in the decoder during the generation (decoding) process, with every generated token \(t_i\), its key (resp. value) \(k_i = x_i W_k\), (resp. \(v_i = x_i W_v\)) gets appended to right most column of \(K\) matrix (resp.  bottom row of \(V\).
+ (typically context + prompt + generated tokens).</p>
+
+<p>This is for instance one of the key tricks to speed up training/inference. For instance, FlashAttention</p>
+
+<hr />
+<p><strong>Question:</strong>  How Cross Attention Head (CAH) different form Multi-Head-Attention (MHA)?</p>
+
+<p>In the CAH, we are fed the \(Q\)’s, and \(K\)’s from the decoder and \(V\)’s are fed the past MHA in the same attention layer.</p>
+
+<hr />
+<p><strong>Question:</strong> The Transformer base archictecture has 65M parameters, how did we come up with it?</p>
+
+<p>Let’s define the following terms:</p>
+<ul>
+  <li>\(V\): vocab size</li>
+  <li>\(N\): number of layers.</li>
+  <li>\(h\): number of heads per Multi-Head-Attention block.</li>
+  <li>\(d_{model}\): hidden size, aka, model dimension or output size.</li>
+  <li>\(d_v, d_k, d_q\): Output dimension of the Weight Matrices (\(W_V, W_K, W_Q\)).
+    <ul>
+      <li>We’ll assume that \(hd_v = h d_k = h d_q = d_{model}\) (A practice that is largely followed in most papers/implementations)</li>
+    </ul>
+  </li>
+  <li>\(W_o\): This is the matrix that is multiplied after the contacatenation of the heads, has size \(d_{model}^2\)</li>
+</ul>
+
+<p>The general formula could be derived as follows:</p>
+
+\[T = E +  N \underbrace{(8 A + F)}_\text{1 Enc. Block} + N(\underbrace{2(8 A + F)}_\text{1 Dec. Block} + FF)\]
+
+<p>Plugging the numbers  for Transfor based (\(N=6, h=12, d_{model} = 512, d_v = 64\)) would lead to \(T = 6xM\)</p>
+
+<p>For the larger model (\(N=6, h=12, d_{model} = 512, d_v = 64\)) I get \(T = 114M\) which X over the paper numbers…</p>
+
+<hr />
+<p><strong>Question:</strong> What are some of the drawbacks of single-headed attention?</p>
+
+<p>Some vectors could take over. I.e., \(q^T k_i\) could way larger for certain key $i$. And hence, get more (undeserved?) attention.</p>
+
+<p>Let’s consider three sets of vectors, Values, Queries and Keys:  ${v_1, \dots , v_n } \sub R^d$</p>
+
+<p>${q_1, \dots , q_n } \sub R^d$, and ${k_1, \dots , k_n } \sub R^d$</p>
+
+<p>It was first used in it’s modern context in the paper » Check Karpathy video. An LSTM also uses a similar attention mechanism.</p>
+
+<hr />
+<p><strong>Question:</strong> What is masking? How is it different in BERT vs GPT-based models.</p>
+
+<ul>
+  <li>Masking in a decoder mean one thing: you can’t the future tokens in the cross attention  layer.</li>
+  <li>
+    <p>Usually implemeted using this underrated trick:</p>
+  </li>
+  <li>Masking in BERT is more general, in fact it is the heart of BERT (hence why BERT is called an MLM, i.e., masked language model).</li>
+</ul>
+
+<p>Masking in decoders is a trick to not cheat while training the model. During training, we usually feed a whole sequence into the model, a train the model to predict the next token. Let’s say the we have a training sequence of the following length \((x_1, \dots, x_L)\)</p>
+
+<p>What is usually done during training is to map this single coherent sentence to multiple training inputs, like the following:</p>
+
+<ul>
+  <li>\((x_1)\)  \(\rightarrow\) We “wish” the decoder could generate \(x_2\)</li>
+  <li>\((x_1,x_2)\)  \(\rightarrow\) We “wish” the decoder could generate \(x_3\)</li>
+  <li>\((x_1, \dots, x_{L-1})\) \(\rightarrow\) We “wish” the decoder could generate \(x_L\)</li>
+  <li>\((x_1, \dots, x_{L})\) \(\rightarrow\) We “wish” the decoder could generate  <EOS> token (End Of Sequence).</EOS></li>
+</ul>
+
+<p>Masking in BERT is what makes BERT… BERT. BERT is <em>NOT</em> pre-trained to generate the next token (i.e., it not an auto-regressive model). It’s a MLM (Masked Language Model).</p>
+
+<p>Worth mentioning that BERT is also trained using a NSP (next sentence prediction), but it was shown later on that is almost obsolete, longer MLM training with longer sequence was enough (Check <a href="https://arxiv.org/abs/1907.11692">RoBERTa</a>)</p>
+
+<hr />
+<p><strong>Question:</strong> What are some key differences in training a transformer Vs using it in inference?</p>
+
+<hr />
+<p><strong>Question:</strong> <em>What the hell</em> are we even training in a Transformer? Show me the weights please.
+Good question,</p>
+
+<hr />
+<p><strong>Question:</strong> How many parameters do we have on a simple Transformer architrecture.
+Good question, a basic 6 layers 12 heads / layer Transformer has 65M parameters.</p>
+
+<hr />
+<p><strong>Question:</strong> Why are using multiple layer normalization (after the attention layer, after the FC layer, also before computing the Softmax scores)</p>
+
+<hr />
+<p><strong>Question:</strong> Wait, why does some models only use an Encoder (e.g., BERT) or Decoder  (e.g., GPT):
+If you want to understand language..</p>
+
+<p>Bert is bad at generating content, why?, because it wasn’t trained to do so. By 2019 standards of course.</p>
+
+<hr />
+<p><strong>Question:</strong> How is attention different from Neural Turing Machine vs “Attention is all you need” paper:</p>
+
+<p>In the former, attention is used to equip the NN (RNN) with a memory-like feature. On the latter, attention is used to capture long-range dependencies. » this is a shit answer. Long-range dependencies are actually memory? come iup with a bertter answer please</p>
+
+<hr />
+<p><strong>Question:</strong> Why can’t you “pre-train” endcoders?</p>
+
+<p>Encoders use self-attention layer, where every word is conditioned on every other word in the sequence. Hence, there is no masking, also implying no pre-training (in the language modeliung sense).</p>
+
+<p>Ok, so how do we pre-train then? (DOn’t we have BERT, and encoder only model, how does it work):
+Super cool Question.</p>
+
+<p>Q: Im BERT, k is usually set to \(15%\),  is us too expemsive or cheaper from a computatriona; stand point to train on less masked data? let’s say k = 5 % and why?</p>
+
+<p>Technically, if k decreases, then at each batch, we would have less “stuff” (representatio  to learn/pre-train) to see, and hence, we need more iterations. Assuming we keep the same model architecture (number of parameters/)</p>
+
+<hr />
+<p><strong>Question:</strong> What is the KV cache?
+This is a pretty advanced term. KV cache is the matrix KV that encoder builds as he decodes a se</p>
+
+<p>At inference, at each time we sample a new toked, we are provided with a sequence that consists of a [promt + past  generated tokens].</p>
+
+<p>At each step, the decoder requires self-attention of all these ast tokens, and hence, requires their KV.</p>
+
+<p>What are universal transformers.</p>
+
+<h3 id="references">References:</h3>
+
+<ul>
+  <li>Original Transformer Paper [<a href="https://arxiv.org/abs/1706.03762">Link</a>]</li>
+  <li>BERT [<a href="https://arxiv.org/abs/1810.04805">Link</a>]</li>
+  <li>RoBERTa [<a href="https://arxiv.org/abs/1907.11692">Link</a>]</li>
+  <li>A great blog on Inference Performance of Transformers. <a href="https://kipp.ly/transformer-inference-arithmetic/">Kipply’s blog</a></li>
+</ul>
+
+:ET

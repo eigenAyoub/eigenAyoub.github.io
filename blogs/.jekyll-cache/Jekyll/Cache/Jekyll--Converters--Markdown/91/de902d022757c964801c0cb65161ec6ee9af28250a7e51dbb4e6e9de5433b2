@@ -1,4 +1,4 @@
-<p>In this blog post, I’ll share some tips that helped speed up my VIM learning trajectory.</p>
+I"� <p>In this blog post, I’ll share some tips that helped speed up my VIM learning trajectory.</p>
 
 <h3 id="my-number-1-rule"><a href="https://www.youtube.com/watch?v=XDdDQQ8uLhY">My number 1 rule</a>:</h3>
 <blockquote>
@@ -107,3 +107,4 @@ You can achieve so by adding the following line to your <strong>.vimrc</strong>:
   <li>Plugins?</li>
   <li>cp paste between files?</li>
 </ul>
+:ET

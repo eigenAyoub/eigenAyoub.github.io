@@ -1,32 +1,33 @@
-I structed this doc in 4 parts:
 
-* Volume
-* Brightness
-* WIFI
-* Hacks
+Migrating to a simple tilling window manager could be a hustle from the get-go. I wrote in this blog, what I would have found useful when I started working with [BSPWM](https://github.com/baskerville/bspwm). Here you'll find how to manage your Volume, Brightness, WIFI, and Bluetooth from your terminal. I'm using UBUNTU 
 
 ### Volume:
 Add the following line to your .vimrc:
+* function()  
 
-Usage:
-For your terminal, type the followng **v x%**
+From your terminal, type the followng 
+* ` ` 
 
 ### Brightness:
 Add the following line to your .vimrc:
+* function()  
 
-Usage:
+From your terminal, type the followng 
+* ` ` 
 ### WIFI:
-* Tools:
+* Tools: 
 
-* Scan for WIFI networks:
-> 
+* Scan for available networks:
+    *  
 
-* Know the interface:
->  
+* Know your interface:
+    *    
 
 * Connect to a network:
-> 
+    * 
 
-* Know your passwords:
-> 
+* Know where your WIFI passwords:
+    *    
 
+### Bluethooth: 
+TO-DO
