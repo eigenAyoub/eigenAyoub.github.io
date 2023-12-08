@@ -4,7 +4,7 @@ title:
 permalink: /blogs/fastinference/
 ---
 
--- Last update: 06 Dec 2023.
+-- Last update: 08 Dec 2023.
 
 I'll collect in the blog a few recent trends that help speed up inference of autoregressive models.
 
