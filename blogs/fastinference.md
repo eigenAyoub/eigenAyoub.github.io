@@ -20,8 +20,7 @@ I'll collect in the blog a few recent trends that help speed up inference of aut
 * [Speculative decoding.](#speculative-decoding)
 
 ---
-### **> What happened to "Transformers being optimally parallelizable"** 
-<a name="built-different"></a>
+### **> What happened to "Transformers are very optimal/parallelizable** <a name="built-different"></a>
 
 Ok, chill! 
 
@@ -43,11 +42,10 @@ As a motivation, [Gemini 1.0](https://blog.google/technology/ai/google-gemini-ai
 >![MQA-gemini](/src/mistral/MQA-Gemini.png)
 
 **Content:**
-* [Batched Multi-Head Attention (MHA).]()
-* [Incremental Batched MHA.]()
-* [Multi-Query Attention (MQA).]()
-* [Incremental MQA.]()
- 
+* [Batched Multi-Head Attention (MHA).](#batched-mha)
+* [Incremental Batched MHA.](#batched-mha-inference)
+* [Multi-Query Attention (MQA).](#batched-mqa)
+* [Incremental MQA.](#incremental-batched-mqa)
 
 <a name="tldr"></a>
 **TL;DR:** Use only **ONE** key/value per multiple queries (i.e., drop the `dim` across the heads of `K` and `V`).
@@ -93,8 +91,6 @@ def MultiheadAttentionBatched(X, M, mask, P_q, P_k, P_v, P_o):
 ```
 
 **-- Performance analysis of Batched MHA:** 
-
- <a name="batched-MHA">
 
 * Total number of operations =  $$\Theta(b n d^2)$$, why $$\downarrow$$
 	* Let's check $$Q$$ for instance, we have `Q` = $$X$$ `@` $$P_K$$
@@ -185,7 +181,7 @@ def MultiQueryAttBatched(X, M, mask, P_q, P_k, P_v, P_o):
     [...]
 ```
 
-**-- Incremental MQA (Inference)** <a name="-incremental-batched-mqa"></a>
+**-- Incremental MQA (Inference)** <a name="incremental-batched-mqa"></a>
 Differences in code are marked as `#no h`. 
 
 ```python
@@ -232,7 +228,7 @@ We notice some quality degradation and training instabiity with this method.
 * Finally, to benefit from inference speed using MQA, models need to be trained on MQA, which is inconvenient. We would love a way to take advantage of MHA in training, but benefit from  MQA in inference, and this is exactly what you get with [Grouped Query Attention](https://arxiv.org/pdf/2305.13245.pdf), presented next.
 
 ---
-### **> Grouped Query Attention:**
+### **> Grouped Query Attention:** <a name="gqa"></a>
 
 * [This Paper](https://arxiv.org/pdf/2305.13245.pdf) provides two contributions:
 	1. A way to uptrain models with MHA into MQA.
@@ -266,7 +262,7 @@ Instead of all queries of an attention layer having the same key/value (MQA), we
 **-- Final notes:**
 
 GQA  >> Increase in inference speed && Reduces memory requirement during decoding. 
-     >> Hight batch size >> Higher throughput
+     >> Higher batch size >> Higher throughput
 
 ---
 ### **> Sliding Window Attention:** <a name="sliding-window"></a>
@@ -312,7 +308,7 @@ K_{S_i}=\left(W_k \mathbf{x}_j\right)_{j \in S_i} \quad V_{S_i}=\left(W_v \mathb
 ### **> Flash Attention:**
 **TODO**
 
-This 34 pages idea, wins the price of "Minimum innovation, maximum innovation -- Ilya Sutskever"
+This 34 pages idea, wins the price of "Minimum innovation, maximum results-- Ilya Sutskever"
 
 One of the ideas:  Basically, instead of moving KV's around, just recompute them at backprop.
 
@@ -395,5 +391,3 @@ TODO:
 * Proof-Check MQA.
 * Have a sync'ed way of listing the references for each section.
 * Check, and update.
-* Arithmetic intensity reference.[Done?]
-* Add this to the first ratio encouter.. compute in 2 order of magnitude higher then memory. Hence, this ratio should be << 1 at all cost to avoid memory bottleneck.

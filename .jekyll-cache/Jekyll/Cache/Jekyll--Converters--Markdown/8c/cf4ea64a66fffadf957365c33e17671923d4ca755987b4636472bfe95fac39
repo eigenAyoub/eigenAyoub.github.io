@@ -1,44 +1,4 @@
-<!DOCTYPE html>
-<html lang="en"><head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Kaizen | 10k</title>
-<meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="Kaizen" />
-<meta property="og:locale" content="en_US" />
-<meta name="description" content="10k" />
-<meta property="og:description" content="10k" />
-<link rel="canonical" href="http://localhost:4000/blogs/fastinference/" />
-<meta property="og:url" content="http://localhost:4000/blogs/fastinference/" />
-<meta property="og:site_name" content="Kaizen" />
-<meta property="og:type" content="website" />
-<meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Kaizen" />
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Kaizen","url":"http://localhost:4000/blogs/fastinference/"}</script>
-<!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kaizen" /></head>
-
-<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-<body><header class="site-header" role="banner">
-
-  <div class="wrapper"><a class="site-title" rel="author" href="/">Kaizen</a><nav class="site-nav">
-        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
-        <label for="nav-trigger">
-          <span class="menu-icon">
-            <svg viewBox="0 0 18 15" width="18px" height="15px">
-              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
-            </svg>
-          </span>
-        </label>
-
-        <div class="trigger"><a class="page-link" href="/gal/">Cuties</a></div>
-      </nav></div>
-</header>
-<main class="page-content" aria-label="Content">
-      <div class="wrapper">
-        <p>– Last update: 06 Dec 2023.</p>
+I"qy<p>– Last update: 06 Dec 2023.</p>
 
 <p>I’ll collect in the blog a few recent trends that help speed up inference of autoregressive models.</p>
 
@@ -56,7 +16,8 @@
 </ul>
 
 <hr />
-<h3 id="-what-happened-to-transformers-are-very-optimalparallelizable-"><strong>&gt; What happened to “Transformers are very optimal/parallelizable</strong> <a name="built-different"></a></h3>
+<h3 id="-what-happened-to-transformers-are-very-optimalparallelizable"><strong>&gt; What happened to “Transformers are very optimal/parallelizable</strong></h3>
+<p><a name="built-different"></a></p>
 
 <p>Ok, chill!</p>
 
@@ -78,9 +39,9 @@
 <p><strong>Content:</strong></p>
 <ul>
   <li><a href="#batched-mha">Batched Multi-Head Attention (MHA).</a></li>
-  <li><a href="#batched-mha-inference">Incremental Batched MHA.</a></li>
+  <li><a href="#batched-mha-incremental">Incremental Batched MHA.</a></li>
   <li><a href="#batched-mqa">Multi-Query Attention (MQA).</a></li>
-  <li><a href="#incremental-batched-mqa">Incremental MQA.</a></li>
+  <li><a href="#batched-mqa-incremental">Incremental MQA.</a></li>
 </ul>
 
 <p><a name="tldr"></a>
@@ -287,7 +248,7 @@ We notice some quality degradation and training instabiity with this method.</li
 </ul>
 
 <hr />
-<h3 id="-grouped-query-attention-"><strong>&gt; Grouped Query Attention:</strong> <a name="gqa"></a></h3>
+<h3 id="-grouped-query-attention"><strong>&gt; Grouped Query Attention:</strong></h3>
 
 <ul>
   <li><a href="https://arxiv.org/pdf/2305.13245.pdf">This Paper</a> provides two contributions:
@@ -382,7 +343,7 @@ K_{S_i}=\left(W_k \mathbf{x}_j\right)_{j \in S_i} \quad V_{S_i}=\left(W_v \mathb
 <h3 id="-flash-attention"><strong>&gt; Flash Attention:</strong></h3>
 <p><strong>TODO</strong></p>
 
-<p>This 34 pages idea, wins the price of “Minimum innovation, maximum results– Ilya Sutskever”</p>
+<p>This 34 pages idea, wins the price of “Minimum innovation, maximum innovation – Ilya Sutskever”</p>
 
 <p>One of the ideas:  Basically, instead of moving KV’s around, just recompute them at backprop.</p>
 
@@ -488,29 +449,4 @@ Q: I thought OpenAI was already doing this, in their 2019 paper. Investigate thi
   <li>Have a sync’ed way of listing the references for each section.</li>
   <li>Check, and update.</li>
 </ul>
-
-      </div>
-    </main><footer class="site-footer h-card">
-  <data class="u-url" href="/"></data>
-  <div class="wrapper">
-    <div class="footer-col-wrapper">
-      <div class="footer-col footer-col-1">
-        <ul class="contact-list">
-          <li class="p-name">
-              Kaizen
-          </li>
-        </ul>
-      </div>
-      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/eigenAyoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">eigenAyoub</span></a></li><li><a href="https://instagram.com/curl.ayoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#instagram"></use></svg> <span class="username">curl.ayoub</span></a></li><li><a href="https://www.linkedin.com/in/eigenAyoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">eigenAyoub</span></a></li></ul>
-</div>
-
-      <div class="footer-col footer-col-3">
-        <p>10k</p>
-      </div>
-
-    </div>
-  </div>
-</footer>
-</body>
-
-</html>
+:ET
