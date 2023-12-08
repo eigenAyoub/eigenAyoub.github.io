@@ -24,7 +24,7 @@ I'll collect in the blog a few recent trends that help speed up inference of aut
 
 Ok, chill! 
 
-That is still the case, and will always be. But we mostly benefit from it in **TRAINING**. Inference though, is **inherently** sequential. I.e., say that $$p(. \mid .)$$ represents the output distribution of the model, and giving a prompt $$T$$, you generate the first token autoregressively by sampling $$x_1 \sim p(.\mid T)$$ and then to generate the second token you condition on both $$[T, x_1]$$, $$x_2 \sim p(.\mid T, x_1)$$. There is simply (and sadly) no escape from this incremental design.
+That is still the case, and will always be. But we mostly benefit from it in **TRAINING**. Inference though, is **inherently** sequential. I.e., say that $$p(. \mid .)$$ represents the output distribution of the model, and given a prompt $$T$$, you generate the first token autoregressively by sampling $$x_1 \sim p(.\mid T)$$ and then to generate the second token you condition on both $$[T, x_1]$$, $$x_2 \sim p(.\mid T, x_1)$$. There is simply (and sadly) no escape from this incremental design.
 
 
 I guess no one is perfect after all, right?!
