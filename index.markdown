@@ -4,7 +4,8 @@ layout: home
 
 
 
-### **Blog-posts:**
+**Blog:**
+
 * [Recent trends to speed up autoregressive inference of LLMs (unifinished)](/blogs/fastinference)
 * Quick hacks that you might find useful: 
     * [Speed up your migration to VIM.](/blogs/vim)
