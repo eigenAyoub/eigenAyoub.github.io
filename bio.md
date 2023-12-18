@@ -12,3 +12,10 @@ I'm a ML Research Assistant [@CAROLL](https://ca-roll.github.io/), and Master's 
 Research Interests: LLMs, Efficient ML, NNs Compression.
 
 -- Ayoub
+
+---
+**Contact:**
+
+* **Gmail:** `ayoub.benayad.467`
+* [LinkedIn](https://www.linkedin.com/in/eigenAyoub/), 
+  [Instagram](https://www.instagram.com/curl.ayoub/)

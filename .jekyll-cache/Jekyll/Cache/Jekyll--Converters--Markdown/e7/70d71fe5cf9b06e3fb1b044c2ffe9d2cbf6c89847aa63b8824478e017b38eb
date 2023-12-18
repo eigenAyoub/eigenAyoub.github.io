@@ -1,4 +1,5 @@
-I"C<h3 id="blog-posts"><strong>Blog-posts:</strong></h3>
+I"Ü<p><strong>Blog:</strong></p>
+
 <ul>
   <li><a href="/blogs/fastinference">Recent trends to speed up autoregressive inference of LLMs (unifinished)</a></li>
   <li>Quick hacks that you might find useful:
@@ -15,21 +16,12 @@
 </ul>
 
 <hr />
-<h3 id="a-few-repos"><strong>A few repos:</strong></h3>
+<p><strong>A few repos:</strong></p>
 
 <ul>
   <li>Backpropagation from scratch \(\rightarrow\) <a href="https://github.com/eigenAyoub/check-your-gradients">Github link</a>.</li>
   <li>Randomized Algorithms \(\rightarrow\) <a href="https://github.com/eigenAyoub/randomised-algorithms">Github link</a>.</li>
   <li>Reinforcement Learning \(\rightarrow\) <a href="https://github.com/eigenAyoub/reinforcement-learning">Github link</a>.</li>
-</ul>
-
-<hr />
-<h3 id="contact"><strong>Contact:</strong></h3>
-
-<ul>
-  <li><strong>Gmail:</strong> <code class="language-plaintext highlighter-rouge">ayoub.benayad.467</code></li>
-  <li><a href="https://www.linkedin.com/in/eigenAyoub/">LinkedIn</a>, 
-<a href="https://www.instagram.com/curl.ayoub/">Instagram</a></li>
 </ul>
 
 :ET
