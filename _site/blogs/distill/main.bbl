@@ -1,0 +1,16 @@
+\begin{thebibliography}{1}
+
+\bibitem{tahaei2022kroneckerbert}
+M.~Tahaei, E.~Charlaix, V.~Nia, A.~Ghodsi, and M.~Rezagholizadeh,
+  ``Kroneckerbert: Significant compression of pre-trained language models
+  through kronecker decomposition and knowledge distillation,'' in {\em
+  Proceedings of the 2022 Conference of the North American Chapter of the
+  Association for Computational Linguistics: Human Language Technologies},
+  pp.~2116--2127, 2022.
+
+\bibitem{edalati2021kroneckr}
+A.~Edalati, M.~Tahaei, A.~Rashid, V.~P. Nia, J.~J. Clark, and
+  M.~Rezagholizadeh, ``Kronecker decomposition for gpt compression,'' {\em
+  arXiv preprint arXiv:2110.08152}, 2021.
+
+\end{thebibliography}

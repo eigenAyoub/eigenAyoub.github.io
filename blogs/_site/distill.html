@@ -1,0 +1,89 @@
+<h2 id="abstract">Abstract:</h2>
+
+<p>Investigating the distillation of GPT-2 like models using Kronecker Products as a substitute to FFN weights:</p>
+
+<h2 id="introduction-and-setup">Introduction and setup.</h2>
+<p>In this blog post, we ingvestigate some intersting properties of distillation. We first postion ourselves in a small setup, and then how these hypothesis would scale to larger models.</p>
+
+<p>Initial mini setup:</p>
+
+<ul>
+  <li>Teacher network:  a 10M GPT2 like model. 6 layers of 6 heads.</li>
+  <li>Student network:  a 4M compressed model of the teacher where each weight  \(W\) of the FFN is decomposed to \(W_1 x W_2\).</li>
+</ul>
+
+<p>The teacher model in this setup is 6 layers GPT2-like model, each layer has 6 heads. The model has 10M parameters in total.</p>
+
+<p>We pre-train the teacher model for 2k steps up to a certain loss, of 2.46, as depicted in the following figure:</p>
+
+<p>We decompose the weights of the MLP (FFN ) using the the Van Loan method.</p>
+
+<p>We ask the following question:</p>
+
+<ol>
+  <li>
+    <p>When we plug new KP matrices to the pre-trained model, is it useful to freeze the other weights that are already pre-trained?</p>
+  </li>
+  <li>
+    <p>When don’t don’t freeze the weigths. Does the netwrok rely on other pretrained methods?</p>
+    <ul>
+      <li><strong>The idea that I’m challenging here</strong>: A lot of work on NNs compression using factorized methods,
+ claim that the network only need to be (post-)trained on small % of the original training steps/data.</li>
+    </ul>
+
+    <p>But, what the fail to mention or elaborate on at least, is that not the weighrts matrices of the network are decomposed.</p>
+
+    <p>And with all the residual connection that are present in most attention networks, 
+ one could suspect, that maybe the weights that were not decomposed are taking over…
+ A good remedy for this is to freeeze the original weights during the post-training, and only allow the new dropped in (factorized matrices) to be updated with backprop</p>
+  </li>
+</ol>
+
+<p>We refer to this method as <strong>forced distillation.</strong></p>
+
+<ol>
+  <li>
+    <p>When we freeze, we investigate how useful is it to distill matrices one by one, rather than drop in the matrices all at once. And also invesitgate if the order of dropping has any 
+significance, buttom up or top buttom…</p>
+  </li>
+  <li></li>
+</ol>
+
+<h2 id="early-experiments">Early experiments:</h2>
+
+<p>I’ll refer with the normal setup (<strong>NS</strong>) to the original model (with no factorization), and with the Kronecker Prodcuts Setup (<strong>KPS</strong>) tp the new KP factorized model. We first run the following 5 training runs:</p>
+
+<ol>
+  <li>
+    <p>Run the NS for 4K steps.</p>
+  </li>
+  <li>
+    <p>Run the NS for 2K, plug-in the KP weights (randomized) then train for 2k more steps.</p>
+  </li>
+  <li>Same as <strong>2.</strong> with a Freezing variation:
+    <ol>
+      <li>Run the NS for 2K, plug-in the KP weights (VL init)</li>
+      <li>Freeze the other weight, and only train the KP matirces for 1K</li>
+      <li>Unfreeze the original weights, i.e., train all parameters again.</li>
+    </ol>
+  </li>
+  <li>
+    <p>Run the NS for 2K, plug-in the KP weights (VL init) then train for 2k more steps.</p>
+  </li>
+  <li>Same as <strong>4.</strong> with a Freezing variation:
+    <ol>
+      <li>Run the NS for 2K, plug-in the KP weights (VL init)</li>
+      <li>Freeze the other weight, and only train the KP matirces for 1K</li>
+      <li>Unfreeze the original weights, i.e., train all parameters again.</li>
+    </ol>
+  </li>
+</ol>
+
+<p>Note: It is worth mentioniung that changing the leartning rate can significantly change the outcome, since the original weights are smoother with a weight-decay. One should be vigilant.</p>
+
+<p>This small model, overfts quickly. We’ll limit the run to</p>
+
+<p>This small model, overfts quickly. We’ll limit the run to 1.8k steps.</p>
+
+<p>Training the base model for 5k steps with different learning rates curves as depicted below, leads to the following training / validation loss curves:</p>
+

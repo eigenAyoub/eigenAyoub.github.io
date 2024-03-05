@@ -1,0 +1,172 @@
+I",<p>My compute container got destroyed by some mysterious force, help!</p>
+
+<hr />
+<h2 id="jump-to-it">Jump to it:</h2>
+<ul>
+  <li><a href="">Essential</a></li>
+  <li><a href="">Pyenv</a></li>
+  <li><a href="">Git</a></li>
+</ul>
+
+<hr />
+<h2 id="essential">Essential:</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># manual / pip</span>
+<span class="nv">$ </span>unminimize
+<span class="nv">$ </span>apt <span class="nb">install </span>python3-pip
+
+<span class="c"># required for `pyenv`</span>
+<span class="nv">$ </span>apt-get <span class="nb">install</span> <span class="nt">-y</span> make build-essential libssl-dev zlib1g-dev <span class="se">\</span>
+libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev <span class="se">\</span>
+libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
+
+<span class="c"># required for `lm-eval` (there</span>
+<span class="nv">$ </span>apt-get <span class="nb">install </span>lzma liblzma-dev libbz2-dev   
+
+<span class="nv">$ </span>apt update <span class="o">&amp;&amp;</span> apt upgrade <span class="nt">-y</span>
+
+<span class="c">#not needed anymore, I guess? Cuz I am using pyenv for everything?</span>
+<span class="c">#apt-get install software-properties-common</span>
+<span class="c">#add-apt-repository ppa:deadsnakes/ppa</span>
+</code></pre></div></div>
+
+<hr />
+<h2 id="pyenv">Pyenv:</h2>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">curl https://pyenv.run | bash</code></li>
+  <li>Add the following to your <code class="language-plaintext highlighter-rouge">.bash_profile</code>:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">PYENV_ROOT</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/.pyenv"</span>
+<span class="o">[[</span> <span class="nt">-d</span> <span class="nv">$PYENV_ROOT</span>/bin <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$PYENV_ROOT</span><span class="s2">/bin:</span><span class="nv">$PATH</span><span class="s2">"</span>
+<span class="nb">eval</span> <span class="s2">"</span><span class="si">$(</span>pyenv init -<span class="si">)</span><span class="s2">"</span>
+</code></pre></div>    </div>
+  </li>
+  <li>Add the following to your <code class="language-plaintext highlighter-rouge">.bashrc</code>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">eval</span> <span class="s2">"</span><span class="si">$(</span>pyenv virtualenv-init -<span class="si">)</span><span class="s2">"</span>
+</code></pre></div>    </div>
+    <p><em>Game time:</em> what you need to know.</p>
+  </li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pyenv <span class="nb">install </span>3.12
+pyenv versions
+pyenv 
+
+</code></pre></div></div>
+
+<hr />
+<h2 id="git">git:</h2>
+
+<p><strong>Update Configs:</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> user.name  eigenAyoub
+git config <span class="nt">--global</span> user.email benayad7@outlook.com
+</code></pre></div></div>
+
+<p><strong>SSH</strong></p>
+<ol>
+  <li>Generate key:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">ssh-keygen -t ed25519 -C "benaya7@outlook.com"</code></li>
+    </ul>
+  </li>
+  <li>Start <code class="language-plaintext highlighter-rouge">ssh-agent</code>, then add private key to it:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">eval "$(ssh-agent -s)</code> (this starts the agent)</li>
+      <li><code class="language-plaintext highlighter-rouge">ssh-add ~/.ssh/id_ed25519</code></li>
+    </ul>
+  </li>
+  <li>Add public key to your remote git server.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">cat ~/.ssh/id_ed25519.pub</code></li>
+      <li>Paste it in github/gitlab.</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Set up multiple remotes</strong></p>
+
+<h2 id="python-copy-pasta-please">Python, copy pasta please.</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>numpy torch torchvision torchaudio <span class="nt">--index-url</span> https://download.pytorch.org/whl/cu118
+pip <span class="nb">install </span>transformers datasets  tiktoken  wandb tqdm ipython einops
+</code></pre></div></div>
+
+<h2 id="rices-bashrc--vimrc---tmuxconf-update-this-regularly">Rices .bashrc / .vimrc  / .tmux.conf (update this regularly):</h2>
+<ul>
+  <li><strong>.bashrc</strong>
+Not sure why I had this before?
+    <ol>
+      <li>On your way, add to your <code class="language-plaintext highlighter-rouge">.bashrc</code>:
+<code class="language-plaintext highlighter-rouge">~~&gt; alias ls='ls --color=auto'</code></li>
+    </ol>
+  </li>
+  <li>
+    <p><strong>.vimrc</strong></p>
+  </li>
+  <li><strong>.tmux.conf</strong></li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">set</span> <span class="nt">-g</span> mouse on
+</code></pre></div></div>
+
+<ul>
+  <li>vscode setting:</li>
+</ul>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"security.workspace.trust.untrustedFiles"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"window.zoomLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"vim.insertModeKeyBindingsNonRecursive"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"before"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"&lt;ESC&gt;"</span><span class="p">],</span><span class="w">
+            </span><span class="nl">"after"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"&lt;ESC&gt;"</span><span class="p">],</span><span class="w">
+            </span><span class="nl">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"workbench.action.files.save"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"keyboard.dispatch"</span><span class="p">:</span><span class="w"> </span><span class="s2">"keyCode"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"vim.normalModeKeyBindingsNonRecursive"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"before"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"Z"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Z"</span><span class="p">],</span><span class="w">
+            </span><span class="nl">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">":w"</span><span class="p">]</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"before"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"g"</span><span class="p">,</span><span class="w"> </span><span class="s2">"p"</span><span class="p">,</span><span class="w"> </span><span class="s2">"d"</span><span class="p">],</span><span class="w">
+            </span><span class="nl">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"editor.action.peekDefinition"</span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"vim.smartRelativeLine"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"editor.cursorSurroundingLines"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"vim.useSystemClipboard"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"glassit.alpha"</span><span class="p">:</span><span class="w"> </span><span class="mi">220</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"editor.minimap.enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="remarks">Remarks:</h2>
+
+<p>Run the minimal GPU/pytorch script (gpu-test.py available in the .config), make sure everything is <a href="https://www.youtube.com/watch?v=4TYv2PhG89A">Operating Smoothly</a>.</p>
+
+<p>Setting python:</p>
+
+<p><code class="language-plaintext highlighter-rouge">python3 -m site</code></p>
+
+<p>I want to start using type hinting with python, and I’m fed up with python 3.8.</p>
+
+<hr />
+<p>Some Useful stuff to keep in mind:</p>
+
+<ul>
+  <li>debugg smth in <strong>ipython</strong>: <code class="language-plaintext highlighter-rouge">%run script.py</code></li>
+  <li>free your the gpu memory that you have used <code class="language-plaintext highlighter-rouge">torch.cuda.empty_cache()</code></li>
+</ul>
+
+<p>Comments from https://discuss.pytorch.org/t/how-can-we-release-gpu-memory-cache/14530/3</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>*  If after calling it, you still have some memory that is used, that means that you have a python variable (either torch Tensor or torch Variable) that reference it, and so it cannot be safely released as you can still access it.
+* So any variable that is no longer reference is freed in the sense that its memory can be used to create new tensors, but this memory is not released to the os (so will still look like it’s used using nvidia-smi). empty_cache forces the allocator that pytorch uses to release to the os any memory that it kept to allocate new tensors, so it will make a visible change while looking at nvidia-smi, but in reality, this memory was already available to allocate new tensors.
+</code></pre></div></div>
+:ET
