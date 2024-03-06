@@ -1,44 +1,4 @@
-<!DOCTYPE html>
-<html lang="en"><head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Kaizen | 10k</title>
-<meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="Kaizen" />
-<meta property="og:locale" content="en_US" />
-<meta name="description" content="10k" />
-<meta property="og:description" content="10k" />
-<link rel="canonical" href="http://localhost:4000/blogs/container/" />
-<meta property="og:url" content="http://localhost:4000/blogs/container/" />
-<meta property="og:site_name" content="Kaizen" />
-<meta property="og:type" content="website" />
-<meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Kaizen" />
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Kaizen","url":"http://localhost:4000/blogs/container/"}</script>
-<!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kaizen" /></head>
-
-<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-<body><header class="site-header" role="banner">
-
-  <div class="wrapper"><a class="site-title" rel="author" href="/">Kaizen</a><nav class="site-nav">
-        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
-        <label for="nav-trigger">
-          <span class="menu-icon">
-            <svg viewBox="0 0 18 15" width="18px" height="15px">
-              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
-            </svg>
-          </span>
-        </label>
-
-        <div class="trigger"><a class="page-link" href="/bio.html">Bio</a><a class="page-link" href="/gal/">Cuties</a></div>
-      </nav></div>
-</header>
-<main class="page-content" aria-label="Content">
-      <div class="wrapper">
-        <p>Quick reset to my compute pod.</p>
+I"3<p>Quick reset to my compute pod.</p>
 
 <hr />
 <h1 id="jump-to-it">Jump to it:</h1>
@@ -48,13 +8,6 @@
   <li><a href="">Git</a></li>
   <li><a href="">pip it</a></li>
   <li><a href="">dotfiles</a></li>
-  <li><a href="">Frequent problems</a>
-    <ul>
-      <li>Copy files between difference hosts over ssh</li>
-      <li>Multiple remote git</li>
-      <li>Local git repo ahead of remote repo, and can;t push (exceeded 100Mb limit)</li>
-    </ul>
-  </li>
 </ul>
 
 <hr />
@@ -62,7 +15,6 @@
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># manual / pip</span>
 <span class="nv">$ </span>unminimize
-<span class="nv">$ </span>apt <span class="nb">install </span>python3-pip
 
 <span class="c"># required for `pyenv`</span>
 <span class="nv">$ </span>apt <span class="nb">install</span> <span class="nt">-y</span> make build-essential libssl-dev zlib1g-dev <span class="se">\</span>
@@ -74,6 +26,7 @@ libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
 
 <span class="c"># needed to transfer files between diff. hosts</span>
 <span class="nv">$ </span>apt <span class="nb">install </span>rsync
+<span class="nv">$ </span>apt <span class="nb">install </span>python3-pip
 
 <span class="nv">$ </span>apt update <span class="o">&amp;&amp;</span> apt upgrade <span class="nt">-y</span>
 
@@ -81,6 +34,7 @@ libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
 <span class="c">#apt-get install software-properties-common</span>
 <span class="c">#add-apt-repository ppa:deadsnakes/ppa</span>
 </code></pre></div></div>
+<p>Additional stuff:</p>
 
 <hr />
 <h1 id="pyenv">Pyenv:</h1>
@@ -143,92 +97,47 @@ git config <span class="nt">--global</span> user.email benayad7@outlook.com
   </li>
 </ol>
 
-<p><strong>Set up multiple remotes</strong></p>
-
-<p><strong>TODO</strong></p>
+<p><strong>Set up multiple remotes</strong>
+TODO</p>
 
 <hr />
 <h1 id="python-copy-pasta-please">Python, copy pasta please.</h1>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># numpy is king,  always first and alone.</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># numpy is king, so always install it alone ;)</span>
 <span class="nv">$ </span>pip <span class="nb">install </span>numpy 
 <span class="nv">$ </span>pip <span class="nb">install </span>matplotlib
 <span class="nv">$ </span>pip <span class="nb">install </span>torch torchvision torchaudio <span class="nt">--index-url</span> https://download.pytorch.org/whl/cu118
 <span class="nv">$ </span>pip <span class="nb">install </span>ipython
 <span class="nv">$ </span>pip <span class="nb">install </span>einops <span class="c"># cuz you need it to learn it!</span>
 <span class="nv">$ </span>pip <span class="nb">install </span>transformers datasets  tiktoken  wandb tqdm 
-<span class="c"># no sklearn? you zoomer.</span>
 </code></pre></div></div>
 
 <hr />
 <h1 id="dotfiles">.dotfiles:</h1>
-<p>(would you please update this frequently?)</p>
 
-<h2 id="vim">VIM</h2>
+<ul>
+  <li><strong>.bashrc</strong>
+Not sure why I had this before?</li>
+</ul>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">set </span>wrap
-<span class="nb">set </span>number relativenumber
+<p>On your way, add to your <code class="language-plaintext highlighter-rouge">.bashrc</code>:
+<code class="language-plaintext highlighter-rouge">~~&gt; alias ls='ls --color=auto'</code></p>
 
-<span class="nb">set </span><span class="nv">mouse</span><span class="o">=</span>a
-<span class="nb">set </span><span class="nv">so</span><span class="o">=</span>15
-<span class="nb">set </span>ai
-<span class="nb">set </span>si
+<ul>
+  <li>
+    <p><strong>.vimrc</strong></p>
+  </li>
+  <li>
+    <p><strong>.tmux.conf</strong></p>
+  </li>
+</ul>
 
-<span class="nb">set </span><span class="nv">tabstop</span><span class="o">=</span>4
-<span class="nb">set </span><span class="nv">shiftwidth</span><span class="o">=</span>4
-<span class="nb">set </span>smarttab
-
-autocmd FileType markdown setlocal spell
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">set</span> <span class="nt">-g</span> mouse on
 </code></pre></div></div>
 
-<h2 id="tmux">tmux</h2>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">################################# Basics</span>
-<span class="nb">set</span> <span class="nt">-g</span> mouse on
-
-<span class="c"># main key</span>
-unbind C-b
-set-option <span class="nt">-g</span> prefix C-Space
-bind-key C-Space send-prefix
-
-<span class="c"># Get the colors work</span>
-<span class="nb">set</span> <span class="nt">-g</span> default-terminal <span class="s2">"screen-256color"</span>
-<span class="nb">set</span> <span class="nt">-ga</span> terminal-overrides <span class="s2">",xterm-256color:Tc"</span>
-
-
-<span class="c">#shift alt, switch between keys</span>
-<span class="nb">bind</span> <span class="nt">-n</span> M-H previous-window
-<span class="nb">bind</span> <span class="nt">-n</span> M-L next-window
-
-<span class="c">################################## Copy Pasta</span>
-<span class="nb">set</span> <span class="nt">-s</span> set-clipboard on
-
-
-<span class="c"># Use vim keybindings in copy mode</span>
-setw <span class="nt">-g</span> mode-keys vi
-unbind <span class="nt">-T</span> copy-mode-vi MouseDragEnd1Pane
-
-<span class="c"># Clear selection on single click</span>
-<span class="nb">bind</span> <span class="nt">-T</span> copy-mode-vi MouseDown1Pane send-keys <span class="nt">-X</span> clear-selection <span class="se">\;</span> <span class="k">select</span><span class="nt">-pane</span>
-
-bind-key <span class="nt">-T</span> copy-mode-vi v send-keys <span class="nt">-X</span> begin-selection
-bind-key <span class="nt">-T</span> copy-mode-vi C-v send-keys <span class="nt">-X</span> rectangle-toggle
-bind-key <span class="nt">-T</span> copy-mode-vi y send-keys <span class="nt">-X</span> copy-selection-and-cancel
-
-<span class="c"># you know exactly what this is about.</span>
-<span class="nb">bind</span> <span class="s1">'"'</span> split-window <span class="nt">-v</span> <span class="nt">-c</span> <span class="s2">"#{pane_current_path}"</span>
-<span class="nb">bind</span> % split-window <span class="nt">-h</span> <span class="nt">-c</span> <span class="s2">"#{pane_current_path}"</span>
-
-<span class="c">################################## Plugins</span>
-<span class="nb">set</span> <span class="nt">-g</span> @plugin <span class="s1">'tmux-plugins/tpm'</span>
-<span class="nb">set</span> <span class="nt">-g</span> @plugin <span class="s1">'tmux-plugins/tmux-sensible'</span>
-<span class="nb">set</span> <span class="nt">-g</span> @plugin <span class="s1">'christoomey/vim-tmux-navigator'</span>
-<span class="nb">set</span> <span class="nt">-g</span> @plugin <span class="s1">'tmux-plugins/tmux-yank'</span>
-
-run <span class="s1">'~/.tmux/plugins/tpm/tpm'</span>
-</code></pre></div></div>
-
-<h2 id="vs-code">VS Code</h2>
+<ul>
+  <li>vscode setting:</li>
+</ul>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
     </span><span class="nl">"security.workspace.trust.untrustedFiles"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open"</span><span class="p">,</span><span class="w">
@@ -266,36 +175,38 @@ run <span class="s1">'~/.tmux/plugins/tpm/tpm'</span>
 <h1 id="problems-and-fixes">Problems and Fixes:</h1>
 
 <ul>
-  <li>Copy files from one pod to another using <code class="language-plaintext highlighter-rouge">rsync</code>:</li>
+  <li>Copy files from one pod to another using <code class="language-plaintext highlighter-rouge">rsync</code>:
+Syntax:</li>
 </ul>
 
+<p>Local to Remote: <code class="language-plaintext highlighter-rouge">rsync [OPTION]... -e ssh [SRC]... [USER@]HOST:DEST</code>
+Remote to Local: <code class="language-plaintext highlighter-rouge">rsync [OPTION]... -e ssh [USER@]HOST:SRC... [DEST]</code></p>
+
+<p>Run the minimal GPU/pytorch script (gpu-test.py available in the .config), make sure everything is <a href="https://www.youtube.com/watch?v=4TYv2PhG89A">Operating Smoothly</a>.</p>
+
+<p>Setting python:
+<code class="language-plaintext highlighter-rouge">python3 -m site</code></p>
 <blockquote>
-  <p>Local to Remote: <code class="language-plaintext highlighter-rouge">rsync [OPTION]... -e ssh [SRC]... [USER@]HOST:DEST</code></p>
+  <p>I want to start using type hinting with python, and I’m fed up with python 3.8.</p>
 </blockquote>
 
-<blockquote>
-  <p>Remote to Local: <code class="language-plaintext highlighter-rouge">rsync [OPTION]... -e ssh [USER@]HOST:SRC... [DEST]</code></p>
-</blockquote>
-
-<ul>
+<ol>
   <li>
     <p>Local git ahead of remote one. Can’t push because of some file that staged a few commits ago, but I deleted the file. Long story, but if you know you know.</p>
   </li>
-  <li>Debug something in <strong>ipython</strong>: <code class="language-plaintext highlighter-rouge">%run script.py</code></li>
-  <li>Free your the gpu memory that you have used <code class="language-plaintext highlighter-rouge">torch.cuda.empty_cache()</code></li>
-</ul>
+  <li>
+    <p>Debug something in <strong>ipython</strong>: <code class="language-plaintext highlighter-rouge">%run script.py</code></p>
+    <ul>
+      <li>Free your the gpu memory that you have used <code class="language-plaintext highlighter-rouge">torch.cuda.empty_cache()</code></li>
+    </ul>
+  </li>
+</ol>
 
 <p>Comments from https://discuss.pytorch.org/t/how-can-we-release-gpu-memory-cache/14530/3</p>
 
-<ul>
-  <li>
-    <p>If after calling it, you still have some memory that is used, that means that you have a python variable (either torch Tensor or torch Variable) that reference it, and so it cannot be safely released as you can still access it.</p>
-  </li>
-  <li>
-    <p>So any variable that is no longer reference is freed in the sense that its memory can be used to create new tensors, but this memory is not released to the os (so will still look like it’s used using nvidia-smi).
-empty_cache forces the allocator that pytorch uses to release to the os any memory that it kept to allocate new tensors, so it will make a visible change while looking at nvidia-smi, but in reality, this memory was already available to allocate new tensors.</p>
-  </li>
-</ul>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>*  If after calling it, you still have some memory that is used, that means that you have a python variable (either torch Tensor or torch Variable) that reference it, and so it cannot be safely released as you can still access it.
+* So any variable that is no longer reference is freed in the sense that its memory can be used to create new tensors, but this memory is not released to the os (so will still look like it’s used using nvidia-smi). empty_cache forces the allocator that pytorch uses to release to the os any memory that it kept to allocate new tensors, so it will make a visible change while looking at nvidia-smi, but in reality, this memory was already available to allocate new tensors.
+</code></pre></div></div>
 
 <hr />
 <h1 id="what-is-the-difference">What is the difference?</h1>
@@ -305,33 +216,8 @@ empty_cache forces the allocator that pytorch uses to release to the os any memo
     <p>Difference between interactive shells and login shells?</p>
   </li>
   <li>
-    <p>Difference between <code class="language-plaintext highlighter-rouge">apt</code> and <code class="language-plaintext highlighter-rouge">apt-get</code>:  Uhhm, <code class="language-plaintext highlighter-rouge">apt</code> is the new <code class="language-plaintext highlighter-rouge">apt-get</code>, just use it dude, trust me!.  <a href="https://askubuntu.com/questions/445384/what-is-the-difference-between-apt-and-apt-get">Ask Ubuntu Link</a></p>
+    <p>Difference between <code class="language-plaintext highlighter-rouge">apt</code> and <code class="language-plaintext highlighter-rouge">apt-get</code>:</p>
   </li>
 </ul>
 
-
-      </div>
-    </main><footer class="site-footer h-card">
-  <data class="u-url" href="/"></data>
-  <div class="wrapper">
-    <div class="footer-col-wrapper">
-      <div class="footer-col footer-col-1">
-        <ul class="contact-list">
-          <li class="p-name">
-              Kaizen
-          </li>
-        </ul>
-      </div>
-      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/eigenAyoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">eigenAyoub</span></a></li><li><a href="https://instagram.com/curl.ayoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#instagram"></use></svg> <span class="username">curl.ayoub</span></a></li><li><a href="https://www.linkedin.com/in/eigenAyoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">eigenAyoub</span></a></li></ul>
-</div>
-
-      <div class="footer-col footer-col-3">
-        <p>10k</p>
-      </div>
-
-    </div>
-  </div>
-</footer>
-</body>
-
-</html>
+:ET

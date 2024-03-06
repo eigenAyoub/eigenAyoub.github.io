@@ -38,6 +38,7 @@
 \section{Resutls}%
 \label{sec:Resutls}
 
+Results so far on wikitext103, wikitext2 and lambada. 
 
 \begin{table}[h]
 \centering
@@ -62,7 +63,10 @@
 
 % add the latest paper
 
-A lot of work has been done on the compression of LLMs using factorization methods, including Kronecker Products. Most notably for encoder based based, and rarely applied to decoder based methods (\cite{tahaei2022kroneckerbert}, \cite{edalati2021kroneckr}). To the best of our knowledge, not many have focused on Freezing the initial pre-trained weights, i.e., most methods drop newly factorized matrices into the already pre-trained parameters, without carefully blending, nor assessing/studying how much the model is relying on already trained weights.
+A lot of work has been done on the compression of LLMs using factorization methods, including Kronecker Products. Most notably for encoder based based, and rarely applied to decoder based methods (\cite{tahaei2022kroneckerbert}, \cite{edalati2021kroneckr}).
+
+\begin{comment}
+To the best of our knowledge, not many have focused on Freezing the initial pre-trained weights, i.e., most methods drop newly factorized matrices into the already pre-trained parameters, without carefully blending, nor assessing/studying how much the model is relying on already trained weights.
 
 In this work:
 
@@ -71,6 +75,9 @@ In this work:
 	\item We also introduce a new distillation / training mechanism to ease the entry of these factorized weights into the old architecture. 
 	\item We also show that freezing the other weights, helps the new introduced get more activation.
 \end{itemize}
+
+\end{comment}
+
 
 When adding multiple Kronecker factors,  we also investigate the impact of freezing the each factor, and train on only some parts of data.. 
 
