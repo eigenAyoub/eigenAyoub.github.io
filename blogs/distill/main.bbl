@@ -1,5 +1,20 @@
 \begin{thebibliography}{1}
 
+\bibitem{merity2016pointer}
+S.~Merity, C.~Xiong, J.~Bradbury, and R.~Socher, ``Pointer sentinel mixture
+  models,'' {\em arXiv preprint arXiv:1609.07843}, 2016.
+
+\bibitem{paperno2016lambada}
+D.~Paperno, G.~Kruszewski, A.~Lazaridou, Q.~N. Pham, R.~Bernardi, S.~Pezzelle,
+  M.~Baroni, G.~Boleda, and R.~Fern{\'a}ndez, ``The lambada dataset: Word
+  prediction requiring a broad discourse context,'' {\em arXiv preprint
+  arXiv:1606.06031}, 2016.
+
+\bibitem{sanh2019distilbert}
+V.~Sanh, L.~Debut, J.~Chaumond, and T.~Wolf, ``Distilbert, a distilled version
+  of bert: smaller, faster, cheaper and lighter,'' in {\em NeurIPS EMC^2
+  Workshop}, 2019.
+
 \bibitem{tahaei2022kroneckerbert}
 M.~Tahaei, E.~Charlaix, V.~Nia, A.~Ghodsi, and M.~Rezagholizadeh,
   ``Kroneckerbert: Significant compression of pre-trained language models
@@ -7,6 +22,12 @@ M.~Tahaei, E.~Charlaix, V.~Nia, A.~Ghodsi, and M.~Rezagholizadeh,
   Proceedings of the 2022 Conference of the North American Chapter of the
   Association for Computational Linguistics: Human Language Technologies},
   pp.~2116--2127, 2022.
+
+\bibitem{abronin2024tqcompressor}
+V.~Abronin, A.~Naumov, D.~Mazur, D.~Bystrov, K.~Tsarova, A.~Melnikov,
+  I.~Oseledets, S.~Dolgov, R.~Brasher, and M.~Perelshtein, ``Tqcompressor:
+  improving tensor decomposition methods in neural networks via permutations,''
+  {\em arXiv preprint arXiv:2401.16367}, 2024.
 
 \bibitem{edalati2021kroneckr}
 A.~Edalati, M.~Tahaei, A.~Rashid, V.~P. Nia, J.~J. Clark, and

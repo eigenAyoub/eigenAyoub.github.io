@@ -15,35 +15,33 @@
 
 \begin{abstract}
 
-	GPT2 checkpoints from HuggingFace reach a approximate loss of 3.11 on OpenWebText. 	In this work, we factorize the main parameters of GPT2, as Kronecker Products leading to a compression factor of $x\%$, and ask the following question:  What is the fastest way to reach back to the 3.11 loss using the Kronecker factors. And how to optimally manipulate training and distillation of the small compressed network. We particularly investigate freezing (for both training and distillation), and smooth transitioning (explained later on).
+What do we do differently:
 
+\begin{itemize}
+	\item We put distillation to test, and see if does improve improve the learning quality over vanilla supervised learning. \textbf{Spoiler alert}: NOPE. (Others, all use distillation)
+	\item We don't compress the attention matrices.
+	\item We try different compression schemes and see how far we can push down the size.
+	\item We use multiple Kronecker Factors.
+	\item We try different compression ratios for different layers.
+\end{itemize}
 
 \end{abstract}
 
-\begin{itemize}
-	\item \textbf{freezing} the pre-trained weights, helps boost accuracy.
-	\item One by One distillation: drop the weights slowly and distill through the network.
-\end{itemize}
-
-\textbf{Methodology:}
-\begin{enumerate}
-	\item Train GPT2 to a certain level. -- $3.11$.
-	\item Decompose the MLP weights.
-	\item Try a bunch of methods and see which one guarantees getting back to the original loss as fast as possible.
-\end{enumerate}
+\newpage
 
 \tableofcontents
 \newpage
 
-\section{Resutls}%
+\section{Resutls:}%
 \label{sec:Resutls}
 
-Results so far on wikitext103, wikitext2 and lambada. 
+Early results on wikitext103, wikitext2 \cite{merity2016pointer} and Lambada \cite{paperno2016lambada}. \textbf{KronyPT} is our model, and the suffixes $1350$ and $3950$ refer to different checkpoints. Both models are already outperforming distilGPT2 (\cite{sanh2019distilbert}) on the 3 datasets. And the $3950$ checkpoint is outperforming \textbf{KnGPT2} (\cite{tahaei2022kroneckerbert}) on Lambada, while slightly still behind \textbf{TQCompressedGPT2}  \cite{abronin2024tqcompressor}. We measure perplexity (duh) using the Hugging Face interface that was used by the other papers.
 
 \begin{table}[h]
 \centering
 \begin{tabular}{|c|c|c|c|c|}
 \hline
+
  & & \multicolumn{3}{c|}{Datasets} \\ \hline
 \# Params &  Model            & wikitext-103 & wikitext-2 & Lambada \\ \hline
 124M      & GPT2              & 29.16        & 24.67      & 45.28      \\ \hline
@@ -63,7 +61,7 @@ Results so far on wikitext103, wikitext2 and lambada.
 
 % add the latest paper
 
-A lot of work has been done on the compression of LLMs using factorization methods, including Kronecker Products. Most notably for encoder based based, and rarely applied to decoder based methods (\cite{tahaei2022kroneckerbert}, \cite{edalati2021kroneckr}).
+A lot of work has been done on the compression of LLMs using factorization methods, including Kronecker Products. Most notably for encoder based based, and rarely applied to decoder based methods (\cite{tahaei2022kroneckerbert}, \cite{edalati2021kroneckr}, \cite{abronin2024tqcompressor}).
 
 \begin{comment}
 To the best of our knowledge, not many have focused on Freezing the initial pre-trained weights, i.e., most methods drop newly factorized matrices into the already pre-trained parameters, without carefully blending, nor assessing/studying how much the model is relying on already trained weights.
@@ -76,16 +74,12 @@ In this work:
 	\item We also show that freezing the other weights, helps the new introduced get more activation.
 \end{itemize}
 
-\end{comment}
-
-
-When adding multiple Kronecker factors,  we also investigate the impact of freezing the each factor, and train on only some parts of data.. 
-
 In this work, we demonstrate that without freezing, the network relies more on the pre-trained weights (to a varying degree, depending on how the new proposed weights are initialized). And with freezing, newly introduced weights learn faster.
 
 Usually the newly introduced weights are brute forced into training, and in many cases not, (knowing how many LLMs are under-trained + many residual connections), the pre-trained carry the weights. We also compare the gradient activations in both cases (when we free and when don't).
 
 In this work we demonstrate the effectiveness of freezing, and of slow integration of weights, either through training or distillation.
+
 
 Using Van Loan has no remarkable benefit improvement over $50\%$ pruning.
 
@@ -134,32 +128,79 @@ We believe that not freezing the original pre-trained weight, is eventually detr
 
 We test some interesting properties of distillation. We first position ourselves in a small setup, and then study how these observations scale to larger models. 
 
-\section{Training setups}%
+
+
+\end{comment}
+
+
+We study how far we can push the compression ratio, and then impact of down-scaling on the quality of the model. We also investigate adding multiple Kronecker factors.
+
+
+\section{Training Set-up}%
 \label{sec:Training setups}
 
-
-
-
+Add here the basic set-up that I used to train the latest models, basically Chinchilla recommendations. (for later)
 
 \section{Kronecker Decomposition}%
 \label{sub:Kronecker Decomposition}
 
-In this section, we study different Kronecker decomposition setups, and the percentage of compression it would  lead to. So far we only decompose the weights \cls{c\_fc.weight} and \cls{c\_proj.weight} (each has $2.3M$ in the original GPT2-small architecture.). Each transformer layer (there are $12$ in total) has two of these weights. They count to $56.6M$ in total ($45\%$ of GPT2 $124M$). Hence any significance reduction to these matrices would lead to a big (xx) compression of the whole model. We choose not to compress the weights of the attention for various reasons, first, it is showed that they're pretty dense (change this, and add more refs.), and second for implementation purposes (Flash Attention is too good!).
+In this section, we study different Kronecker decomposition setups, and the percentage of compression it would  lead to. So far we only decompose the weights \cls{c\_fc.weight} and \cls{c\_proj.weight} (each has $2.3M$ in the original GPT2-small architecture.). Each transformer layer (there are $12$ in total) has two of these weights. They count to $56.6M$ in total ($45\%$ of GPT2 $124M$). Hence any significant reduction to these matrices would lead to a remarkable compression ratio of the whole model. We choose not to compress the other weights, namely, attention weights and embedding matrix for various reasons that we will expose later on. 
 
-The parameter \cls{$p_1 = $ c\_fc.weight} (and  \cls{$p_2 = $ c\_proj.weight}) has a shape of $(3072, 768)$ (resp.  $(768, 3072)$). We first try the following decomposition: $p_1 = \underbrace{W_{11}}_{\text{(3072,384)}} \otimes \underbrace{W_{12}}_{\text{(1,2)}}$  and $p_2 = \underbrace{W_{21}}_{\text{(384,3072)}} \otimes \underbrace{W_{22}}_{\text{(2,1)}}$  % why tf can't I write math env insite \text. u fucking shit. 
+%of the attention for various reasons, first, it is showed that they're pretty dense (change this, and add more refs.), and second for implementation purposes (Flash Attention is too good!).
+\subsection{The 95M model}%
+\label{sub:The 95M model}
+The most basic strategy is to divide one of the dimensions of each W by 2, this would lead to a 95M model. The parameter \cls{$p_1 = $ c\_fc.weight} (resp. \cls{$p_2 = $ c\_proj.weight}) has a shape of $(3072, 768)$ (resp.  $(768, 3072)$). We first try the following decomposition: $p_1 = \underbrace{W_{11}}_{\text{(3072,384)}} \otimes \underbrace{W_{12}}_{\text{(1,2)}}$  and $p_2 = \underbrace{W_{21}}_{\text{(384,3072)}} \otimes \underbrace{W_{22}}_{\text{(2,1)}}$  
 
-This decomposition would lead to to reduction of $28M$ ($50\%$). The new network would have approx $95M$. Our goal is to eventually reach the $85M$ mark, similar to DistilGPT2.
+
+This decomposition would lead to to reduction of $28M$ ($50\%$). The new network would have approx $95M$. Our goal is to eventually reach the $82M$ mark, similar to DistilGPT2, and other Factorized models (inserts other refs here).
 
 \subsection{Different decomposition schemes:}%
 \label{sec:Different decomposition schemes}
 
-In this section, we try different decompositions.
+It is reasonable to aim for a decomposition that guarantees the maximum rank we can get. Since the Rank of Kronecker products is multiplicative, i.e., $\mathrm{rank}(A\otimes B) = \mathrm{rank}(A)\cdot\mathrm{rank}(B)$ \footnote{\href{ https://math.stackexchange.com/questions/707091/elementary-proof-for-textrank-lefta-otimes-b-right-textranka-cdot}{Link to proof: https://math.stackexchange.com/questions/707091/elementary-proof-for-textrank-lefta-otimes-b-right-textranka-cdot}}, we can easily compute the rank of each possible decomposition. In our case, we have $W \in \mathbb{R}^{(m,n)}$ where $m = 3072$ and $n = 768$. Hence, for each layer of GPT2, we aim to find the ``optimal'' $A \in \mathbb{R}^{(m_1, n_1)}$, and $B\in \mathbb{R}^{(m_2, n_2)$, i.e.,: 
 
-It is reasonable to aim for a decomposition that guarantees the maximum rank we can get. Since the Rank of Kronecker products is multiplicative, i.e., $\mathrm{rank}(A\otimes B) = \mathrm{rank}(A)\cdot\mathrm{rank}(B)$ \footnote{\href{ https://math.stackexchange.com/questions/707091/elementary-proof-for-textrank-lefta-otimes-b-right-textranka-cdot}{Link to proof: https://math.stackexchange.com/questions/707091/elementary-proof-for-textrank-lefta-otimes-b-right-textranka-cdot}}, we can easily compute the rank of each possible decomposition.
+	\[W \approx A\otimes B, \qquad m = m_1 m_2, n = n_1 n_2 \]. 
 
-In our case, let $W \in \mathbb{R}^{(m,n)}$ where $m = 3072$ and $n = 768$. So, for each layer of GPT2, we aim to find the "optimal" $A \in \mathbb{R}^{(m_1, n_1)}$, and $B\in \mathbb{R}^{(m_2, n_2)$, s.t.: \[W \approx A\otimes B, m = m_1 m_2, n = n_1 n_2 \].
+	W.l.o.g, for each decomposition $(A,B)$ the maximum rank we can reach is $\min(m_1,n_1) \cdot \min(m_2,n_2)$. And each of the reduced decompositions would have exactly $m_1 n_1 + m_2 n_2$ parameters. Hence, theoritically, the maximum rank we can get is $384$ of a $(3072, 768)$ matrix. The following table summarizes all possible combinations, alongside the reduction it would lead to per layer, and the total number of parameters in GPT2, for only those decompostions of rank $384$.
 
-W.l.o.g, for each decomposition $(A,B)$ the maximum rank we can reach is $\min(m_1,n_1) \cdot \min(m_2,n_2)$. And each of the reduced decompositions would have exactly $m_1 n_1 + m_2 n_2$ parameters. Hence, theoritically, the maximum rank we can get is $384$ of a $(3072, 768)$ matrix. The following table summarizes all possible combinations, alongside the reduction it would lead to per layer, and the total number of parameters in GPT2, for only those decompostions of rank $384$.
+
+The following table summarizes some of the decompositions that we can try without degrading the rank. We are particularly interested in 3 models, the 67M, the 81M and the 96M. (Need to add this) Furthermore, we add more factors to the 67M leading to a XXM model and see how loss curve behaves.
+
+\begin{table}[htb!]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+Name 	& Dimension 		& 	#params 	& Model size\\
+\hline
+67M		&  (64, 32)         &   3200       & 67,893,504  \\ \hline 
+		&  (64, 48)         &   3840       & 67,908,864  \\ \hline 
+		&  (96, 32)         &   3840       & 67,908,864  \\ \hline
+		&  (64, 64)         &   4672       & 67,928,832  \\ \hline
+		&  (128, 32)        &   4672       & 67,928,832  \\ \hline 
+		&  (96, 48)         &   5120       & 67,939,584  \\ \hline 
+		&  (96, 64)         &   6528       & 67,973,376  \\ \hline
+		&  (128, 48)        &   6528       & 67,973,376  \\ \hline
+		&  (128, 64)        &   8480       & 68,020,224  \\ \hline 
+		&  (96, 96)         &   9472       & 68,044,032  \\ \hline 
+		&  (192, 48)        &   9472       & 68,044,032  \\ \hline
+		&  (128, 96)        &   12480      & 68,116,224  \\ \hline
+		&  (192, 64)        &   12480      & 68,116,224  \\ \hline 
+		&  (128, 128)       &   16528      & 68,213,376  \\ \hline 
+		&  (256, 64)        &   16528      & 68,213,376  \\ \hline
+		&  \cdots &   \cdots    & \cdots \\ \hline
+		&  (1024, 256)      &   262153     & 74,108,376  \\ \hline 
+		&  (768, 384)       &   294920     & 74,894,784  \\ \hline
+		&  (1024, 384)      &   393222     & 77,254,032  \\ \hline
+81M 	&  (768, 768)       &   589828     & 81,972,576  \\ \hline
+		&  (1536, 384)      &   589828     & 81,972,576  \\ \hline
+		&  (1024, 768)      &   786435     & 86,691,144  \\ \hline
+96M		&  (1536, 768)      &   1179650    & 96,128,304  \\ \hline
+GPT2	&  (3072, 768)      &   2359297    & 124,439,832 \\ \hline
+\end{tabular}
+\caption{Comparison of different models on various datasets.}
+\end{table}
+
+\newpage
 \section{Impact of down-scaling: How small can we go}%
 \label{sub:get-down}
 
@@ -168,7 +209,7 @@ In this section, we study the impact of down-scaling on the compressed models, w
 \begin{itemize}
 	\item 67M: diverges // try with higher batch size (the least we can get)
 	\item 81M: Super.
-	\item 81M: with a Variant scheme
+	\item 81M: with a Variant scheme (67M with multiple factors)
 	\item 95M: duh duh duh. (the highest we can get)
 \end{itemize}
 
@@ -188,120 +229,39 @@ Keep in mind:
 \end{itemize}	
 
 
-
-\subsection{Initialization}%
+\section{Initialization}%
 \label{sub:Initialization}
 
-Here we try different initialization tricks, and see how the loss evolves with a few iterations of training. We particularly try Random initialization, Van Loan Initialization, and a special initialization that introduce and call, Sign Maximization, where we try to optimize the signs of the Kronecker Product then randomize. Results are summarized below:
+In our set-up, we blend/merge new parameters into already pre-trained. It seems wastful, to randomly initiliaze the newly introduce Kroncker Products if we can come up with a clever / better way. Here we introduce the Van Loan method, and another pruning based initialization trick, specifically crafted for the 95M model. And eventually both of them.
 
-
-Add a bar for 3.11, to show the target.
-
-\subsection{Teacher/Student architecture}
-
-\begin{itemize}
-
-\item Teacher network:   a 10M GPT2 like model. 6 layers of 6 heads.
-\item Student network:  a 4M compressed model of the teacher where each weight  $W$ of the FFN is decomposed to $W \approx W_1 \otimes W_2$. 
-
-\end{itemize}
-
-\subsection{Methodology}%
-\label{sub:Methodology}
-
-\begin{enumerate}
-	\item  We pre-train the teacher model for 1k steps.
-	\item  Decompose the MLP weights into Kronecker Products.
-	\item  Resume the training with 2 variations:
-	\begin{itemize}
-		\item How we initialize the KronP factors (either Random or Van Loan)
-		\item Either or freeze the other pre-trained weights.
-	\end{itemize}
-\end{enumerate}
-
-
+\subsection{The fuck is Van Loan}%
+\label{sub:The fuck is Van Loan}
+XX
+\subsection{Pruning based Initialization}%
+\label{sub:Pruning based Initialization}
+XX
 
 \subsection{Questions}%
 \label{sub:Questions}
 
 
 \begin{itemize}
-	\item When we plug new KP matrices to the pre-trained model, is it useful to freeze the other weights that are already pre-trained?
+	\item When we plug new KP matrices to the pre-trained model, is it useful to freeze the other weights that are already pre-trained? Or using different learning rates schemes maybe?
+
 	\item When don't don't freeze the weights. Does the network rely on other pre-trained methods?
-   * **The idea that I'm challenging here**: A lot of work on NNs compression using factorized methods,
-     claim that the network only need to be (post-)trained on small % of the original training steps/data.
-   * But, what the fail to mention or elaborate on at least, is that not the weights matrices of the network are decomposed.
-   * And with all the residual connection that are present in most attention networks, 
-     one could suspect, that maybe the weights that were not decomposed are taking over...
-   * A good remedy for this is to freeze the original weights during the post-training, and only allow the new dropped in (factorized matrices) to be updated with backprop.
+	\begin{itemize}
+		\item **The idea that I'm challenging here**: A lot of work on NNs compression using factorized methods,
+			    claim that the network only need to be (post-)trained on small % of the original training steps/data.                                                                   
+		\item But, what the fail to mention or elaborate on at least, is that not the weights matrices of the network are decomposed.                                                 
+		\item And with all the residual connection that are present in most attention networks,                                                                                       
+			    one could suspect, that maybe the weights that were not decomposed are taking over...                                                                                   
+		\item A good remedy for this is to freeze the original weights during the post-training, and only allow the new dropped in (factorized matrices) to be updated with backprop. 
+			   
+	\end{itemize}
 	\item This strategy could also be implemented in distillation. We refer to this method as **forced distillation.**
 	\item When we freeze, we investigate how useful is it to distill matrices one by one, rather than drop in the matrices all at once. And also investigate if the order of dropping has any significance, bottom up or top bottom...
 
 \end{itemize}
-
-\section{Toy experiments: 14M GPT2 model.}%
-\label{sec:GPT2-Mini}
-
-I'll refer with the normal setup \textbf{NS} to the original model (with no factorization), and with the Kronecker Products Setup \textbf{KPS} to the new KP factorized model.
-
-We first run the following 5 training runs:
-\begin{itemize}
-	\item 
-	\item  Run the NS for 4K steps.
-	\item  2 runs with different learning rate strategies.
-	\item  Run the NS for 2K, plug-in the KP weights (randomized) then train for 2k more steps.
-	\item  Same as **2.** with a Freezing variation:
-	\begin{itemize}
-		\item     Run the NS for 2K, plug-in the KP weights (VL init) 
-		\item     Freeze the other weight, and only train the KP matirces for 1K
-		\item     Unfreeze the original weights, i.e., train all parameters again. 
-	\end{itemize}
-	\item  Run the NS for 2K, plug-in the KP weights (VL init) then train for 2k more steps.
-	\item  Same as **4.** with a Freezing variation:
-	\begin{itemize}
-		\item     Run the NS for 2K, plug-in the KP weights (VL init) 
-		\item     Freeze the other weight, and only train the KP matrices for 1K
-		\item     Unfreeze the original weights, i.e., train all parameters again. 
-	\end{itemize}
-\end{itemize}
-
-Another thing I should try:
-\begin{itemize}
-	\item compare 1 on 1 training with whole training at once.  Just for training. One the same number of iterations. With freezing of course.
-	\item play with different lr strategies of pre-trained / post-trained parameters
-
-\end{itemize}
-
-Notes: 
-\begin{itemize}
-	\item  It is worth mentioning that changing the learning rate can significantly change the outcome, since the original weights are smoother with a weight-decay. One should be vigilant.
-	\item  The model overfit quickly.
-\end{itemize}
-somestuffstyle
-
-
-Training the base model for 5k steps with different learning rates curves as depicted below, leads to the following training / validation loss curves:
-
-\begin{comment}
-	
-![Training loss of base models](/src/kp-blog/base_train.png)
-![Validiation loss of base models](/src/kp-blog/base_validation.png)
-![Learning rate methodology of base models](/src/kp-blog/base_lr.png)
-
-\end{comment}
-
-As a rule, I'll set the learning_rate of all already-pretrained to a constant ($1e3$), while decaying the new factorized methods.
-
-
-
-\section{Results}%
-\label{sub:}
-
-
-
-
-
-
 
 \bibliography{bib}
 \bibliographystyle{ieeetr}
