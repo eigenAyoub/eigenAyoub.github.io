@@ -234,13 +234,14 @@ Keep in mind:
 
 In our set-up, we blend/merge new parameters into already pre-trained. It seems wastful, to randomly initiliaze the newly introduce Kroncker Products if we can come up with a clever / better way. Here we introduce the Van Loan method, and another pruning based initialization trick, specifically crafted for the 95M model. And eventually both of them.
 
-\subsection{The fuck is Van Loan}%
+\subsection{Van Loan}%
 \label{sub:The fuck is Van Loan}
 XX
 \subsection{Pruning based Initialization}%
 \label{sub:Pruning based Initialization}
 XX
-
+\begin{comment}
+	
 \subsection{Questions}%
 \label{sub:Questions}
 
@@ -262,7 +263,9 @@ XX
 	\item When we freeze, we investigate how useful is it to distill matrices one by one, rather than drop in the matrices all at once. And also investigate if the order of dropping has any significance, bottom up or top bottom...
 
 \end{itemize}
+\end{comment}
 
+\newpage
 \bibliography{bib}
 \bibliographystyle{ieeetr}
 
