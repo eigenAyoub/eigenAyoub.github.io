@@ -179,13 +179,13 @@ Name 	& Dimension 		& 	#params 	& Model size\\
 		&  (128, 48)        &   6528       & 67,973,376  \\ \hline
 		&  (128, 64)        &   8480       & 68,020,224  \\ \hline 
 		&  (96, 96)         &   9472       & 68,044,032  \\ \hline 
-MF1		&  (192, 48)        &   9472       & 68,044,032  \\ \hline
+ 		&  (192, 48)        &   9472       & 68,044,032  \\ \hline
 		&  (128, 96)        &   12480      & 68,116,224  \\ \hline
 		&  (192, 64)        &   12480      & 68,116,224  \\ \hline 
 		&  (128, 128)       &   16528      & 68,213,376  \\ \hline 
-MF2		&  (256, 64)        &   16528      & 68,213,376  \\ \hline
+MF1		&  (256, 64)        &   16528      & 68,213,376  \\ \hline
 		&  \cdots &   \cdots    & \cdots \\ \hline
-MF3		&  (1024, 256)      &   262153     & 74,108,376  \\ \hline 
+MF2		&  (1024, 256)      &   262153     & 74,108,376  \\ \hline 
 		&  (768, 384)       &   294920     & 74,894,784  \\ \hline
 		&  (1024, 384)      &   393222     & 77,254,032  \\ \hline
 81M 	&  (768, 768)       &   589828     & 81,972,576  \\ \hline
@@ -204,9 +204,8 @@ GPT2	&  (3072, 768)      &   2359297    & 124,439,832 \\ \hline
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
 Name 	& Dimension 		& 	#params    & 1 factor    & 2 factors   & 3 factors     \\ \hline                                                                                 
-MF1		&  (192, 48)        &   9472       & 68,044,032  & 68,044,032  & 68,044,032    \\ \hline
-MF2		&  (256, 64)        &   16528      & 68,213,376  & 68,213,376  & 68,213,376    \\ \hline
-MF3		&  (1024, 256)      &   262153     & 74,108,376  & 74,108,376  & 74,108,376    \\ \hline 
+MF1		&  (256, 64)        &   16528      & 68,2M       & 68,6  & 69M    \\ \hline
+MF2		&  (1024, 256)      &   262153     & 74M         & 80M   & 86M    \\ \hline 
 \end{tabular}
 \caption{Adding multiple Kronecker Factors}
 \end{table}
@@ -242,12 +241,12 @@ Keep in mind:
 \section{Initialization}%
 \label{sub:Initialization}
 
-Since we inherit a GPT2 checkpoint that was trained for multiple epochs on the Open Web Text (OWT) (cite here), we want to initiliaze our weights in a way that leverages the old pre-training as much as possible. This of course obvious for the parameters that are common between \textbf{GPT2} and \textbf{KronyPT} (i.e., exact match).  But more tricky for the weights that are decomposed into Kronecker Factors. In our work, we try two different approaches, Van Loan decomposition (cite here), and a Pruning, exclusively for the 95M model.
+Since we inherit a GPT2 checkpoint that was trained for multiple epochs on the Open Web Text (OWT) (cite here), we want to initiliaze our weights in a way that leverages the old pre-training as much as possible. This is of course obvious for the parameters that are common between \textbf{GPT2} and \textbf{KronyPT} (i.e., we match).  But more tricky for the weights that are decomposed into Kronecker Factors. In our work, we try two different approaches, Van Loan decomposition (cite here), and a Pruning based method exclusively for the 95M model.
 
 \subsection{Van Loan Method}%
 \label{sub:The fuck is Van Loan}
 
-Given matrices $A \in \mathbb{R}^{m \times m}$ and $B \in \mathbb{R}^{n \times n}$, the Kronecker product is defined as $A \otimes B = [a_{ij}B] \in \mathbb{R}^{mn \times mn}$. The Van Loan method computes a matrix function, denoted as $f(A \otimes B)$, by exploiting eigenvalue or singular value decompositions. Specifically, if $f$ is a matrix exponential, then $e^{A \otimes B} = e^{A} \otimes e^{B}$. This method reduces computational complexity and is especially advantageous in large-scale matrix computations.
+XX (maybe not even write this section)
 
 \subsection{Pruning based Initialization}%
 \label{sub:Pruning based Initialization}
