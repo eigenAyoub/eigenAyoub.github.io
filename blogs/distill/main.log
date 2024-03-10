@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.12.27)  9 MAR 2024 15:05
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.12.27)  10 MAR 2024 15:25
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -409,8 +409,8 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 \openout5 = `main.toc'.
 
  [2] [3]
-./main.tex:152: Undefined control sequence.
-l.152 ...sition: $p_1 = \underbrace{W_{11}}_{\text
+./main.tex:153: Undefined control sequence.
+l.153 ...sition: $p_1 = \underbrace{W_{11}}_{\text
                                                   {(3072,384)}} \otimes \und...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -418,8 +418,8 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-./main.tex:152: Undefined control sequence.
-l.152 ...384)}} \otimes \underbrace{W_{12}}_{\text
+./main.tex:153: Undefined control sequence.
+l.153 ...384)}} \otimes \underbrace{W_{12}}_{\text
                                                   {(1,2)}}$  and $p_2 = \und...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -427,8 +427,8 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-./main.tex:152: Undefined control sequence.
-l.152 ...}$  and $p_2 = \underbrace{W_{21}}_{\text
+./main.tex:153: Undefined control sequence.
+l.153 ...}$  and $p_2 = \underbrace{W_{21}}_{\text
                                                   {(384,3072)}} \otimes \und...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -436,8 +436,8 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-./main.tex:152: Undefined control sequence.
-l.152 ...072)}} \otimes \underbrace{W_{22}}_{\text
+./main.tex:153: Undefined control sequence.
+l.153 ...072)}} \otimes \underbrace{W_{22}}_{\text
                                                   {(2,1)}}$
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -445,8 +445,8 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-./main.tex:160: Undefined control sequence.
-l.160 ...tion. In our case, we have $W \in \mathbb
+./main.tex:161: Undefined control sequence.
+l.161 ...tion. In our case, we have $W \in \mathbb
                                                   {R}^{(m,n)}$ where $m = 30...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -454,8 +454,8 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-./main.tex:160: Undefined control sequence.
-l.160 ...im to find the ``optimal'' $A \in \mathbb
+./main.tex:161: Undefined control sequence.
+l.161 ...im to find the ``optimal'' $A \in \mathbb
                                                   {R}^{(m_1, n_1)}$, and $B\...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -463,8 +463,8 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-./main.tex:160: Undefined control sequence.
-l.160 ...athbb{R}^{(m_1, n_1)}$, and $B\in \mathbb
+./main.tex:161: Undefined control sequence.
+l.161 ...athbb{R}^{(m_1, n_1)}$, and $B\in \mathbb
                                                   {R}^{(m_2, n_2)$, i.e.,:
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -472,10 +472,10 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-./main.tex:160: Missing } inserted.
+./main.tex:161: Missing } inserted.
 <inserted text> 
                 }
-l.160 ...n_1)}$, and $B\in \mathbb{R}^{(m_2, n_2)$
+l.161 ...n_1)}$, and $B\in \mathbb{R}^{(m_2, n_2)$
                                                   , i.e.,:
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -483,28 +483,28 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
-./main.tex:173: You can't use `macro parameter character #' in restricted horizontal mode.
+./main.tex:170: You can't use `macro parameter character #' in restricted horizontal mode.
 <recently read> ##
                   
-l.173 Name 	& Dimension 		& 	#
+l.170 Name 	& Dimension 		& 	#
                               params 	& Model size\\
 Sorry, but I'm not programmed to handle this case;
 I'll just pretend that you didn't ask for it.
 If you're in the wrong mode, you might be able to
 return to the right one by typing `I}' or `I$' or `I\par'.
 
-./main.tex:190: Missing $ inserted.
+./main.tex:187: Missing $ inserted.
 <inserted text> 
                 $
-l.190 		&  \cdots
+l.187 		&  \cdots
                   &   \cdots    & \cdots \\ \hline
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:190: Extra }, or forgotten $.
+./main.tex:187: Extra }, or forgotten $.
 <template> \unskip \hfil }
                           \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.190 		&  \cdots &
+l.187 		&  \cdots &
                       \cdots    & \cdots \\ \hline
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -512,18 +512,18 @@ you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
-./main.tex:190: Missing $ inserted.
+./main.tex:187: Missing $ inserted.
 <inserted text> 
                 $
-l.190 		&  \cdots &
+l.187 		&  \cdots &
                       \cdots    & \cdots \\ \hline
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:190: Missing } inserted.
+./main.tex:187: Missing } inserted.
 <inserted text> 
                 }
-l.190 		&  \cdots &
+l.187 		&  \cdots &
                       \cdots    & \cdots \\ \hline
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -531,18 +531,18 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
-./main.tex:190: Missing $ inserted.
+./main.tex:187: Missing $ inserted.
 <inserted text> 
                 $
-l.190 		&  \cdots &   \cdots
+l.187 		&  \cdots &   \cdots
                                 & \cdots \\ \hline
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:190: Extra }, or forgotten $.
+./main.tex:187: Extra }, or forgotten $.
 <template> \unskip \hfil }
                           \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.190 		&  \cdots &   \cdots    &
+l.187 		&  \cdots &   \cdots    &
                                   \cdots \\ \hline
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -550,18 +550,18 @@ you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
-./main.tex:190: Missing $ inserted.
+./main.tex:187: Missing $ inserted.
 <inserted text> 
                 $
-l.190 		&  \cdots &   \cdots    &
+l.187 		&  \cdots &   \cdots    &
                                   \cdots \\ \hline
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:190: Missing } inserted.
+./main.tex:187: Missing } inserted.
 <inserted text> 
                 }
-l.190 		&  \cdots &   \cdots    &
+l.187 		&  \cdots &   \cdots    &
                                   \cdots \\ \hline
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -569,18 +569,18 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
-./main.tex:190: Missing $ inserted.
+./main.tex:187: Missing $ inserted.
 <inserted text> 
                 $
-l.190 		&  \cdots &   \cdots    & \cdots
+l.187 		&  \cdots &   \cdots    & \cdots
                                          \\ \hline
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:190: Extra }, or forgotten $.
+./main.tex:187: Extra }, or forgotten $.
 <template> \unskip \hfil }
                           \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.190 		&  \cdots &   \cdots    & \cdots \\ \hline
+l.187 		&  \cdots &   \cdots    & \cdots \\ \hline
                                                   
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -588,18 +588,18 @@ you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
-./main.tex:190: Missing $ inserted.
+./main.tex:187: Missing $ inserted.
 <inserted text> 
                 $
-l.190 		&  \cdots &   \cdots    & \cdots \\ \hline
+l.187 		&  \cdots &   \cdots    & \cdots \\ \hline
                                                   
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:190: Missing } inserted.
+./main.tex:187: Missing } inserted.
 <inserted text> 
                 }
-l.190 		&  \cdots &   \cdots    & \cdots \\ \hline
+l.187 		&  \cdots &   \cdots    & \cdots \\ \hline
                                                   
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -607,26 +607,63 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
+./main.tex:206: You can't use `macro parameter character #' in restricted horizontal mode.
+<recently read> ##
+                  
+l.206 Name 	& Dimension 		& 	#
+                              params    & 1 factor    & 2 factors   & 3 fact...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
 [4] [5]
 
-./main.tex:229: LaTeX Error: \begin{document} ended by \end{itemize}.
+./main.tex:239: LaTeX Error: \begin{document} ended by \end{itemize}.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.229 \end{itemize}
+l.239 \end{itemize}
                    	
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
-./main.tex:229: Extra \endgroup.
+./main.tex:239: Extra \endgroup.
 <recently read> \endgroup 
                           
-l.229 \end{itemize}
+l.239 \end{itemize}
                    	
 Things are pretty mixed up, but I think the worst is over.
+
+./main.tex:250: Undefined control sequence.
+l.250 Given matrices $A \in \mathbb
+                                   {R}^{m \times m}$ and $B \in \mathbb{R}^{...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+./main.tex:250: Undefined control sequence.
+l.250 ...athbb{R}^{m \times m}$ and $B \in \mathbb
+                                                  {R}^{n \times n}$, the Kro...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+./main.tex:250: Undefined control sequence.
+l.250 ...d as $A \otimes B = [a_{ij}B] \in \mathbb
+                                                  {R}^{mn \times mn}$. The V...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
 [6] (./main.bbl
 ./main.bbl:15: Missing $ inserted.
@@ -667,21 +704,21 @@ my insertion and my current dilemma will both disappear.
 
 ) [7] (./main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: B4A0010F9E893BC1C76254174FB07983;1571.
+(rerunfilecheck)             Checksum: 2E129533CB69E2538CDD477A412D07F8;1429.
  ) 
 Here is how much of TeX's memory you used:
- 18248 strings out of 480247
- 345158 string characters out of 5896150
- 618798 words of memory out of 5000000
+ 18249 strings out of 480247
+ 345155 string characters out of 5896150
+ 620772 words of memory out of 5000000
  35883 multiletter control sequences out of 15000+600000
  475307 words of font info for 48 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 99i,10n,104p,792b,447s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/ayoub/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk> </home/ayoub/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm0900.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on main.pdf (7 pages, 231317 bytes).
+ 99i,11n,104p,799b,427s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </home/ayoub/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk> </home/ayoub/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm0900.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on main.pdf (7 pages, 242971 bytes).
 PDF statistics:
- 216 PDF objects out of 1000 (max. 8388607)
- 169 compressed objects within 2 object streams
- 29 named destinations out of 1000 (max. 500000)
+ 222 PDF objects out of 1000 (max. 8388607)
+ 173 compressed objects within 2 object streams
+ 30 named destinations out of 1000 (max. 500000)
  93 words of extra memory for PDF output out of 10000 (max. 10000000)
 

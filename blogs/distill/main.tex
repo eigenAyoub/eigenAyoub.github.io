@@ -22,7 +22,6 @@ What do we do differently:
 	\item We don't compress the attention matrices.
 	\item We try different compression schemes and see how far we can push down the size.
 	\item We use multiple Kronecker Factors.
-	\item We try different compression ratios for different layers.
 \end{itemize}
 
 \end{abstract}
@@ -56,12 +55,15 @@ Early results on wikitext103, wikitext2 \cite{merity2016pointer} and Lambada \ci
 
 
 
-\section{Introduction and Setup}
-\label{sec:Introduction and Setup}
+\section{Introduction}
+\label{sec:Introduction}
 
 % add the latest paper
 
 A lot of work has been done on the compression of LLMs using factorization methods, including Kronecker Products. Most notably for encoder based based, and rarely applied to decoder based methods (\cite{tahaei2022kroneckerbert}, \cite{edalati2021kroneckr}, \cite{abronin2024tqcompressor}).
+
+
+We study how far we can push the compression ratio, and record then impact of down-scaling on the quality of the model. We also investigate adding multiple Kronecker factors.
 
 \begin{comment}
 To the best of our knowledge, not many have focused on Freezing the initial pre-trained weights, i.e., most methods drop newly factorized matrices into the already pre-trained parameters, without carefully blending, nor assessing/studying how much the model is relying on already trained weights.
@@ -133,7 +135,6 @@ We test some interesting properties of distillation. We first position ourselves
 \end{comment}
 
 
-We study how far we can push the compression ratio, and then impact of down-scaling on the quality of the model. We also investigate adding multiple Kronecker factors.
 
 
 \section{Training Set-up}%
@@ -161,11 +162,7 @@ It is reasonable to aim for a decomposition that guarantees the maximum rank we 
 
 	\[W \approx A\otimes B, \qquad m = m_1 m_2, n = n_1 n_2 \]. 
 
-	W.l.o.g, for each decomposition $(A,B)$ the maximum rank we can reach is $\min(m_1,n_1) \cdot \min(m_2,n_2)$. And each of the reduced decompositions would have exactly $m_1 n_1 + m_2 n_2$ parameters. Hence, theoritically, the maximum rank we can get is $384$ of a $(3072, 768)$ matrix. The following table summarizes all possible combinations, alongside the reduction it would lead to per layer, and the total number of parameters in GPT2, for only those decompostions of rank $384$.
-
-
-The following table summarizes some of the decompositions that we can try without degrading the rank. We are particularly interested in 3 models, the 67M, the 81M and the 96M. (Need to add this) Furthermore, we add more factors to the 67M leading to a XXM model and see how loss curve behaves.
-
+	W.l.o.g, for each decomposition $(A,B)$ the maximum rank we can reach is $\min(m_1,n_1) \cdot \min(m_2,n_2)$. And each of the reduced decompositions would have exactly $m_1 n_1 + m_2 n_2$ parameters. Hence, theoritically, the maximum rank we can get is $768$ of a $(3072, 768)$ matrix. The following table summarizes some possible combinations, alongside the reduction it would lead to per layer, and the total number of parameters in GPT2, for only those decompostions of maximal attainable rank. We are particularly interested in 3 class of models, the 67M, the 81M and the 96M. (Need to add this) Furthermore, we add multiple factors to the models labeled with \textbf{MF} (second table / a few decompositions are missing, check this out. e.g., 3072, 384).
 \begin{table}[htb!]
 \centering
 \begin{tabular}{|c|c|c|c|}
@@ -182,13 +179,13 @@ Name 	& Dimension 		& 	#params 	& Model size\\
 		&  (128, 48)        &   6528       & 67,973,376  \\ \hline
 		&  (128, 64)        &   8480       & 68,020,224  \\ \hline 
 		&  (96, 96)         &   9472       & 68,044,032  \\ \hline 
-		&  (192, 48)        &   9472       & 68,044,032  \\ \hline
+MF1		&  (192, 48)        &   9472       & 68,044,032  \\ \hline
 		&  (128, 96)        &   12480      & 68,116,224  \\ \hline
 		&  (192, 64)        &   12480      & 68,116,224  \\ \hline 
 		&  (128, 128)       &   16528      & 68,213,376  \\ \hline 
-		&  (256, 64)        &   16528      & 68,213,376  \\ \hline
+MF2		&  (256, 64)        &   16528      & 68,213,376  \\ \hline
 		&  \cdots &   \cdots    & \cdots \\ \hline
-		&  (1024, 256)      &   262153     & 74,108,376  \\ \hline 
+MF3		&  (1024, 256)      &   262153     & 74,108,376  \\ \hline 
 		&  (768, 384)       &   294920     & 74,894,784  \\ \hline
 		&  (1024, 384)      &   393222     & 77,254,032  \\ \hline
 81M 	&  (768, 768)       &   589828     & 81,972,576  \\ \hline
@@ -197,11 +194,26 @@ Name 	& Dimension 		& 	#params 	& Model size\\
 96M		&  (1536, 768)      &   1179650    & 96,128,304  \\ \hline
 GPT2	&  (3072, 768)      &   2359297    & 124,439,832 \\ \hline
 \end{tabular}
-\caption{Comparison of different models on various datasets.}
+\caption{Different compression schemes}
 \end{table}
 
+
+
+\begin{table}[htb!]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+Name 	& Dimension 		& 	#params    & 1 factor    & 2 factors   & 3 factors     \\ \hline                                                                                 
+MF1		&  (192, 48)        &   9472       & 68,044,032  & 68,044,032  & 68,044,032    \\ \hline
+MF2		&  (256, 64)        &   16528      & 68,213,376  & 68,213,376  & 68,213,376    \\ \hline
+MF3		&  (1024, 256)      &   262153     & 74,108,376  & 74,108,376  & 74,108,376    \\ \hline 
+\end{tabular}
+\caption{Adding multiple Kronecker Factors}
+\end{table}
+
+
 \newpage
-\section{Impact of down-scaling: How small can we go}%
+\section{How small can we go?}%
 \label{sub:get-down}
 
 In this section, we study the impact of down-scaling on the compressed models, we train 4 different architectures, with variant dimensions:
@@ -209,7 +221,7 @@ In this section, we study the impact of down-scaling on the compressed models, w
 \begin{itemize}
 	\item 67M: diverges // try with higher batch size (the least we can get)
 	\item 81M: Super.
-	\item 81M: with a Variant scheme (67M with multiple factors)
+	\item 81M: with a Variant scheme (67M with multiple factors / 1025-256 with  two factors)
 	\item 95M: duh duh duh. (the highest we can get)
 \end{itemize}
 
@@ -223,8 +235,6 @@ Keep in mind:
 			\item  Every odd layer 
 			\item  In the middle 
 		\end{itemize}
-			\item 
-			\item 
 		\end{itemize}
 \end{itemize}	
 
@@ -232,11 +242,13 @@ Keep in mind:
 \section{Initialization}%
 \label{sub:Initialization}
 
-In our set-up, we blend/merge new parameters into already pre-trained. It seems wastful, to randomly initiliaze the newly introduce Kroncker Products if we can come up with a clever / better way. Here we introduce the Van Loan method, and another pruning based initialization trick, specifically crafted for the 95M model. And eventually both of them.
+Since we inherit a GPT2 checkpoint that was trained for multiple epochs on the Open Web Text (OWT) (cite here), we want to initiliaze our weights in a way that leverages the old pre-training as much as possible. This of course obvious for the parameters that are common between \textbf{GPT2} and \textbf{KronyPT} (i.e., exact match).  But more tricky for the weights that are decomposed into Kronecker Factors. In our work, we try two different approaches, Van Loan decomposition (cite here), and a Pruning, exclusively for the 95M model.
 
-\subsection{Van Loan}%
+\subsection{Van Loan Method}%
 \label{sub:The fuck is Van Loan}
-XX
+
+Given matrices $A \in \mathbb{R}^{m \times m}$ and $B \in \mathbb{R}^{n \times n}$, the Kronecker product is defined as $A \otimes B = [a_{ij}B] \in \mathbb{R}^{mn \times mn}$. The Van Loan method computes a matrix function, denoted as $f(A \otimes B)$, by exploiting eigenvalue or singular value decompositions. Specifically, if $f$ is a matrix exponential, then $e^{A \otimes B} = e^{A} \otimes e^{B}$. This method reduces computational complexity and is especially advantageous in large-scale matrix computations.
+
 \subsection{Pruning based Initialization}%
 \label{sub:Pruning based Initialization}
 XX

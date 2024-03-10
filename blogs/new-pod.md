@@ -137,6 +137,8 @@ autocmd FileType markdown setlocal spell
 
 ## tmux
 
+First `git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm`, then reload / source.
+
 ```bash
 ################################# Basics
 set -g mouse on

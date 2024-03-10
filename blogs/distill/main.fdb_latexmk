@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex main"] 1709993116 "main.aux" "main.bbl" "main" 1709993116
+["bibtex main"] 1710080158 "main.aux" "main.bbl" "main" 1710080713
   "/usr/share/texlive/texmf-dist/bibtex/bst/base/ieeetr.bst" 1292289607 18361 1a00e58565e7f19bf2b3e1bfb82254ae ""
   "bib.bib" 1709825382 1983 046726f66505a618db768e9579f75d4e ""
-  "main.aux" 1709993109 3521 a3af4576a56b5a386f3bb013603beffa "pdflatex"
+  "main.aux" 1710080655 3619 4fa1a18518579428daf4c54ae29a65cc "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
-["pdflatex"] 1709993116 "main.tex" "main.pdf" "main" 1709993116
+["pdflatex"] 1710080713 "main.tex" "main.pdf" "main" 1710080713
   "/etc/texmf/web2c/texmf.cnf" 1703681622 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/ayoub/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm0900.600pk" 1703703940 10448 b218bb2ecbf2a25110ab91e2df2cc374 ""
   "/home/ayoub/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk" 1703682729 11524 4c3ddf96b76de68480b7c65669aabe6c ""
@@ -44,6 +44,7 @@
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb" 1248133631 32726 0a1aea6fcd6468ee2cf64d891f5c43c8 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb" 1248133631 33993 9b89b85fd2d9df0482bd47194d1d3bf3 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1248133631 32569 5e5ddc8df908dea60932f3c484a54c0d ""
+  "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb" 1248133631 32716 08e384dc442464e7285e891af9f45947 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb" 1248133631 37944 359e864bd06cde3b1cf57bb20757fb06 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb" 1248133631 31099 c85edf1dd5b9e826d67c9c7293b6786c ""
   "/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
@@ -153,11 +154,11 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1644012257 39432 7155514e09a3d69036fac785183a21c2 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1703703020 128028 f533b797fba58d231669ea19e894e23e ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1703703026 1405655 f285ff83ddf7944a807a55ba5e5cee08 ""
-  "main.aux" 1709993109 3521 a3af4576a56b5a386f3bb013603beffa "pdflatex"
-  "main.bbl" 1709993116 1632 efaaae3f42843959fba438af75e668da "bibtex main"
-  "main.out" 1709993109 1571 b4a0010f9e893bc1c76254174fb07983 "pdflatex"
-  "main.tex" 1709993105 15347 5b9f12282757a5ee5ed5e03c1b6d4db6 ""
-  "main.toc" 1709993109 806 6f2b2f9ba35be6449395c19ea6368ed0 "pdflatex"
+  "main.aux" 1710080655 3619 4fa1a18518579428daf4c54ae29a65cc "pdflatex"
+  "main.bbl" 1710080158 1632 efaaae3f42843959fba438af75e668da "bibtex main"
+  "main.out" 1710080655 1429 2e129533cb69e2538cdd477a412d07f8 "pdflatex"
+  "main.tex" 1710080705 16528 74e9e8b626ba176dca5f4b139a41edde ""
+  "main.toc" 1710080655 780 f68adee1dff7b813f82405181098b6cb "pdflatex"
   (generated)
   "main.aux"
   "main.log"
