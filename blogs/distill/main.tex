@@ -243,6 +243,18 @@ Keep in mind:
 
 Since we inherit a GPT2 checkpoint that was trained for multiple epochs on the Open Web Text (OWT) (cite here), we want to initiliaze our weights in a way that leverages the old pre-training as much as possible. This is of course obvious for the parameters that are common between \textbf{GPT2} and \textbf{KronyPT} (i.e., we match).  But more tricky for the weights that are decomposed into Kronecker Factors. In our work, we try two different approaches, Van Loan decomposition (cite here), and a Pruning based method exclusively for the 95M model.
 
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+
+ & & \multicolumn{3}{c|}{Datasets} \\ \hline
+\# Params &  Model            & wikitext-103 & wikitext-2 & Lambada \\ \hline
+95M       & \textbf{Krony-PT1}  & 41.80        & 35.50      & 61.34         \\ \hline
+95M       & \textbf{Krony-PT1}  & 41.81        & 36.02      & 59.95         \\ \hline
+\end{tabular}
+\caption{Comparison of different models on various datasets.}
+\end{table}
 \subsection{Van Loan Method}%
 \label{sub:The fuck is Van Loan}
 
