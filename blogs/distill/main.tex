@@ -19,13 +19,13 @@
 What do we do differently: \textbf{We} have empirical evidence not to use distillation, as experiments show better results with just Vanilla supervised training. \textbf{We} don't compress the attention matrices matrices, and focus mainly on the MLPs (why?, see below). \textbf{We} try different compression ratios and see how far we can push down the size. \textbf{We} add multiple Kronecker Factors. \textbf{Finally}, we introduce a new (and efficient, as it doesn't require any extra compute) initialization trick based on pruning.
 
 \begin{center}
-\textbf{Some false narratives of the other papers that we need to debunk?}
+\textbf{Some false narratives of the other papers}
 \begin{itemize}
 	\item \textbf{Parameter count}: It appears like the competitor paper do not count the output matrix, and I quote ``Note that number of parameters of the models are
 reported excluding the output embedding layer in language modelling which is not compressed, is
 equal to row Parameters''. If this is true, then their model would technically be a 120M. The reason why we (and GPT2 paper) don't count the output matrix is because it is identical to the embedding matrix, this known as weight tying or weight sharing. Which does not seem the case with the other papers (I have contacted the other paper for clarifications through github).
 
-	\item  \textbf{Training data percentage}: both paper claim that they only used 3\% of the training data to train their models. We argue that limiting your training to only a fraction of the data does not correlate with the generalization capabilities of the compressed model, for the simple and following reasons:
+	\item  ``\textbf{We only use 3\% of the data}": both papers claim that they only used 3\% of the training data to train their models. We argue that in this set up, limiting your training data to only a fraction  does not imply a better compression/factorization method, for the simple and following reasons:
 		\begin{enumerate}
 			\item They inherit almost half the weights from the old GPT2 checkpoint that was trained for numerous epochs, and has seen the whole data. 
 			\item They use Van Loan method, hence, even, when they don't match the original checkpoint, VL is still a smart init, some knowledge is definitely passed through the SVD. 
@@ -33,6 +33,7 @@ equal to row Parameters''. If this is true, then their model would technically b
 		\end{enumerate}
 \end{itemize}
 
+Hence, we don't know ``how much knowledge" has been passed through the already trained parameters. A fair comparison would be to initialize \textbf{all the parameters} of the new compressed model with random values, and not rely on any of the other pre-trained ones. Which is clearly not the case here.
 
 
 \end{abstract}
@@ -152,6 +153,12 @@ We test some interesting properties of distillation. We first position ourselves
 \label{sec:Training setups}
 
 Add here the basic set-up that I used to train the latest models, basically Chinchilla recommendations. (for later)
+
+Some key differences:
+\begin{itemize}
+	\item \textbf{Batch size:} We find better and more stable loss curve with higher batch sizes, a typical step would need 6 batches (gradient acc.) of 12 samples. 
+	\item \textbf{Learning rate:} We found better, and more stable results when using a constant learning rate of $6e-4$. (check this again), The other set-up is to use a cosine scheduler, peaking at $6e04$ after a warm-up of 500 steps?.  Learning rate
+\end{itemize}
 
 \section{Kronecker Decomposition}%
 \label{sub:Kronecker Decomposition}
