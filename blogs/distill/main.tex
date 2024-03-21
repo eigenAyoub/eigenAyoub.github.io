@@ -2,6 +2,7 @@
 
 \usepackage{hyperref}
 \usepackage{tcolorbox}
+\usepackage{amsmath}
 
 % this is supposed to the `` of md.
 \newtcbox{\cls}{on line,boxrule=0pt,boxsep=0pt,colback=lightgray,top=1pt,bottom=1pt,left=1pt,right=1pt,arc=0pt,fontupper=\ttfamily}
@@ -15,14 +16,24 @@
 
 \begin{abstract}
 
-What do we do differently:
+What do we do differently: \textbf{We} have empirical evidence not to use distillation, as experiments show better results with just Vanilla supervised training. \textbf{We} don't compress the attention matrices matrices, and focus mainly on the MLPs (why?, see below). \textbf{We} try different compression ratios and see how far we can push down the size. \textbf{We} add multiple Kronecker Factors. \textbf{Finally}, we introduce a new (and efficient, as it doesn't require any extra compute) initialization trick based on pruning.
 
+\begin{center}
+\textbf{Some false narratives of the other papers that we need to debunk?}
 \begin{itemize}
-	\item We put distillation to test, and see if does improve improve the learning quality over vanilla supervised learning. \textbf{Spoiler alert}: NOPE. (Others, all use distillation)
-	\item We don't compress the attention matrices.
-	\item We try different compression schemes and see how far we can push down the size.
-	\item We use multiple Kronecker Factors.
+	\item \textbf{Parameter count}: It appears like the competitor paper do not count the output matrix, and I quote ``Note that number of parameters of the models are
+reported excluding the output embedding layer in language modelling which is not compressed, is
+equal to row Parameters''. If this is true, then their model would technically be a 120M. The reason why we (and GPT2 paper) don't count the output matrix is because it is identical to the embedding matrix, this known as weight tying or weight sharing. Which does not seem the case with the other papers (I have contacted the other paper for clarifications through github).
+
+	\item  \textbf{Training data percentage}: both paper claim that they only used 3\% of the training data to train their models. We argue that limiting your training to only a fraction of the data does not correlate with the generalization capabilities of the compressed model, for the simple and following reasons:
+		\begin{enumerate}
+			\item They inherit almost half the weights from the old GPT2 checkpoint that was trained for numerous epochs, and has seen the whole data. 
+			\item They use Van Loan method, hence, even, when they don't match the original checkpoint, VL is still a smart init, some knowledge is definitely passed through the SVD. 
+			\item Dude, you literally use the output matrix as GPT2, have some shame.
+		\end{enumerate}
 \end{itemize}
+
+
 
 \end{abstract}
 
@@ -262,7 +273,56 @@ XX (maybe not even write this section)
 
 \subsection{Pruning based Initialization}%
 \label{sub:Pruning based Initialization}
-XX
+
+
+We propose a new initialization strategy by inducing sparsity in the first factor of the Kronecker Product, and prune it by half. This is equivalent to picking the second factor as 
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix}. Now, we illustrate how this procedure works with a random matrix.
+
+\[
+\begin{bmatrix}
+a_{11} & a_{12} & a_{13} & a_{14} & a_{15} \\
+a_{21} & a_{22} & a_{23} & a_{24} & a_{25} \\
+a_{31} & a_{32} & a_{33} & a_{34} & a_{35} \\
+a_{41} & a_{42} & a_{43} & a_{44} & a_{45} \\
+a_{51} & a_{52} & a_{53} & a_{54} & a_{55} \\
+a_{61} & a_{62} & a_{63} & a_{64} & a_{65} \\
+\end{bmatrix}
+\xrightarrow[\text{pruning}]{}
+\begin{bmatrix}
+a_{11} & a_{12} & a_{13} & a_{14} & a_{15} \\
+0 & 0 & 0 & 0 & 0  \\
+a_{31} & a_{32} & a_{33} & a_{34} & a_{35} \\
+0 & 0 & 0 & 0 & 0  \\
+a_{51} & a_{52} & a_{53} & a_{54} & a_{55} \\
+0 & 0 & 0 & 0 & 0  \\
+a_{61} & a_{62} & a_{63} & a_{64} & a_{65} \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+a_{11} & a_{12} & a_{13} & a_{14} & a_{15} \\
+a_{31} & a_{32} & a_{33} & a_{34} & a_{35} \\
+a_{51} & a_{52} & a_{53} & a_{54} & a_{55} \\
+a_{61} & a_{62} & a_{63} & a_{64} & a_{65} \\
+\end{bmatrix}
+\otimes
+\begin{bmatrix}
+1  \\
+0  
+% Elements of matrix D
+\end{bmatrix}
+ 
+
+\]
+
+
+
+
+
+
+
 \begin{comment}
 	
 \subsection{Questions}%
