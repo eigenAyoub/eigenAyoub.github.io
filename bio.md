@@ -17,5 +17,6 @@ Research Interests: LLMs, Efficient ML, NNs Compression.
 **Contact:**
 
 * **Gmail:** `ayoub.benayad.467`
-* [LinkedIn](https://www.linkedin.com/in/eigenAyoub/), 
-  [Instagram](https://www.instagram.com/curl.ayoub/)
+* [LinkedIn](https://www.linkedin.com/in/benayad/), 
+[Twitter](https://www.twitter.com/benayad_) (new acc),
+[Instagram](https://www.instagram.com/curl.ayoub/) (most likely deactivated).

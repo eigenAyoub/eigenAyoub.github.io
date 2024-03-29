@@ -2,6 +2,7 @@
 
 \usepackage{hyperref}
 \usepackage{tcolorbox}
+\usepackage{amsmath}
 
 % this is supposed to the `` of md.
 \newtcbox{\cls}{on line,boxrule=0pt,boxsep=0pt,colback=lightgray,top=1pt,bottom=1pt,left=1pt,right=1pt,arc=0pt,fontupper=\ttfamily}
@@ -15,35 +16,43 @@
 
 \begin{abstract}
 
-	GPT2 checkpoints from HuggingFace reach a approximate loss of 3.11 on OpenWebText. 	In this work, we factorize the main parameters of GPT2, as Kronecker Products leading to a compression factor of $x\%$, and ask the following question:  What is the fastest way to reach back to the 3.11 loss using the Kronecker factors. And how to optimally manipulate training and distillation of the small compressed network. We particularly investigate freezing (for both training and distillation), and smooth transitioning (explained later on).
+What do we do differently: \textbf{We} have empirical evidence not to use distillation, as experiments show better results with just Vanilla supervised training. \textbf{We} don't compress the attention matrices matrices, and focus mainly on the MLPs (why?, see below). \textbf{We} try different compression ratios and see how far we can push down the size. \textbf{We} add multiple Kronecker Factors. \textbf{Finally}, we introduce a new (and efficient, as it doesn't require any extra compute) initialization trick based on pruning.
+
+\begin{center}
+\textbf{Some false narratives of the other papers}
+\begin{itemize}
+	\item \textbf{Parameter count}: It appears like the competitor paper do not count the output matrix, and I quote ``Note that number of parameters of the models are
+reported excluding the output embedding layer in language modelling which is not compressed, is
+equal to row Parameters''. If this is true, then their model would technically be a 120M. The reason why we (and GPT2 paper) don't count the output matrix is because it is identical to the embedding matrix, this known as weight tying or weight sharing. Which does not seem the case with the other papers (I have contacted the other paper for clarifications through github).
+
+	\item  ``\textbf{We only use 3\% of the data}": both papers claim that they only used 3\% of the training data to train their models. We argue that in this set up, limiting your training data to only a fraction  does not imply a better compression/factorization method, for the simple and following reasons:
+		\begin{enumerate}
+			\item They inherit almost half the weights from the old GPT2 checkpoint that was trained for numerous epochs, and has seen the whole data. 
+			\item They use Van Loan method, hence, even, when they don't match the original checkpoint, VL is still a smart init, some knowledge is definitely passed through the SVD. 
+			\item Dude, you literally use the output matrix as GPT2, have some shame.
+		\end{enumerate}
+\end{itemize}
+
+Hence, we don't know ``how much knowledge" has been passed through the already trained parameters. A fair comparison would be to initialize \textbf{all the parameters} of the new compressed model with random values, and not rely on any of the other pre-trained ones. Which is clearly not the case here.
 
 
 \end{abstract}
 
-\begin{itemize}
-	\item \textbf{freezing} the pre-trained weights, helps boost accuracy.
-	\item One by One distillation: drop the weights slowly and distill through the network.
-\end{itemize}
-
-\textbf{Methodology:}
-\begin{enumerate}
-	\item Train GPT2 to a certain level. -- $3.11$.
-	\item Decompose the MLP weights.
-	\item Try a bunch of methods and see which one guarantees getting back to the original loss as fast as possible.
-\end{enumerate}
+\newpage
 
 \tableofcontents
 \newpage
 
-\section{Resutls}%
+\section{Resutls:}%
 \label{sec:Resutls}
 
-Results so far on wikitext103, wikitext2 and lambada. 
+Early results on wikitext103, wikitext2 \cite{merity2016pointer} and Lambada \cite{paperno2016lambada}. \textbf{KronyPT} is our model, and the suffixes $1350$ and $3950$ refer to different checkpoints. Both models are already outperforming distilGPT2 (\cite{sanh2019distilbert}) on the 3 datasets. And the $3950$ checkpoint is outperforming \textbf{KnGPT2} (\cite{tahaei2022kroneckerbert}) on Lambada, while slightly still behind \textbf{TQCompressedGPT2}  \cite{abronin2024tqcompressor}. We measure perplexity (duh) using the Hugging Face interface that was used by the other papers.
 
 \begin{table}[h]
 \centering
 \begin{tabular}{|c|c|c|c|c|}
 \hline
+
  & & \multicolumn{3}{c|}{Datasets} \\ \hline
 \# Params &  Model            & wikitext-103 & wikitext-2 & Lambada \\ \hline
 124M      & GPT2              & 29.16        & 24.67      & 45.28      \\ \hline
@@ -58,12 +67,15 @@ Results so far on wikitext103, wikitext2 and lambada.
 
 
 
-\section{Introduction and Setup}
-\label{sec:Introduction and Setup}
+\section{Introduction}
+\label{sec:Introduction}
 
 % add the latest paper
 
-A lot of work has been done on the compression of LLMs using factorization methods, including Kronecker Products. Most notably for encoder based based, and rarely applied to decoder based methods (\cite{tahaei2022kroneckerbert}, \cite{edalati2021kroneckr}).
+A lot of work has been done on the compression of LLMs using factorization methods, including Kronecker Products. Most notably for encoder based based, and rarely applied to decoder based methods (\cite{tahaei2022kroneckerbert}, \cite{edalati2021kroneckr}, \cite{abronin2024tqcompressor}).
+
+
+We study how far we can push the compression ratio, and record then impact of down-scaling on the quality of the model. We also investigate adding multiple Kronecker factors.
 
 \begin{comment}
 To the best of our knowledge, not many have focused on Freezing the initial pre-trained weights, i.e., most methods drop newly factorized matrices into the already pre-trained parameters, without carefully blending, nor assessing/studying how much the model is relying on already trained weights.
@@ -84,9 +96,6 @@ In this work we demonstrate the effectiveness of freezing, and of slow integrati
 
 
 Using Van Loan has no remarkable benefit improvement over $50\%$ pruning.
-
-
-
 
 \subsection{Learning rate, batch size, and gradient accumulation}%
 \label{sub:lr}
@@ -138,16 +147,18 @@ We test some interesting properties of distillation. We first position ourselves
 \end{comment}
 
 
-We study how far we can push the compression ratio, and then impact of down-scaling on the quality of the model. We also investigate adding multiple Kronecker factors.
 
 
-\section{Training setups}%
+\section{Training Set-up}%
 \label{sec:Training setups}
 
-Here we discuss the main. After many I am going for the main, mostly  
+Add here the basic set-up that I used to train the latest models, basically Chinchilla recommendations. (for later)
 
-
-
+Some key differences:
+\begin{itemize}
+	\item \textbf{Batch size:} We find better and more stable loss curve with higher batch sizes, a typical step would need 6 batches (gradient acc.) of 12 samples. 
+	\item \textbf{Learning rate:} We found better, and more stable results when using a constant learning rate of $6e-4$. (check this again), The other set-up is to use a cosine scheduler, peaking at $6e04$ after a warm-up of 500 steps?.  Learning rate
+\end{itemize}
 
 \section{Kronecker Decomposition}%
 \label{sub:Kronecker Decomposition}
@@ -169,8 +180,57 @@ It is reasonable to aim for a decomposition that guarantees the maximum rank we 
 
 	\[W \approx A\otimes B, \qquad m = m_1 m_2, n = n_1 n_2 \]. 
 
-	W.l.o.g, for each decomposition $(A,B)$ the maximum rank we can reach is $\min(m_1,n_1) \cdot \min(m_2,n_2)$. And each of the reduced decompositions would have exactly $m_1 n_1 + m_2 n_2$ parameters. Hence, theoritically, the maximum rank we can get is $384$ of a $(3072, 768)$ matrix. The following table summarizes all possible combinations, alongside the reduction it would lead to per layer, and the total number of parameters in GPT2, for only those decompostions of rank $384$.
-\section{Impact of down-scaling: How small can we go}%
+	W.l.o.g, for each decomposition $(A,B)$ the maximum rank we can reach is $\min(m_1,n_1) \cdot \min(m_2,n_2)$. And each of the reduced decompositions would have exactly $m_1 n_1 + m_2 n_2$ parameters. Hence, theoritically, the maximum rank we can get is $768$ of a $(3072, 768)$ matrix. The following table summarizes some possible combinations, alongside the reduction it would lead to per layer, and the total number of parameters in GPT2, for only those decompostions of maximal attainable rank. We are particularly interested in 3 class of models, the 67M, the 81M and the 96M. (Need to add this) Furthermore, we add multiple factors to the models labeled with \textbf{MF} (second table / a few decompositions are missing, check this out. e.g., 3072, 384).
+\begin{table}[htb!]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+Name 	& Dimension 		& 	#params 	& Model size\\
+\hline
+67M		&  (64, 32)         &   3200       & 67,893,504  \\ \hline 
+		&  (64, 48)         &   3840       & 67,908,864  \\ \hline 
+		&  (96, 32)         &   3840       & 67,908,864  \\ \hline
+		&  (64, 64)         &   4672       & 67,928,832  \\ \hline
+		&  (128, 32)        &   4672       & 67,928,832  \\ \hline 
+		&  (96, 48)         &   5120       & 67,939,584  \\ \hline 
+		&  (96, 64)         &   6528       & 67,973,376  \\ \hline
+		&  (128, 48)        &   6528       & 67,973,376  \\ \hline
+		&  (128, 64)        &   8480       & 68,020,224  \\ \hline 
+		&  (96, 96)         &   9472       & 68,044,032  \\ \hline 
+ 		&  (192, 48)        &   9472       & 68,044,032  \\ \hline
+		&  (128, 96)        &   12480      & 68,116,224  \\ \hline
+		&  (192, 64)        &   12480      & 68,116,224  \\ \hline 
+		&  (128, 128)       &   16528      & 68,213,376  \\ \hline 
+MF1		&  (256, 64)        &   16528      & 68,213,376  \\ \hline
+		&  \cdots &   \cdots    & \cdots \\ \hline
+MF2		&  (1024, 256)      &   262153     & 74,108,376  \\ \hline 
+		&  (768, 384)       &   294920     & 74,894,784  \\ \hline
+		&  (1024, 384)      &   393222     & 77,254,032  \\ \hline
+81M 	&  (768, 768)       &   589828     & 81,972,576  \\ \hline
+		&  (1536, 384)      &   589828     & 81,972,576  \\ \hline
+		&  (1024, 768)      &   786435     & 86,691,144  \\ \hline
+96M		&  (1536, 768)      &   1179650    & 96,128,304  \\ \hline
+GPT2	&  (3072, 768)      &   2359297    & 124,439,832 \\ \hline
+\end{tabular}
+\caption{Different compression schemes}
+\end{table}
+
+
+
+\begin{table}[htb!]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+Name 	& Dimension 		& 	#params    & 1 factor    & 2 factors   & 3 factors     \\ \hline                                                                                 
+MF1		&  (256, 64)        &   16528      & 68,2M       & 68,6  & 69M    \\ \hline
+MF2		&  (1024, 256)      &   262153     & 74M         & 80M   & 86M    \\ \hline 
+\end{tabular}
+\caption{Adding multiple Kronecker Factors}
+\end{table}
+
+
+\newpage
+\section{How small can we go?}%
 \label{sub:get-down}
 
 In this section, we study the impact of down-scaling on the compressed models, we train 4 different architectures, with variant dimensions:
@@ -178,7 +238,7 @@ In this section, we study the impact of down-scaling on the compressed models, w
 \begin{itemize}
 	\item 67M: diverges // try with higher batch size (the least we can get)
 	\item 81M: Super.
-	\item 81M: with a Variant scheme
+	\item 81M: with a Variant scheme (67M with multiple factors / 1025-256 with  two factors)
 	\item 95M: duh duh duh. (the highest we can get)
 \end{itemize}
 
@@ -192,25 +252,86 @@ Keep in mind:
 			\item  Every odd layer 
 			\item  In the middle 
 		\end{itemize}
-			\item 
-			\item 
 		\end{itemize}
 \end{itemize}	
 
 
-
-\subsection{Initialization}%
+\section{Initialization}%
 \label{sub:Initialization}
 
-Here we test a new initialization trick based on pruning for the 95M models. And compare it to the VL method. Pruning shows a much better
+Since we inherit a GPT2 checkpoint that was trained for multiple epochs on the Open Web Text (OWT) (cite here), we want to initiliaze our weights in a way that leverages the old pre-training as much as possible. This is of course obvious for the parameters that are common between \textbf{GPT2} and \textbf{KronyPT} (i.e., we match).  But more tricky for the weights that are decomposed into Kronecker Factors. In our work, we try two different approaches, Van Loan decomposition (cite here), and a Pruning based method exclusively for the 95M model.
 
-\subsection{The fuck is Van Loan}%
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+
+ & & \multicolumn{3}{c|}{Datasets} \\ \hline
+\# Params &  Model            & wikitext-103 & wikitext-2 & Lambada \\ \hline
+95M       & \textbf{Krony-PT1}  & 41.80        & 35.50      & 61.34         \\ \hline
+95M       & \textbf{Krony-PT1}  & 41.81        & 36.02      & 59.95         \\ \hline
+\end{tabular}
+\caption{Comparison of different models on various datasets.}
+\end{table}
+\subsection{Van Loan Method}%
 \label{sub:The fuck is Van Loan}
-XX
+
+XX (maybe not even write this section)
+
 \subsection{Pruning based Initialization}%
 \label{sub:Pruning based Initialization}
-XX
 
+
+We propose a new initialization strategy by inducing sparsity in the first factor of the Kronecker Product, and prune it by half. This is equivalent to picking the second factor as 
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix}. Now, we illustrate how this procedure works with a random matrix.
+
+\[
+\begin{bmatrix}
+a_{11} & a_{12} & a_{13} & a_{14} & a_{15} \\
+a_{21} & a_{22} & a_{23} & a_{24} & a_{25} \\
+a_{31} & a_{32} & a_{33} & a_{34} & a_{35} \\
+a_{41} & a_{42} & a_{43} & a_{44} & a_{45} \\
+a_{51} & a_{52} & a_{53} & a_{54} & a_{55} \\
+a_{61} & a_{62} & a_{63} & a_{64} & a_{65} \\
+\end{bmatrix}
+\xrightarrow[\text{pruning}]{}
+\begin{bmatrix}
+a_{11} & a_{12} & a_{13} & a_{14} & a_{15} \\
+0 & 0 & 0 & 0 & 0  \\
+a_{31} & a_{32} & a_{33} & a_{34} & a_{35} \\
+0 & 0 & 0 & 0 & 0  \\
+a_{51} & a_{52} & a_{53} & a_{54} & a_{55} \\
+0 & 0 & 0 & 0 & 0  \\
+a_{61} & a_{62} & a_{63} & a_{64} & a_{65} \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+a_{11} & a_{12} & a_{13} & a_{14} & a_{15} \\
+a_{31} & a_{32} & a_{33} & a_{34} & a_{35} \\
+a_{51} & a_{52} & a_{53} & a_{54} & a_{55} \\
+a_{61} & a_{62} & a_{63} & a_{64} & a_{65} \\
+\end{bmatrix}
+\otimes
+\begin{bmatrix}
+1  \\
+0  
+% Elements of matrix D
+\end{bmatrix}
+ 
+
+\]
+
+
+
+
+
+
+
+\begin{comment}
+	
 \subsection{Questions}%
 \label{sub:Questions}
 
@@ -232,7 +353,9 @@ XX
 	\item When we freeze, we investigate how useful is it to distill matrices one by one, rather than drop in the matrices all at once. And also investigate if the order of dropping has any significance, bottom up or top bottom...
 
 \end{itemize}
+\end{comment}
 
+\newpage
 \bibliography{bib}
 \bibliographystyle{ieeetr}
 
