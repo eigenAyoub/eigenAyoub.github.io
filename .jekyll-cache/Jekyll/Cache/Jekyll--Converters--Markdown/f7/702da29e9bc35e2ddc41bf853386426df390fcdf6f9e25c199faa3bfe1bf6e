@@ -1,0 +1,40 @@
+I"�<p><a href="https://www.youtube.com/watch?v=c-MU_5VkjtE">Hey you</a>,</p>
+
+<p>I’m a ML Research Assistant <a href="https://ca-roll.github.io/">@CAROLL</a>, and Master’s student
+<a href="https://www.uni-passau.de/en/msc-compmaths">@UniPassau</a>.</p>
+
+<p>Research Interests: LLMs, Efficient ML, NNs Compression.</p>
+
+<p>– Ayoub</p>
+
+<hr />
+<h3 id="blog">Blog:</h3>
+<ul>
+  <li><a href="/blogs/container">Quick reset of my compute pod.</a>
+<!-- [Investigating Kronecker Products as  xx](/blogs/distill/main.pdf) --></li>
+  <li><a href="/blogs/fastinference">Recent trends to speed up autoregressive inference of LLMs (unifinished)</a></li>
+  <li>Quick hacks that you might find useful:
+    <ul>
+      <li><a href="/blogs/vim">Speed up your migration to VIM.</a></li>
+      <li><a href="/blogs/enter_the_matrix">Matrix Differential Calculus</a></li>
+    </ul>
+  </li>
+  <li>Convex Optimization:
+    <ul>
+      <li><a href="/blogs/SGD">Convergence Rates of SGD in convex and non-convex cases</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<h3 id="some-repos">Some repos:</h3>
+<ul>
+  <li>Backpropagation from scratch \(\rightarrow\) <a href="https://github.com/eigenAyoub/check-your-gradients">Github link</a>.</li>
+  <li>Randomized Algorithms \(\rightarrow\) <a href="https://github.com/eigenAyoub/randomised-algorithms">Github link</a>.</li>
+  <li>Reinforcement Learning \(\rightarrow\) <a href="https://github.com/eigenAyoub/reinforcement-learning">Github link</a>.</li>
+</ul>
+
+<hr />
+<h3 id="contact">Contact:</h3>
+
+:ET
