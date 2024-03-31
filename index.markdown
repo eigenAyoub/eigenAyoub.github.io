@@ -4,7 +4,7 @@ layout: home
 
 
 
-### Blog:
+## Blog:
 
 * [Quick reset of my compute pod.](/blogs/container)
 <!-- [Investigating Kronecker Products as  xx](/blogs/distill/main.pdf) -->
