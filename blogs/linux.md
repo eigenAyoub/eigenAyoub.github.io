@@ -4,7 +4,9 @@ title:
 permalink: /blogs/linux/
 ---
 
-Some useful Linux day 2 day stuff that most I find most useful when managing multiple checkpoints (weights of ML models).
+Some useful Linux day 2 day stuff that I find most useful when managing multiple checkpoints (weights of ML models). Especially tailored to this need:
+
+> You run an experiment overnight, wake up in the morning, ssh to your pod, and find a new 100 Gb sitting on your home... Time to strat cleaning!
 
 ### **Size of each sub-directories:**
 
@@ -30,13 +32,14 @@ $ ls -l | grep "^d"
 ```bash
 $ ls | grep "^pattern_X" | grep -v "^pattern_XY" 
 ```
-> Example of use: When managing checkpoints during training (weights of ML models), and you would like to delete most your checkpoints, except maybe the last one.
 
-### **View last added files of some pattern `pattern_X`**
+### **View the last added files of some pattern `pattern_X`**
 
 ```bash
 $ ls -t | grep "^pattern_X" | head -n 10 
 ```
+
+> Example of use: When managing checkpoints while still training, and you would like to delete most your checkpoints, except maybe the last one.
 
 ### **A very very practical use:**
 
