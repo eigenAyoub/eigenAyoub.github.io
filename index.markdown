@@ -5,6 +5,8 @@ layout: home
 
 <ins> **Blog:**</ins>
 
+
+* [Handling checkpoints from terminal - some useful tricks.](/blogs/linux)
 * [Quick reset of my compute pod.](/blogs/container)
 <!-- [Investigating Kronecker Products as  xx](/blogs/distill/main.pdf) -->
 * [Recent trends to speed up autoregressive inference of LLMs (unifinished).](/blogs/fastinference)
@@ -28,4 +30,4 @@ I'm also enrolled [@UniPassau](https://www.uni-passau.de/en/msc-compmaths).
 * **Gmail:** `ayoub.benayad.467`
 * [LinkedIn](https://www.linkedin.com/in/benayad/),
 [Twitter](https://www.twitter.com/benayad_) (new acc),
-[Instagram](https://www.instagram.com/curl.ayoub/) (most likely deactivated).
+[Instagram](https://www.instagram.com/curl.ayoub/).
