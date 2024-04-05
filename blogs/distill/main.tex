@@ -52,19 +52,30 @@ Early results on wikitext103, wikitext2 \cite{merity2016pointer} and Lambada \ci
 \centering
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-
  & & \multicolumn{3}{c|}{Datasets} \\ \hline
 \# Params &  Model            & wikitext-103 & wikitext-2 & Lambada \\ \hline
 124M      & GPT2              & 29.16        & 24.67      & 45.28      \\ \hline
 82M       & DistilGPT2        & 44.53        & 36.48      & 76.00      \\ \hline
-81M       & \textbf{KronyPT-81M-1350}  & 41.98        & 34.99      & -          \\ \hline
-81M       & \textbf{KronyPT-81M-3950}  & -            & -          & 64.92      \\ \hline
-81M       & TQCompressedGPT2  & 40.28        & 32.25      & 64.72      \\ \hline
-81M       & KnGPT-2 (Huawei)  & 40.97        & 32.81      & 67.62      \\ \hline
+81M       & \textbf{KronyPT-81M-1350}  & \textbf{41.98}   & \textbf{34.99}      & -          \\ \hline
+81M       & \textbf{KronyPT-81M-3950}  & -            	  & -          & \textbf{64.92}      \\ \hline
 \end{tabular}
-\caption{Comparison of different models on various datasets.}
+\caption{Perplexity results of Krony-PT and DistilGPT}
 \end{table}
 
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+ & & \multicolumn{3}{c|}{Datasets} \\ \hline
+\# Params &  Model            & wikitext-103 & wikitext-2 & Lambada \\ \hline
+81M       & \textbf{KronyPT-81M-1350}  & 41.98        & 34.99      & -          \\ \hline
+81M       & \textbf{KronyPT-81M-3950}  & -            & -          & 64.92      \\ \hline
+119M       & TQCompressedGPT2  & 40.28        & 32.25      & 64.72      \\ \hline
+119M       & KnGPT-2 (Huawei)  & 40.97        & 32.81      & 67.62      \\ \hline
+\end{tabular}
+\caption{Perplexity of Krony-PT against other Kronecker based models.}
+\end{table}
 
 
 \section{Introduction}

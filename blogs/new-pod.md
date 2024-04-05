@@ -9,18 +9,20 @@ Quick reset to my compute pod.
 
 ---
 # Jump to it:
-* [Essential]()
-* [Pyenv]()
-* [Git]()
-* [pip it]()
-* [dotfiles]()
-* [Frequent problems]()
+* [Essential](#ess)
+* [Pyenv](#pyenv)
+* [Git](#git)
+* [pip install](#pip)
+* [dotfiles](#dots)
+* [Frequent problems](#faq)
 	* Copy files between difference hosts over ssh
-	* Multiple remote git 
+	* git: Multiple remote hosts 
+	* debugging in ipython + VS Code
+	* GPU, free the memory from ipython. 
 	* Local git repo ahead of remote repo, and can;t push (exceeded 100Mb limit)
 
 ---
-# Essential:
+# Essential: <a name="ess">
 
 
 ```bash
@@ -47,7 +49,7 @@ $ apt update && apt upgrade -y
 ```
 
 ---
-# Pyenv:
+# Pyenv:<a name="pyenv">
 
 * Run the following installer:
 ```bash
@@ -100,7 +102,7 @@ git config --global user.email benayad7@outlook.com
 **TODO**
 
 ---
-# Python, copy pasta please.
+# Python, copy pasta please.  <a name="pip">
 
 ```bash
 # numpy is king,  always first and alone.
@@ -114,7 +116,7 @@ $ pip install transformers datasets  tiktoken  wandb tqdm
 ```
 
 ---
-# .dotfiles:
+# .dotfiles:  <a name="dots">
 (would you please update this frequently?)
 
 ## VIM
@@ -185,7 +187,10 @@ set -g @plugin 'tmux-plugins/tmux-yank'
 run '~/.tmux/plugins/tpm/tpm'
 ```	
 
-## VS Code
+## VS Code:
+
+Add a detailed description here on how to use remote hosts over VS Code.  //TODO
+
 
 ```json
 {
@@ -222,7 +227,7 @@ run '~/.tmux/plugins/tpm/tpm'
 
 	
 ---
-# Problems and Fixes:
+# Problems and Fixes:   <a name="faq">
 
 * Copy files from one pod to another using `rsync`:
 
@@ -231,11 +236,11 @@ run '~/.tmux/plugins/tpm/tpm'
 > Remote to Local: `rsync [OPTION]... -e ssh [USER@]HOST:SRC... [DEST]`
 
 
-
 * Local git ahead of remote one. Can't push because of some file that staged a few commits ago, but I deleted the file. Long story, but if you know you know.
 
 * Debug something in **ipython**: `%run script.py`
-* Free your the gpu memory that you have used `torch.cuda.empty_cache()`
+
+* Free your the gpu memory that you have been used `torch.cuda.empty_cache()`, if you loaded a checkpoint that you no longer need, then you can also just `checkpoint = None`.
 
 
 Comments from https://discuss.pytorch.org/t/how-can-we-release-gpu-memory-cache/14530/3
@@ -249,6 +254,5 @@ empty_cache forces the allocator that pytorch uses to release to the os any memo
 # What is the difference?
 
 * Difference between interactive shells and login shells?
-
-* Difference between `apt` and `apt-get`:  Uhhm, `apt` is the new `apt-get`, just use it dude, trust me!.  [Ask Ubuntu Link](https://askubuntu.com/questions/445384/what-is-the-difference-between-apt-and-apt-get)
+* Difference between `apt` and `apt-get`:  Uhhm, `apt` is the new `apt-get`, [ask Ubuntu Link](https://askubuntu.com/questions/445384/what-is-the-difference-between-apt-and-apt-get).
 
