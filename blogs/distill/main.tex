@@ -52,18 +52,8 @@ Usually the newly introduced weights are brute forced into training, and in many
 
 In this work we demonstrate the effectiveness of freezing, and of slow integration of weights, either through training or distillation.
 
-
 Using Van Loan has no remarkable benefit improvement over $50\%$ pruning.
 
-\subsection{Learning rate, batch size, and gradient accumulation}%
-\label{sub:lr}
-
-In this section, we discuss the impact of the \textbf{learning rate}, \textbf{batch size} and \textbf{gradient accumulation} on the training trajectory,  namely on the first $10000$ iterations of training.
-
-
-> Note: Higher
-
-%%Insert figure here.
 
 Based on these results, we follow the  
 \begin{itemize}
@@ -72,12 +62,7 @@ Based on these results, we follow the
 	\item Batch size: 12, better stability. 
 \end{itemize}
 
-
 This configuration allows a balanced trade-off between speed of updates and stochasticity of the loss with each iterations. And it also allows multiple experiments to be run simultaneously on a node of 4 A100s. Reframe this: you lose a bit of performance, but you gain a lot of memory to try out other approach at the same time, sounds silly, but this is important when you're GPU poor.
-
-So, with this config, and with only 100k steps, avereging approx 0.5% data. 
-
-What can we do better? Distillation?
 
 \end{comment}
 
@@ -239,7 +224,7 @@ a_{61} & a_{62} & a_{63} & a_{64} & a_{65} \\
 \subsection{Training setup}%
 \label{sub:Setup}
 
-For pre-training, we follow general industry standards, namely of Chinchilla \cite{hoffmann2022training}. We noticed more stable loss curves with a higher \textbf{batch size}, typically $128$ batch size (attained with a gradient accumulation of $4$, and each forward pass seeing a batch of $32$), and constant \textbf{learning rate} of $6 \times 10^{-5}$ (better than a cosine scheduler with a warm-up). After pre-training on approximately one epoch, we pick the best checkpoint and train further on $\approx$ 500k tokens per step (as suggested in the literature) which amounts in our set up (sequence length of $1024$) to a batch size of $512$. All experiments have been conducted using a single A100 80 GB, for one epoch of on Open Web Text \cite{Gokaslan2019OpenWeb}, an open source reproduction of OpenAI's WebText dataset.
+For pre-training, we follow general industry standards, namely of Chinchilla \cite{hoffmann2022training}. We noticed more stable loss curves with higher \textbf{batch sizes}, typically $128$ batch size (attained with a gradient accumulation of $4$, and each forward pass seeing a batch of $32$), and constant \textbf{learning rate} of $6 \times 10^{-5}$ (better than a cosine scheduler with a warm-up). After pre-training on approximately one epoch, we pick the best checkpoint and train further on $\approx$ 500k tokens per step (as suggested in the literature) which amounts in our set up (sequence length of $1024$) to a batch size of $512$. All experiments have been conducted using a single A100 80 GB, for one epoch of on Open Web Text \cite{Gokaslan2019OpenWeb}, an open source reproduction of OpenAI's WebText dataset.
 
 
 
@@ -286,6 +271,9 @@ We refer to our models with the nomenclature \textbf{Krony-PT-XM\{-Y\}}, with $X
 \subsection{The 95M class:}%
 \label{sub:The 95M class:}
 
+\subsection{Scale test}%
+\label{sub:Scale test}
+How far can we push down the size? tl;dr: 67M does not work!
 
 \subsection{General trends:}%
 

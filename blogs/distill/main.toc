@@ -11,7 +11,8 @@
 \contentsline {subsection}{\numberline {3.2}Results}{6}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}The 81M class:}{7}{subsection.3.3}%
 \contentsline {subsection}{\numberline {3.4}The 95M class:}{7}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}General trends:}{7}{subsection.3.5}%
-\contentsline {section}{\numberline {4}Discussion}{7}{section.4}%
+\contentsline {subsection}{\numberline {3.5}Scale test}{7}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}General trends:}{7}{subsection.3.6}%
+\contentsline {section}{\numberline {4}Discussion}{8}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Parameter count:}{8}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}Only 3\% of data}{8}{subsection.4.2}%
