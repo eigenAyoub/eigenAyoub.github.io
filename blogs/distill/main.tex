@@ -15,8 +15,8 @@
 \maketitle
 
 \begin{abstract}
-
-LLMs are cool, everywhere, but are pretty big.
+soon! also, write your TODO here, yo.
+\end{abstract}
 
 \newpage
 
@@ -32,41 +32,14 @@ LLMs are cool, everywhere, but are pretty big.
 
 A lot of work has been done on the compression of LLMs using factorization methods, including Kronecker Products. Most notably for encoder based based, and rarely applied to decoder based methods (\cite{tahaei2022kroneckerbert}, \cite{edalati2021kroneckr}, \cite{abronin2024tqcompressor}).
 
+\begin{comment}
 
 We study how far we can push the compression ratio, and record then impact of down-scaling on the quality of the model. We also investigate adding multiple Kronecker factors.
 
-\begin{comment}
-To the best of our knowledge, not many have focused on Freezing the initial pre-trained weights, i.e., most methods drop newly factorized matrices into the already pre-trained parameters, without carefully blending, nor assessing/studying how much the model is relying on already trained weights.
-
-In this work:
-
-\begin{itemize}
-	\item   We investigate the impact of freezing on the quality of learning,  and also demonstrate the capacity for the network to just not rely on the new weights, and just use the already pre-trained one. 
-	\item We also introduce a new distillation / training mechanism to ease the entry of these factorized weights into the old architecture. 
-	\item We also show that freezing the other weights, helps the new introduced get more activation.
-\end{itemize}
-
-In this work, we demonstrate that without freezing, the network relies more on the pre-trained weights (to a varying degree, depending on how the new proposed weights are initialized). And with freezing, newly introduced weights learn faster.
-
-Usually the newly introduced weights are brute forced into training, and in many cases not, (knowing how many LLMs are under-trained + many residual connections), the pre-trained carry the weights. We also compare the gradient activations in both cases (when we free and when don't).
-
 In this work we demonstrate the effectiveness of freezing, and of slow integration of weights, either through training or distillation.
-
-Using Van Loan has no remarkable benefit improvement over $50\%$ pruning.
-
-
-Based on these results, we follow the  
-\begin{itemize}
-	\item Learning rate: cosine schedule, with a warm-up of 500 tiers.
-	\item Gradient accumulation: 3 across 4 nodes (a good balance between 2 and 5)
-	\item Batch size: 12, better stability. 
-\end{itemize}
-
-This configuration allows a balanced trade-off between speed of updates and stochasticity of the loss with each iterations. And it also allows multiple experiments to be run simultaneously on a node of 4 A100s. Reframe this: you lose a bit of performance, but you gain a lot of memory to try out other approach at the same time, sounds silly, but this is important when you're GPU poor.
-
 \end{comment}
 
-\textbf{Our contributions} (so far, delete this) could be summarized as follows:
+\textbf{Our contributions} could be summarized as follows:
 \begin{itemize}
     \item We use weight tying, i.e., the embedding and softmax matrices are identical. This makes our model, the only "effective" 81M model compared to (X,Y).
     \item We have a systematic compression scheme, i.e., compress all layers the same way. We don't see any reasons to why we would only compress odd layers (besides to "force" the number of parameters to be under certain threshold).
@@ -77,6 +50,13 @@ This configuration allows a balanced trade-off between speed of updates and stoc
 		\end{itemize}
     \item We don't use distillation (empirical evidence shows no benefits compared to only Vanilla supervised learning).
 \end{itemize}
+
+\section{Related work}%
+\label{sec:Related work}
+
+
+
+
 \section{Methodology}%
 \label{sec:Training setups}
 
@@ -263,9 +243,9 @@ We refer to our models with the nomenclature \textbf{Krony-PT-XM\{-Y\}}, with $X
 81M       & \textbf{KronyPT-81M-1350}  & 41.98        & 34.99      & -          \\ \hline
 81M       & \textbf{KronyPT-81M-3950}  & -            & -          & 64.92      \\ \hline
 119M       & TQCompressedGPT2  & 40.28        & 32.25      & 64.72      \\ \hline
-119M       & KnGPT-2   & 40.97        & 32.81      & 67.62      \\ \hline
+119M       & KEPT-2   & 40.97        & 32.81      & 67.62      \\ \hline
 \end{tabular}
-\caption{Perplexity of Krony-PT against other Kronecker based models.}
+\caption{Perplexity of Crony-PT against other Kronecker based models.}
 \end{table}
 
 \subsection{The 95M class:}%
@@ -273,7 +253,9 @@ We refer to our models with the nomenclature \textbf{Krony-PT-XM\{-Y\}}, with $X
 
 \subsection{Scale test}%
 \label{sub:Scale test}
-How far can we push down the size? tl;dr: 67M does not work!
+How far can we push down the size? 
+
+Convergence starts to emerge starting from 80M models.   80M with single factors is higher than 80M with small dims and high factors.
 
 \subsection{General trends:}%
 
@@ -286,7 +268,6 @@ Things to add here:
 	\item does re-plugging the matrix work? 
 \end{itemize}
 
-
 \section{Discussion}%
 \label{sec:Discussion}
 
@@ -295,49 +276,22 @@ We clarify in this section some design choices of the other papers:
 \subsection{Parameter count:}%
 \label{sub:Parameter count:}
 
-For some reason the other papers do not include the output matrix, and I quote for \cite{ ``Note that number of parameters of the models are
-reported excluding the output embedding layer in language modelling which is not compressed, is
-equal to row Parameters''. If this is true, then their model would technically be a 120M. The reason why we (and GPT2 paper) don't count the output matrix is because it is identical to the embedding matrix, this known as weight tying or weight sharing. Which does not seem the case with the other papers (I have contacted the other paper for clarifications through github).
+The other papers (\cite{tahaei2022kroneckerbert}, \cite{abronin2024tqcompressor}), count the number of parameters differently than how our method and DistilGPT2 do, which makes the comparison not tit for tat. The difference is that they do not include the output matrix in the parameter count, which is not of a negligible size (approximately 40M), especially when initialized using pre-trained GPT2 weights. Quoting from KnGPT2 \cite{tahaei2022kroneckerbert}: ``Note that number of parameters of the models are reported excluding the output embedding layer in language modelling which is not compressed, is equal to row Parameters''. TQCompressor \cite{abronin2024tqcompressor} follow their lead as well, which was clarified on a GitHub issue \footnote{\href{https://github.com/terra-quantum-public/TQCompressedGPT2/issues/1}{Link to GitHub issue: https://github.com/terra-quantum-public/TQCompressedGPT2/issues/1}}.
+This difference in counting, makes their 81M models, a 120M in reality. The reason why we (and GPT2 paper) don't count the output matrix is because it is identical to the embedding matrix, this known as weight tying or weight sharing. Which does not seem the case with the other papers (I have contacted the other paper for clarifications through github).
 
 \subsection{Only 3\% of data}%
 \label{sub:Only 3\% of data}
 
-both papers claim that they only used 3\% of the training data to train their models. We argue that in this set up, limiting your training data to only a fraction  does not imply a better compression/factorization method, for the simple and following reasons:
+Both papers claim that they only used 3\% of the training data to train their models. We argue that in this set up, limiting your training data to only a fraction  does not imply a better compression/factorization method, for (the simple and) following reasons:
 
 \begin{enumerate}
 	\item They inherit almost half the weights from the old GPT2 checkpoint that was trained for numerous epochs, and has seen the whole data. 
-	\item They use Van Loan method, hence, even, when they don't match the original checkpoint, VL is still a smart init, some knowledge is definitely passed through the SVD. 
-	\item You literally use the output matrix of a pre-trained GPT2.
+	\item They use Van Loan (VL) method to initialize the Kronecker products, hence, even, when they don't match the original checkpoint, VL is not a random initialization, some knowledge is definitely passed through the SVD. 
+	\item The use the same output matrix as GPT2, without weight trying (one can be fairly sure that this matrix ``distills" all knowledge that was learned). 
 \end{enumerate}
 
-Hence, we don't know ``how much knowledge" has been passed through the already trained parameters. A fair comparison would be to initialize \textbf{all the parameters} of the new compressed model with random values, and not rely on any of the other pre-trained ones. Which is clearly not the case here.
+Hence, we can't quantify exactly ``how much knowledge" has been passed through the already trained parameters. A fair comparison would be to initialize \textbf{all the parameters} of the new compressed model with random values, and not rely on any of the other pre-trained ones. Which is clearly not the case here.
 
-
-
-\begin{comment}
-	
-\subsection{Questions}%
-\label{sub:Questions}
-
-
-\begin{itemize}
-	\item When we plug new KP matrices to the pre-trained model, is it useful to freeze the other weights that are already pre-trained? Or using different learning rates schemes maybe?
-
-	\item When don't don't freeze the weights. Does the network rely on other pre-trained methods?
-	\begin{itemize}
-		\item **The idea that I'm challenging here**: A lot of work on NNs compression using factorized methods,
-			    claim that the network only need to be (post-)trained on small % of the original training steps/data.                                                                   
-		\item But, what the fail to mention or elaborate on at least, is that not the weights matrices of the network are decomposed.                                                 
-		\item And with all the residual connection that are present in most attention networks,                                                                                       
-			    one could suspect, that maybe the weights that were not decomposed are taking over...                                                                                   
-		\item A good remedy for this is to freeze the original weights during the post-training, and only allow the new dropped in (factorized matrices) to be updated with backprop. 
-			   
-	\end{itemize}
-	\item This strategy could also be implemented in distillation. We refer to this method as **forced distillation.**
-	\item When we freeze, we investigate how useful is it to distill matrices one by one, rather than drop in the matrices all at once. And also investigate if the order of dropping has any significance, bottom up or top bottom...
-
-\end{itemize}
-\end{comment}
 
 \newpage
 \bibliography{bib}
