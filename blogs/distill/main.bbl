@@ -13,6 +13,23 @@ A.~Vaswani, N.~Shazeer, N.~Parmar, J.~Uszkoreit, L.~Jones, A.~N. Gomez,
   {\L}.~Kaiser, and I.~Polosukhin, ``Attention is all you need,'' {\em Advances
   in neural information processing systems}, vol.~30, 2017.
 
+\bibitem{achiam2023gpt}
+J.~Achiam, S.~Adler, S.~Agarwal, L.~Ahmad, I.~Akkaya, F.~L. Aleman, D.~Almeida,
+  J.~Altenschmidt, S.~Altman, S.~Anadkat, {\em et~al.}, ``Gpt-4 technical
+  report,'' {\em arXiv preprint arXiv:2303.08774}, 2023.
+
+\bibitem{claude3}
+
+
+\bibitem{cmd}
+
+
+\bibitem{reid2024gemini}
+M.~Reid, N.~Savinov, D.~Teplyashin, D.~Lepikhin, T.~Lillicrap, J.-b. Alayrac,
+  R.~Soricut, A.~Lazaridou, O.~Firat, J.~Schrittwieser, {\em et~al.}, ``Gemini
+  1.5: Unlocking multimodal understanding across millions of tokens of
+  context,'' {\em arXiv preprint arXiv:2403.05530}, 2024.
+
 \bibitem{tahaei2022kroneckerbert}
 M.~Tahaei, E.~Charlaix, V.~Nia, A.~Ghodsi, and M.~Rezagholizadeh,
   ``Kroneckerbert: Significant compression of pre-trained language models

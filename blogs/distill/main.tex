@@ -15,7 +15,7 @@
 \maketitle
 
 \begin{abstract}
-	We introduce Krony-PT, a (novel) compression technique of GPT2 \cite{radford2019language} based on Kronecker Products decomposition. We specifically target the MLP layers of each transformer layer, and systematically compress the feed forward layer matrices to various degrees. We use optimal Van Loan decompositions to initialize the new matrices, and also introduce a new pruning-based initialization trick. Our method compresses the original GPT2 124M parameters to various smaller models, 67M being the smallest, and 95M being the largest compressed model. Our 81M model variant outperforms distilgpt2 on next-token prediction on all standard language modeling datasets, and shows competitive scores or is on par with other Kronecker Products based compressed models of GPT2 that are significantly higher in size. 
+	We introduce Krony-PT, a (novel) compression technique of GPT2 \cite{radford2019language} based on Kronecker Products decomposition. We specifically target the MLP layers of each transformer layer, and systematically compress the feed forward layer matrices to various degrees. We use optimal Van Loan decompositions to initialize the new matrices, and also introduce a new pruning-based initialization trick. Our method compresses the original GPT2 124M parameters to various smaller models, 67M being the smallest, and 95M being the largest compressed model. Our 81M model variant outperforms distilgpt2 on next-token prediction on all standard language modeling datasets, and shows competitive scores or performs on par with other Kronecker Products based compressed models of GPT2 that are significantly higher in size. 
 \end{abstract}
 
 \newpage
@@ -28,22 +28,11 @@
 \section{Introduction}
 \label{sec:Introduction}
 
-% add the latest paper
+Large Language Models (LLMs) are revolutionizing many industries and changing the way we perceive and interact with machines with (or thanks to) their rapid and unprecedented development. Their strong ability to understand, generate, and perhaps even "generalize" in numerous domains including automated text generation, language translation, and notably coding, has led many to believe that Artificial General Intelligence (AGI) is achievable with more scaling, a theory known as The Scaling Hypothesis \cite{branwen2021scaling}. Despite their advanced features, the core of LLMs still fundamentally relies on the initial Transformer architecture \cite{vaswani2017attention}. And specifically the encoder only variants that was first introduced with GPT2 \cite{radford2019language}. (XX sota models have moved from a encoder only to enc-dec to decoder models)
 
+While GPT-4 \cite{achiam2023gpt} has fairly led the race in the past year, a lot of the big actors of the industry seem to have recently caught up (e.g., Anthropic \cite{claude3}, Cohere \cite{cmd}, and Google \cite{reid2024gemini}), as demonstrated by the independent and open LMSys Leaderboard \footnote{\href{https://chat.lmsys.org/?leaderboard}{https://chat.lmsys.org/?leaderboard}}. (And) Many believe that the two main ingredients are compute and data. And, while this seems affordable for big corporations, it poses significant challenges for individuals and smaller organizations to replicate these advancements. Hence, advancing work on the compression and factorization methods of Large Language Models is essential to make these powerful tools more accessible and sustainable for broader use, and a necessity for deployment on edge-devices.
 
-Large Language Models (LLMs) are revolutionizing many industries and changing the way we perceive and interact with machines with (or thanks to) their rapid and unprecedented development. Their strong ability to understand, generate, and perhaps even "generalize" in numerous domains including automated text generation, language translation, and notably coding, has led many to believe that Artificial General Intelligence (AGI) is achievable with more scaling, a theory known as The Scaling Hypothesis \cite{branwen2021scaling}. Despite their advanced features, the core of LLMs still fundamentally relies on the initial Transformer architecture \cite{vaswani2017attention}.
-
-The capabilities of their next-token prediction have exponentially increased at an unprecedented speed from GPT2 to the latest versions of GPT4, Claude3, etc.
-
-While GPT-4 has fairly led the race in the past year, a lot of big actors have in the industry recently seems to catch up (e.g., Anthropic, Cohere, Google), and many believe that the two main ingredients are compute and data. And, while this seems affordable for big corps, it poses significant challenges for individuals and smaller organizations trying to replicate these advancements. And, advancing work on the compression and factorization of Large Language Models is essential to make these powerful tools more accessible and sustainable for broader use                                                           
-A lot of work has been done on the compression of LLMs using factorization methods, including Kronecker Products. Most notably for encoder based based, and rarely applied to decoder based methods (\cite{tahaei2022kroneckerbert}, \cite{edalati2021kroneckr}, \cite{abronin2024tqcompressor}).
-
-\begin{comment}
-
-We study how far we can push the compression ratio, and record then impact of down-scaling on the quality of the model. We also investigate adding multiple Kronecker factors.
-
-In this work we demonstrate the effectiveness of freezing, and of slow integration of weights, either through training or distillation.
-\end{comment}
+XX, a lot of work has been done on the compression of LLMs using factorization methods, including Kronecker Products. Most notably for encoder based based, and rarely applied to decoder based methods (\cite{tahaei2022kroneckerbert}, \cite{edalati2021kroneckr}, \cite{abronin2024tqcompressor}).
 
 \textbf{Our contributions} could be summarized as follows:
 \begin{itemize}
