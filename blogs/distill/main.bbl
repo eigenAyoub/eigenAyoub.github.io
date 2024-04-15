@@ -1,4 +1,17 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
+
+\bibitem{radford2019language}
+A.~Radford, J.~Wu, R.~Child, D.~Luan, D.~Amodei, I.~Sutskever, {\em et~al.},
+  ``Language models are unsupervised multitask learners,'' {\em OpenAI blog},
+  vol.~1, no.~8, p.~9, 2019.
+
+\bibitem{branwen2021scaling}
+G.~Branwen, ``The scaling hypothesis,'' 2021.
+
+\bibitem{vaswani2017attention}
+A.~Vaswani, N.~Shazeer, N.~Parmar, J.~Uszkoreit, L.~Jones, A.~N. Gomez,
+  {\L}.~Kaiser, and I.~Polosukhin, ``Attention is all you need,'' {\em Advances
+  in neural information processing systems}, vol.~30, 2017.
 
 \bibitem{tahaei2022kroneckerbert}
 M.~Tahaei, E.~Charlaix, V.~Nia, A.~Ghodsi, and M.~Rezagholizadeh,
