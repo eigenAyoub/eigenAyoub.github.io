@@ -15,10 +15,11 @@ $ du -h --max-depth=1
 $ du -h --max-depth=1 | grep 'G' 
 ```
 
-### **Delete all files starting with some pattern `pattern_X`:**
+### **Delete all files starting (or ending) with some pattern `pattern_X`:**
 
 ```bash
 $ ls  | grep "^pattern_X" | xargs rm
+$ ls  | grep "pattern_X$" | xargs rm  # ending with pattern_X
 ```
 
 ### **Only view sub-directories of a current directory:**
