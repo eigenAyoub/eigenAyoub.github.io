@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.16)  18 APR 2024 11:56
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.16)  8 MAY 2024 20:38
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -468,8 +468,8 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 \openout5 = `main.toc'.
 
  [2] [3]
-./main.tex:79: Undefined control sequence.
-l.79 ...ition. In our case, we have $W \in \mathbb
+./main.tex:76: Undefined control sequence.
+l.76 ...ition. In our case, we have $W \in \mathbb
                                                   {R}^{(m,n)}$ where $m = 30...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -477,8 +477,8 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-./main.tex:79: Undefined control sequence.
-l.79 ...aim to find the ``optimal'' $A \in \mathbb
+./main.tex:76: Undefined control sequence.
+l.76 ...aim to find the ``optimal'' $A \in \mathbb
                                                   {R}^{(m_1, n_1)}$, and $B\...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -486,8 +486,8 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-./main.tex:79: Undefined control sequence.
-l.79 ...mathbb{R}^{(m_1, n_1)}$, and $B\in \mathbb
+./main.tex:76: Undefined control sequence.
+l.76 ...mathbb{R}^{(m_1, n_1)}$, and $B\in \mathbb
                                                   {R}^{(m_2, n_2)$, i.e.,:
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -495,10 +495,10 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-./main.tex:79: Missing } inserted.
+./main.tex:76: Missing } inserted.
 <inserted text> 
                 }
-l.79 ... n_1)}$, and $B\in \mathbb{R}^{(m_2, n_2)$
+l.76 ... n_1)}$, and $B\in \mathbb{R}^{(m_2, n_2)$
                                                   , i.e.,:
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -507,28 +507,28 @@ really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
 [4]
-./main.tex:88: You can't use `macro parameter character #' in restricted horizontal mode.
+./main.tex:85: You can't use `macro parameter character #' in restricted horizontal mode.
 <recently read> ##
                   
-l.88 Name 	& Dimension 		& 	#
+l.85 Name 	& Dimension 		& 	#
                              params 	& Model size\\
 Sorry, but I'm not programmed to handle this case;
 I'll just pretend that you didn't ask for it.
 If you're in the wrong mode, you might be able to
 return to the right one by typing `I}' or `I$' or `I\par'.
 
-./main.tex:105: Missing $ inserted.
+./main.tex:102: Missing $ inserted.
 <inserted text> 
                 $
-l.105 		&  \cdots &
+l.102 		&  \cdots &
                       \cdots    & \cdots \\ \hline
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:105: Extra }, or forgotten $.
+./main.tex:102: Extra }, or forgotten $.
 <template> \unskip \hfil }
                           \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.105 		&  \cdots &
+l.102 		&  \cdots &
                       \cdots    & \cdots \\ \hline
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -536,18 +536,18 @@ you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
-./main.tex:105: Missing $ inserted.
+./main.tex:102: Missing $ inserted.
 <inserted text> 
                 $
-l.105 		&  \cdots &
+l.102 		&  \cdots &
                       \cdots    & \cdots \\ \hline
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:105: Missing } inserted.
+./main.tex:102: Missing } inserted.
 <inserted text> 
                 }
-l.105 		&  \cdots &
+l.102 		&  \cdots &
                       \cdots    & \cdots \\ \hline
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -555,18 +555,18 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
-./main.tex:105: Missing $ inserted.
+./main.tex:102: Missing $ inserted.
 <inserted text> 
                 $
-l.105 		&  \cdots &   \cdots    &
+l.102 		&  \cdots &   \cdots    &
                                   \cdots \\ \hline
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:105: Extra }, or forgotten $.
+./main.tex:102: Extra }, or forgotten $.
 <template> \unskip \hfil }
                           \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.105 		&  \cdots &   \cdots    &
+l.102 		&  \cdots &   \cdots    &
                                   \cdots \\ \hline
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -574,18 +574,18 @@ you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
-./main.tex:105: Missing $ inserted.
+./main.tex:102: Missing $ inserted.
 <inserted text> 
                 $
-l.105 		&  \cdots &   \cdots    &
+l.102 		&  \cdots &   \cdots    &
                                   \cdots \\ \hline
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:105: Missing } inserted.
+./main.tex:102: Missing } inserted.
 <inserted text> 
                 }
-l.105 		&  \cdots &   \cdots    &
+l.102 		&  \cdots &   \cdots    &
                                   \cdots \\ \hline
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -593,18 +593,18 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
-./main.tex:105: Missing $ inserted.
+./main.tex:102: Missing $ inserted.
 <inserted text> 
                 $
-l.105 		&  \cdots &   \cdots    & \cdots \\
+l.102 		&  \cdots &   \cdots    & \cdots \\
                                             \hline
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:105: Extra }, or forgotten $.
+./main.tex:102: Extra }, or forgotten $.
 <template> \unskip \hfil }
                           \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.105 		&  \cdots &   \cdots    & \cdots \\ \hline
+l.102 		&  \cdots &   \cdots    & \cdots \\ \hline
                                                   
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -612,18 +612,18 @@ you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
-./main.tex:105: Missing $ inserted.
+./main.tex:102: Missing $ inserted.
 <inserted text> 
                 $
-l.105 		&  \cdots &   \cdots    & \cdots \\ \hline
+l.102 		&  \cdots &   \cdots    & \cdots \\ \hline
                                                   
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:105: Missing } inserted.
+./main.tex:102: Missing } inserted.
 <inserted text> 
                 }
-l.105 		&  \cdots &   \cdots    & \cdots \\ \hline
+l.102 		&  \cdots &   \cdots    & \cdots \\ \hline
                                                   
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -631,10 +631,10 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
-./main.tex:123: You can't use `macro parameter character #' in restricted horizontal mode.
+./main.tex:120: You can't use `macro parameter character #' in restricted horizontal mode.
 <recently read> ##
                   
-l.123 Name 	& Dimension 		& 	#
+l.120 Name 	& Dimension 		& 	#
                               params    & 1 factor    & 2 factors   & 3 fact...
 Sorry, but I'm not programmed to handle this case;
 I'll just pretend that you didn't ask for it.
@@ -642,18 +642,18 @@ If you're in the wrong mode, you might be able to
 return to the right one by typing `I}' or `I$' or `I\par'.
 
 [5]
-./main.tex:160: Missing $ inserted.
+./main.tex:157: Missing $ inserted.
 <inserted text> 
                 $
-l.160 \begin{bmatrix}
+l.157 \begin{bmatrix}
                      
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:163: Missing $ inserted.
+./main.tex:160: Missing $ inserted.
 <inserted text> 
                 $
-l.163 \end{bmatrix}
+l.160 \end{bmatrix}
                    . Now, we illustrate how this procedure works with a rand...
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -661,45 +661,45 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
-./main.tex:197: Missing $ inserted.
+./main.tex:194: Missing $ inserted.
 <inserted text> 
                 $
-l.197 
+l.194 
       
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:197: Display math should end with $$.
+./main.tex:194: Display math should end with $$.
 <to be read again> 
                    \tex_par:D 
-l.197 
+l.194 
       
 The `$' that I just saw supposedly matches a previous `$$'.
 So I shall assume that you typed `$$' both times.
 
 
-Overfull \hbox (97.00964pt too wide) detected at line 197
+Overfull \hbox (97.00964pt too wide) detected at line 194
 [] [] [] \OT1/cmr/m/n/10 = [] \OMS/cmsy/m/n/10 
  []
  []
 
 
-./main.tex:199: LaTeX Error: Bad math environment delimiter.
+./main.tex:196: LaTeX Error: Bad math environment delimiter.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.199 \]
+l.196 \]
         
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
-./main.tex:199: Missing $ inserted.
+./main.tex:196: Missing $ inserted.
 <inserted text> 
                 $
-l.199 \]
+l.196 \]
         
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -707,27 +707,27 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
-./main.tex:199: Display math should end with $$.
+./main.tex:196: Display math should end with $$.
 <to be read again> 
                    \endgroup 
-l.199 \]
+l.196 \]
         
 The `$' that I just saw supposedly matches a previous `$$'.
 So I shall assume that you typed `$$' both times.
 
 [6]
-LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 214.
+LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 211.
  (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/bx/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 214.
+(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 211.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [7]
-Underfull \hbox (badness 10000) in paragraph at lines 279--279
+Underfull \hbox (badness 10000) in paragraph at lines 276--276
 [][][][]\OT1/cmr/m/n/8 Link to GitHub is-sue: https://github.com/terra-quantum-
  []
 
@@ -793,7 +793,7 @@ Here is how much of TeX's memory you used:
  14 hyphenation exceptions out of 8191
  99i,11n,104p,954b,448s stack positions out of 5000i,500n,10000p,200000b,80000s
  </home/ayoub/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on main.pdf (11 pages, 273697 bytes).
+Output written on main.pdf (11 pages, 273725 bytes).
 PDF statistics:
  327 PDF objects out of 1000 (max. 8388607)
  272 compressed objects within 3 object streams

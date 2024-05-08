@@ -26,7 +26,7 @@
 \section{Introduction}
 \label{sec:Introduction}
 
-Thanks to their rapid and unprecedented development, Large Language Models (LLMs) are revolutionizing many industries and changing the way we perceive and interact with machines with. Their strong ability to understand, generate, and perhaps even "generalize" in numerous domains including automated text generation, language translation, and notably coding, has led many to believe that Artificial General Intelligence (AGI) is achievable with more scaling, a theory known as The Scaling Hypothesis \cite{branwen2021scaling}. Despite their advanced features, the core of LLMs still fundamentally relies on the initial Transformer architecture \cite{vaswani2017attention}. And specifically the encoder only variants that was first introduced with GPT2 \cite{radford2019language}. (XX sota models have moved from a encoder only to enc-dec to decoder models, enc-dec are having a comeback, Roka paper)
+Thanks to their rapid and unprecedented development, Large Language Models (LLMs) are revolutionizing many industries and changing the way we perceive and interact with machines. Their strong ability to understand, generate, and perhaps even "generalize" in numerous domains including automated text generation, language translation, and notably coding, has led many to believe that Artificial General Intelligence (AGI) is achievable with more scaling, a theory known as The Scaling Hypothesis \cite{branwen2021scaling}. Despite their advanced features, the core of LLMs still fundamentally relies on the initial Transformer architecture \cite{vaswani2017attention}. And specifically the encoder only variants that was first introduced with GPT2 \cite{radford2019language}. (XX sota models have moved from a encoder only to enc-dec to decoder models, enc-dec are having a comeback, Roka paper)
 
 While GPT-4 \cite{achiam2023gpt} has fairly led the race in the past year, a lot of the big actors of the industry seem to have recently caught up (e.g., Anthropic \cite{claude3}, Cohere \cite{cmd}, and Google \cite{reid2024gemini}), as demonstrated by the independent and open LMSys Leaderboard \footnote{\href{https://chat.lmsys.org/?leaderboard}{https://chat.lmsys.org/?leaderboard}}. (Subsequently,?) many believe that the two main ingredients are compute and data. While this seems affordable for big corporations, it poses significant challenges for individuals and smaller organizations to replicate these advancements. Hence, advancing work on the compression and factorization methods of Large Language Models is essential to make these powerful tools more accessible and sustainable for broader use, and a necessity for deployment on edge-devices.
 
@@ -37,7 +37,7 @@ While GPT-4 \cite{achiam2023gpt} has fairly led the race in the past year, a lot
     \item We try different compression schemes (67M, 81M, and 95M)
 		\begin{itemize}
 			\item We propose a new simple initialization for the 95M model.
-			\item We use multiple factors for the VL based inits.
+			\item We use multiple factors for the VL based units.
 		\end{itemize}
     \item We don't use distillation (empirical evidence shows no benefits compared to only Vanilla supervised learning).
 \end{itemize}
@@ -45,17 +45,16 @@ While GPT-4 \cite{achiam2023gpt} has fairly led the race in the past year, a lot
 \section{Related work}%
 \label{sec:Related work}
 
-Compressing Large Language Models is currently a major focus in research.
+Compressing Large Language Models is currently a major focus in research. In this context, Matrix Factorization provide the perfect framework for compression. There are three major research directions in the compression of LLMs, \textbf{Distillation}, \textbf{Quantization}, and finally \textbf{Factorization}, which is the focus of our work. Generally speaking, Matrix Factorization techniques aim to combine (e.g., a product) lower rank matrices to reconstruct an original (typically bigger) matrix. A lot of work has been done on the compression of LLMs using factorization methods, including Kronecker Products. Most notably for encoder based based, and rarely applied to decoder based methods (\cite{tahaei2022kroneckerbert}, \cite{edalati2021kroneckr}, \cite{abronin2024tqcompressor}).
 
-In this context, Matrix Factorization provide the perfect framework for compression.
 
-3 different types, distillation, quantization and factorization. in this section, we review some of the work on the former.
-
-Generally speaking, Matrix Factorization techniques aim to combine (e.g., a product) lower rank matrices to reconstruct a bigger matrix.
-
-A lot of work has been done on the compression of LLMs using factorization methods, including Kronecker Products. Most notably for encoder based based, and rarely applied to decoder based methods (\cite{tahaei2022kroneckerbert}, \cite{edalati2021kroneckr}, \cite{abronin2024tqcompressor}).
 
 Motivated by how dense the attention layers are \cite{}, we opted not to compress the QKV matrices.  
+
+
+
+
+
 
 \section{Methodology}%
 \label{sec:Training setups}
