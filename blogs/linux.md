@@ -51,6 +51,11 @@ $ ls -t check2/ | grep "^256" | head -n 9 | while read -r line; do
 $ 	python owt_eval.py "./check2/$line"; 
 $ done
 ```
+Another way is, now my preferred way:
+
+```bash
+$ls -t check2/ | grep "^256" | head -n 9 | xargs -I {} python owt_eval.py check2/{}
+```
 
 * I want to use another script `kron_to_gpt.py`, I need for each checkpoint an `output_directory` that usually depends on the checkpoint iteration step.
 

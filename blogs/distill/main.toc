@@ -1,5 +1,5 @@
 \contentsline {section}{\numberline {1}Introduction}{3}{section.1}%
-\contentsline {section}{\numberline {2}Related work}{4}{section.2}%
+\contentsline {section}{\numberline {2}Related work}{3}{section.2}%
 \contentsline {section}{\numberline {3}Methodology}{4}{section.3}%
 \contentsline {subsection}{\numberline {3.1}Kronecker Decomposition}{4}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}The 95M model}{4}{subsection.3.2}%
@@ -7,13 +7,13 @@
 \contentsline {subsection}{\numberline {3.4}Initialization}{6}{subsection.3.4}%
 \contentsline {subsubsection}{\numberline {3.4.1}Van Loan Method}{6}{subsubsection.3.4.1}%
 \contentsline {subsubsection}{\numberline {3.4.2}Pruning based Initialization}{6}{subsubsection.3.4.2}%
-\contentsline {section}{\numberline {4}Experiements}{6}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Training setup}{6}{subsection.4.1}%
+\contentsline {section}{\numberline {4}Experiements}{7}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Training setup}{7}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}Results}{7}{subsection.4.2}%
 \contentsline {subsection}{\numberline {4.3}The 81M class:}{7}{subsection.4.3}%
-\contentsline {subsection}{\numberline {4.4}The 95M class:}{8}{subsection.4.4}%
-\contentsline {subsection}{\numberline {4.5}Scale test}{8}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.4}The 95M class:}{7}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Scale test}{7}{subsection.4.5}%
 \contentsline {subsection}{\numberline {4.6}General trends:}{8}{subsection.4.6}%
 \contentsline {section}{\numberline {5}Discussion}{8}{section.5}%
 \contentsline {subsection}{\numberline {5.1}Parameter count:}{8}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Only 3\% of data}{8}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.2}Only 3\% of data}{9}{subsection.5.2}%
