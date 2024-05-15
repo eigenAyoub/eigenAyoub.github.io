@@ -244,7 +244,7 @@ We refer to our models with the nomenclature \textbf{Krony-PT-XM\{-Y\}}, with $X
 119M       & TQCompressedGPT2  & 40.28        & 32.25      & 64.72      \\ \hline
 119M       & KEPT-2   & 40.97        & 32.81      & 67.62      \\ \hline
 \end{tabular}
-\caption{Perplexity of Crony-PT against other Kronecker based models.}
+\caption{Perplexity of Krony-PT against other Kronecker based models.}
 \end{table}
 
 \subsection{The 95M class:}%
@@ -255,6 +255,25 @@ We refer to our models with the nomenclature \textbf{Krony-PT-XM\{-Y\}}, with $X
 How far can we push down the size? 
 
 Convergence starts to emerge starting from 80M models.   80M with single factors is higher than 80M with small dims and high factors.
+
+\subsection{Multiple Kronecker factors, with scalers.}%
+\label{sub:Multiple Kronecker factors, with scalers.}
+
+In this section, we study the effect of adding multiple Kronecker Factors, and additionally adding scalers. In this setting, we compare 3 models:
+
+\textbf{Setting number 1} $\rightarrow$ 96M class (i.e., the biggest model class with one factor)
+
+\textbf{Setting number 2} $\rightarrow W = \sum_{n=1}^{r} A_i \otimes B_i $ 
+
+\textbf{Setting number 3} $\rightarrow W  = \sum_{n=1}^{r} s_i (A_i \otimes B_i)$
+
+To keep things at a comparable level, we train this class of 92.2M parameters, attained with $4$ factors of size $(256, 1024)$. 
+
+
+\textbf{Note:} Adding scalers barely adds any complexity to the parameter count: $96 = (\underbrace{4}_{\text{number of factors}} \times \underbrace{2}_{\text{MLP matrices per layer}}) \times \underbrace{12}_{\text{number of layers}}$ 
+
+
+\textbf{Conclusion:} Adding multiple factors do not help much, but adding scalers can during training improve model performance.
 
 \subsection{General trends:}%
 
