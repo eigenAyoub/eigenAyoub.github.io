@@ -15,7 +15,7 @@
 \maketitle
 
 \begin{abstract}
-	We introduce Krony-PT, a compression technique of GPT2 \cite{radford2019language} based on Kronecker Products decomposition. We specifically target the MLP layers of each transformer layer, and systematically compress the feed forward layer matrices to various degrees. We use optimal Van Loan decompositions to initialize the new matrices, and also introduce a new pruning-based initialization trick. Our method compresses the original GPT2 124M parameters to various smaller models, 67M being the smallest, and 95M being the largest compressed model. Our 81M model variant outperforms distilgpt2 on next-token prediction on all standard language modeling datasets, and shows competitive scores or performs on par with other Kronecker Products based compressed models of GPT2 that are significantly higher in size. 
+	We introduce Krony-PT, a compression technique of GPT2 \cite{radford2019language} based on Kronecker Products. We specifically target the MLP layers of each transformer layer, and systematically compress the feed forward layer matrices to various degrees. We use optimal Van Loan decompositions to initialize the new matrices, and also introduce a new pruning-based initialization trick. Our method compresses the original GPT2 124M parameters to various smaller models, 67M being the smallest, and 95M being the largest compressed model. Our 81M model variant outperforms distilgpt2 on next-token prediction on all standard language modeling datasets, and shows competitive scores or performs on par with other Kronecker Products based compressed models of GPT2 that are significantly higher in size. 
 \end{abstract}
 
 \newpage
