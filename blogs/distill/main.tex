@@ -15,7 +15,7 @@
 \maketitle
 
 \begin{abstract}
-	We introduce Krony-PT, a (novel) compression technique of GPT2 \cite{radford2019language} based on Kronecker Products decomposition. We specifically target the MLP layers of each transformer layer, and systematically compress the feed forward layer matrices to various degrees. We use optimal Van Loan decompositions to initialize the new matrices, and also introduce a new pruning-based initialization trick. Our method compresses the original GPT2 124M parameters to various smaller models, 67M being the smallest, and 95M being the largest compressed model. Our 81M model variant outperforms distilgpt2 on next-token prediction on all standard language modeling datasets, and shows competitive scores or performs on par with other Kronecker Products based compressed models of GPT2 that are significantly higher in size. 
+	We introduce Krony-PT, a compression technique of GPT2 \cite{radford2019language} based on Kronecker Products decomposition. We specifically target the MLP layers of each transformer layer, and systematically compress the feed forward layer matrices to various degrees. We use optimal Van Loan decompositions to initialize the new matrices, and also introduce a new pruning-based initialization trick. Our method compresses the original GPT2 124M parameters to various smaller models, 67M being the smallest, and 95M being the largest compressed model. Our 81M model variant outperforms distilgpt2 on next-token prediction on all standard language modeling datasets, and shows competitive scores or performs on par with other Kronecker Products based compressed models of GPT2 that are significantly higher in size. 
 \end{abstract}
 
 \newpage
@@ -26,9 +26,11 @@
 \section{Introduction}
 \label{sec:Introduction}
 
-Thanks to their rapid and unprecedented development, Large Language Models (LLMs) are revolutionizing many industries and changing the way we perceive and interact with machines. Their strong ability to understand, generate, and perhaps even "generalize" in numerous domains including automated text generation, language translation, and notably coding, has led many to believe that Artificial General Intelligence (AGI) is achievable with more scaling, a theory known as The Scaling Hypothesis \cite{branwen2021scaling}. Despite their advanced features, the core of LLMs still fundamentally relies on the initial Transformer architecture \cite{vaswani2017attention}. And specifically the encoder only variants that was first introduced with GPT2 \cite{radford2019language}. (XX sota models have moved from a encoder only to enc-dec to decoder models, enc-dec are having a comeback, Roka paper)
+With to their rapid and unprecedented development, Large Language Models (LLMs) are revolutionizing many industries and changing the way we perceive and interact with machines. Their strong ability to understand, generate, and perhaps even ``generalize" in numerous domains including automated text generation, language translation, and notably coding, has led many to believe that Artificial General Intelligence (AGI) is achievable with more scaling, a theory known as The Scaling Hypothesis \cite{branwen2021scaling}. Despite their advanced features, the core of LLMs still fundamentally relies on the initial Transformer architecture \cite{vaswani2017attention}. And specifically the encoder only variants that was first introduced with GPT2 \cite{radford2019language}. 
 
-While GPT-4 \cite{achiam2023gpt} has fairly led the race in the past year, a lot of the big actors of the industry seem to have recently caught up (e.g., Anthropic \cite{claude3}, Cohere \cite{cmd}, and Google \cite{reid2024gemini}), as demonstrated by the independent and open LMSys Leaderboard \footnote{\href{https://chat.lmsys.org/?leaderboard}{https://chat.lmsys.org/?leaderboard}}. (Subsequently,?) many believe that the two main ingredients are compute and data. While this seems affordable for big corporations, it poses significant challenges for individuals and smaller organizations to replicate these advancements. Hence, advancing work on the compression and factorization methods of Large Language Models is essential to make these powerful tools more accessible and sustainable for broader use, and a necessity for deployment on edge-devices.
+%(XX sota models have moved from a encoder only to enc-dec to decoder models, enc-dec are having a comeback, Roka paper)
+
+Although GPT-4 \cite{achiam2023gpt} has fairly led the race in the past year, a lot of the big actors of the industry seem to have recently caught up (e.g., Anthropic \cite{claude3}, Cohere \cite{cmd}, and Google \cite{reid2024gemini}), as demonstrated by the independent and open LMSys Leaderboard \footnote{\href{https://chat.lmsys.org/?leaderboard}{https://chat.lmsys.org/?leaderboard}}. Subsequently, many believe that the two main ingredients are compute and data. While this seems affordable for big corporations, it poses significant challenges for individuals and smaller organizations to reproduce these SoTA models. Hence, advancing work on the compression and factorization methods of LLMs is essential to make these powerful tools more accessible and sustainable for broader use, and a necessity for deployment on edge-devices.
 
 \textbf{Our contributions} could be summarized as follows:
 \begin{itemize}
@@ -38,6 +40,7 @@ While GPT-4 \cite{achiam2023gpt} has fairly led the race in the past year, a lot
 		\begin{itemize}
 			\item We propose a new simple initialization for the 95M model.
 			\item We use multiple factors for the VL based units.
+			\item We introduce scalers to each factor, which (apparently) unlocks ``a new dimension"
 		\end{itemize}
     \item We don't use distillation (empirical evidence shows no benefits compared to only Vanilla supervised learning).
 \end{itemize}
@@ -270,10 +273,28 @@ In this section, we study the effect of adding multiple Kronecker Factors, and a
 To keep things at a comparable level, we train this class of 92.2M parameters, attained with $4$ factors of size $(256, 1024)$. 
 
 
-\textbf{Note:} Adding scalers barely adds any complexity to the parameter count: $96 = (\underbrace{4}_{\text{number of factors}} \times \underbrace{2}_{\text{MLP matrices per layer}}) \times \underbrace{12}_{\text{number of layers}}$ 
+\textbf{Note:} Adding scalers barely adds any complexity to the parameter count, for the setting number 3, we add exactly $96$ parameters, depicted as follows: $96 = (\underbrace{4}_{\text{number of factors}} \times \underbrace{2}_{\text{MLP matrices per layer}}) \times \underbrace{12}_{\text{number of layers}}$. Moreover, it doesn't add any additional latency to inference compared to only using multiple factors (without scalers), as we can multiply the scaler $s_i$ with the first Kronecker factor $A_i$ first and then compute the Kronecker product with $B_i$.
 
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+ & & \multicolumn{3}{c|}{Datasets} \\ \hline
+\# Params &  Model            & wikitext-103 & wikitext-2 & Lambada \\ \hline
+96M       & \textbf{KronyPT 96M Parameters}  & 41.80        & 35.50      & 61.34         \\ \hline
+92.2M     & \textbf{4 factors without scalers} & -            & -          &       \\ \hline
+92.2M     & \textbf{4 factors with scalers}  &  \textbf{38.15}   & \textbf{33.08}      & \textbf{61.04} \\ \hline
+\end{tabular}
+\caption{Effect of adding scalers to multiple Kroneckers}
+
+\end{table}
 
 \textbf{Conclusion:} Adding multiple factors do not help much, but adding scalers can during training improve model performance.
+
+\subsection{Embeddings freezing:}%
+\label{sub:Embeddings freezing:}
+
+In this setting we test the impact of freezing on the model's performance. I should probb test on the 82M models. Code should be done today.
 
 \subsection{General trends:}%
 

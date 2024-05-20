@@ -14,7 +14,8 @@
 \contentsline {subsection}{\numberline {4.4}The 95M class:}{7}{subsection.4.4}%
 \contentsline {subsection}{\numberline {4.5}Scale test}{7}{subsection.4.5}%
 \contentsline {subsection}{\numberline {4.6}Multiple Kronecker factors, with scalers.}{8}{subsection.4.6}%
-\contentsline {subsection}{\numberline {4.7}General trends:}{8}{subsection.4.7}%
-\contentsline {section}{\numberline {5}Discussion}{8}{section.5}%
+\contentsline {subsection}{\numberline {4.7}Embeddings freezing:}{8}{subsection.4.7}%
+\contentsline {subsection}{\numberline {4.8}General trends:}{9}{subsection.4.8}%
+\contentsline {section}{\numberline {5}Discussion}{9}{section.5}%
 \contentsline {subsection}{\numberline {5.1}Parameter count:}{9}{subsection.5.1}%
 \contentsline {subsection}{\numberline {5.2}Only 3\% of data}{9}{subsection.5.2}%
