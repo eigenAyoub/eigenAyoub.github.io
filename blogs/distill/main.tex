@@ -209,6 +209,8 @@ a_{61} & a_{62} & a_{63} & a_{64} & a_{65} \\
 For pre-training, we follow general industry standards, namely of Chinchilla \cite{hoffmann2022training}. We noticed more stable loss curves with higher \textbf{batch sizes}, typically $128$ batch size (attained with a gradient accumulation of $4$, and each forward pass seeing a batch of $32$), and constant \textbf{learning rate} of $6 \times 10^{-5}$ (better than a cosine scheduler with a warm-up). After pre-training on approximately one epoch, we pick the best checkpoint and train further on $\approx$ 500k tokens per step (as suggested in the literature) which amounts in our set up (sequence length of $1024$) to a batch size of $512$. All experiments have been conducted using a single A100 80 GB, for one epoch of on Open Web Text \cite{Gokaslan2019OpenWeb}, an open source reproduction of OpenAI's WebText dataset.
 
 
+After training for approximately one epoch, we usually ``fine-tune" aggressively with very large batch size (approx 500k tokens per iteration) for approx. $10\%$ of data. We had best success with this strategy.
+
 
 \subsection{Results}%
 \label{sub:results}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.16)  30 MAY 2024 12:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.16)  31 MAY 2024 15:24
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -392,7 +392,7 @@ File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
 ./main.aux:87: Missing \endcsname inserted.
 <to be read again> 
                    \%
-l.87 ...2}{9}{Only 3\% of data}{subsection.5.2}{}}
+l.87 ...}{10}{Only 3\% of data}{subsection.5.2}{}}
                                                   
 The control sequence marked <to be read again> should
 not appear between \csname and \endcsname.
@@ -400,7 +400,7 @@ not appear between \csname and \endcsname.
 ./main.aux:87: Missing \endcsname inserted.
 <to be read again> 
                    \%
-l.87 ...2}{9}{Only 3\% of data}{subsection.5.2}{}}
+l.87 ...}{10}{Only 3\% of data}{subsection.5.2}{}}
                                                   
 The control sequence marked <to be read again> should
 not appear between \csname and \endcsname.
@@ -716,28 +716,28 @@ The `$' that I just saw supposedly matches a previous `$$'.
 So I shall assume that you typed `$$' both times.
 
 [6]
-LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 216.
+LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 218.
  (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/bx/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 216.
+(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 218.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [7]
-Overfull \hbox (0.55147pt too wide) in paragraph at lines 276--277
+Overfull \hbox (0.55147pt too wide) in paragraph at lines 278--279
 \OT1/cmr/m/n/10 96 = ([] \OMS/cmsy/m/n/10 ^^B []\OT1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^B []$\OT1/cmr/m/n/10 . More-over, it doesn't
  []
 
 
-Overfull \hbox (32.49423pt too wide) in paragraph at lines 280--288
+Overfull \hbox (32.49423pt too wide) in paragraph at lines 282--290
  [][] 
  []
 
 [8]
-Underfull \hbox (badness 10000) in paragraph at lines 322--322
+Underfull \hbox (badness 10000) in paragraph at lines 324--324
 [][][][]\OT1/cmr/m/n/8 Link to GitHub is-sue: https://github.com/terra-quantum-
  []
 
@@ -782,7 +782,7 @@ my insertion and my current dilemma will both disappear.
 ./main.aux:87: Missing \endcsname inserted.
 <to be read again> 
                    \%
-l.87 ...2}{9}{Only 3\% of data}{subsection.5.2}{}}
+l.87 ...}{10}{Only 3\% of data}{subsection.5.2}{}}
                                                   
 The control sequence marked <to be read again> should
 not appear between \csname and \endcsname.
@@ -797,13 +797,13 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 Here is how much of TeX's memory you used:
  19001 strings out of 480247
  355538 string characters out of 5896151
- 635611 words of memory out of 5000000
+ 635612 words of memory out of 5000000
  36580 multiletter control sequences out of 15000+600000
  476353 words of font info for 53 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  99i,11n,104p,954b,448s stack positions out of 5000i,500n,10000p,200000b,80000s
  </home/ayoub/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on main.pdf (12 pages, 281137 bytes).
+Output written on main.pdf (12 pages, 281496 bytes).
 PDF statistics:
  348 PDF objects out of 1000 (max. 8388607)
  292 compressed objects within 3 object streams
