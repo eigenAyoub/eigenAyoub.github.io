@@ -19,10 +19,13 @@ J.~Achiam, S.~Adler, S.~Agarwal, L.~Ahmad, I.~Akkaya, F.~L. Aleman, D.~Almeida,
   report,'' {\em arXiv preprint arXiv:2303.08774}, 2023.
 
 \bibitem{claude3}
+Anthropic, ``The claude 3 model family: Opus, sonnet, haiku.''
 
+\bibitem{llama}
+Meta, ``Llama 3.''
 
-\bibitem{cmd}
-
+\bibitem{llama3}
+AI@Meta, ``Llama 3 model card,'' 2024.
 
 \bibitem{reid2024gemini}
 M.~Reid, N.~Savinov, D.~Teplyashin, D.~Lepikhin, T.~Lillicrap, J.-b. Alayrac,

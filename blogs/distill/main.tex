@@ -26,21 +26,20 @@
 \section{Introduction}
 \label{sec:Introduction}
 
-With to their rapid and unprecedented development, Large Language Models (LLMs) are revolutionizing many industries and changing the way we perceive and interact with machines. Their strong ability to understand, generate, and perhaps even ``generalize" in numerous domains including automated text generation, language translation, and notably coding, has led many to believe that Artificial General Intelligence (AGI) is achievable with more scaling, a theory known as The Scaling Hypothesis \cite{branwen2021scaling}. Despite their advanced features, the core of LLMs still fundamentally relies on the initial Transformer architecture \cite{vaswani2017attention}. And specifically the encoder only variants that was first introduced with GPT2 \cite{radford2019language}. 
+With (/ Given) their rapid and unprecedented development, Large Language Models (LLMs) are revolutionizing many industries and changing the way we perceive and interact with machines. Their strong ability to understand, generate, and perhaps even ``generalize" in numerous domains including automated text generation, language translation, and notably coding, has led many to believe that scaling up models is all you need to achieve Artificial General Intelligence (AGI) (i.e., The Scaling Hypothesis \cite{branwen2021scaling}). Despite their advanced features, the core of LLMs still fundamentally relies on the initial Transformer architecture \cite{vaswani2017attention}. And specifically the encoder only variants that was first introduced with GPT2 \cite{radford2019language}. 
 
-%(XX sota models have moved from a encoder only to enc-dec to decoder models, enc-dec are having a comeback, Roka paper)
-
-Although GPT-4 \cite{achiam2023gpt} has fairly led the race in the past year, a lot of the big actors of the industry seem to have recently caught up (e.g., Anthropic \cite{claude3}, Cohere \cite{cmd}, and Google \cite{reid2024gemini}), as demonstrated by the independent and open LMSys Leaderboard \footnote{\href{https://chat.lmsys.org/?leaderboard}{https://chat.lmsys.org/?leaderboard}}. Subsequently, many believe that the two main ingredients are compute and data. While this seems affordable for big corporations, it poses significant challenges for individuals and smaller organizations to reproduce these SoTA models. Hence, advancing work on the compression and factorization methods of LLMs is essential to make these powerful tools more accessible and sustainable for broader use, and a necessity for deployment on edge-devices.
+Although GPT-4 \cite{achiam2023gpt} has fairly led the race in the past year, a lot of the big actors of the industry seem to have recently caught up (e.g., Anthropic \cite{claude3}, Meta \cite{llama}, \cite{llama3} , and Google \cite{reid2024gemini}), as demonstrated by the independent and open LMSys Leaderboard \footnote{\href{https://chat.lmsys.org/?leaderboard}{https://chat.lmsys.org/?leaderboard}}. Subsequently, many believe that the two main ingredients are \textbf{compute} and \textbf{data}. And while this seems affordable for big corporations, it poses significant challenges for individuals and smaller organizations to reproduce these SATA models. Hence, advancing work on the compression and factorization methods of LLMs is essential to make these powerful tools more accessible and sustainable for broader use, and a necessity for deployment on edge-devices.
 
 \textbf{Our contributions} could be summarized as follows:
 \begin{itemize}
-    \item We use weight tying, i.e., the embedding and softmax matrices are identical. This makes our model, the only "effective" 81M model compared to (X,Y).
+    \item We use weight tying, i.e., the embedding and softmax matrices are identical. This makes our model, the only ``effective" 81M model compared to (X,Y). Which significantly reduces the model size by 38M compared to other methods (see appendix for details regarding parameter count).
     \item We have a systematic compression scheme, i.e., compress all layers the same way. We don't see any reasons to why we would only compress odd layers (besides to "force" the number of parameters to be under certain threshold).
     \item We try different compression schemes (67M, 81M, and 95M)
 		\begin{itemize}
 			\item We propose a new simple initialization for the 95M model.
 			\item We use multiple factors for the VL based units.
-			\item We introduce scalers to each factor, which (apparently) unlocks ``a new dimension"
+			\item We introduce scalers to each factor, which (apparently) helps with generalizing (why? the performance on OWT seems to be ok, but the ppl is  better on other benchmarks, e.g., wiki and lamabada)
+
 		\end{itemize}
     \item We don't use distillation (empirical evidence shows no benefits compared to only Vanilla supervised learning).
 \end{itemize}
@@ -296,7 +295,8 @@ To keep things at a comparable level, we train this class of 92.2M parameters, a
 \subsection{Embeddings freezing:}%
 \label{sub:Embeddings freezing:}
 
-In this setting we test the impact of freezing on the model's performance. I should probb test on the 82M models. Code should be done today.
+In this setting we test the impact of freezing on the model's performance. I should probb test on the 82M models. Code should be done today. We also noticed that the scalers in the case of 4 factors, -- no matter what the initialization is --, always do converge to around 4. Hence, we tried to to freeze them as well at 4. And see how the learning would react.
+
 
 \subsection{Aggressive learning rate.}%
 
