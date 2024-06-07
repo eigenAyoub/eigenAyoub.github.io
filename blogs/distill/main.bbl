@@ -52,6 +52,10 @@ V.~Abronin, A.~Naumov, D.~Mazur, D.~Bystrov, K.~Tsarova, A.~Melnikov,
   improving tensor decomposition methods in neural networks via permutations,''
   {\em arXiv preprint arXiv:2401.16367}, 2024.
 
+\bibitem{van1993approximation}
+C.~F. Van~Loan and N.~Pitsianis, {\em Approximation with Kronecker products}.
+\newblock Springer, 1993.
+
 \bibitem{hoffmann2022training}
 J.~Hoffmann, S.~Borgeaud, A.~Mensch, E.~Buchatskaya, T.~Cai, E.~Rutherford,
   D.~de~Las~Casas, L.~A. Hendricks, J.~Welbl, A.~Clark, {\em et~al.},

@@ -3,6 +3,7 @@
 \usepackage{hyperref}
 \usepackage{tcolorbox}
 \usepackage{amsmath}
+\usepackage{verbatim}
 
 % this is supposed to the `` of md.
 \newtcbox{\cls}{on line,boxrule=0pt,boxsep=0pt,colback=lightgray,top=1pt,bottom=1pt,left=1pt,right=1pt,arc=0pt,fontupper=\ttfamily}
@@ -148,10 +149,94 @@ Since we inherit a GPT2 checkpoint that was trained for multiple epochs on the O
 \end{tabular}
 \caption{Comparison of different models on various datasets.}
 \end{table}
+
+\subsection{Van Loan Decomposition}
+
+The Van Loan decomposition is a mathematical technique used to represent a matrix as a sum of Kronecker products, which is particularly useful in numerical linear algebra for simplifying various matrix computations. This method is named after Charles F. Van Loan, who developed this approach.
+
+\subsection{Overview}
+
+The Van Loan decomposition provides a framework to express a matrix \( Z \) in terms of Kronecker products of smaller matrices. This is beneficial in applications such as signal processing, systems theory, and solutions to tensor equations where the representation of a matrix in a reduced form can significantly simplify computations and analyses.
+
+\subsection{Decomposition Process}
+
+The basic principle of the Van Loan decomposition is to express a matrix \( Z \) as a sum of Kronecker products of smaller matrices. The general form of the decomposition is given by:
+\begin{equation}
+    Z = \sum_{i=1}^k A_i \otimes B_i,
+\end{equation}
+where \( A_i \) and \( B_i \) are matrices of appropriate dimensions, and \( \otimes \) denotes the Kronecker product. The challenge lies in determining the matrices \( A_i \) and \( B_i \) such that the sum of their Kronecker products faithfully reconstructs the matrix \( Z \).
+
+\subsection{Kronecker Product}
+
+The Kronecker product, central to this decomposition, is defined for two matrices \( A \) of size \( m \times n \) and \( B \) of size \( p \times q \) as:
+\begin{equation}
+    A \otimes B = 
+    \begin{pmatrix}
+    a_{11}B & \cdots & a_{1n}B \\
+    \vdots & \ddots & \vdots \\
+    a_{m1}B & \cdots & a_{mn}B
+    \end{pmatrix},
+\end{equation}
+which results in a block matrix of size \( (mp) \times (nq) \).
+
 \subsubsection{Van Loan Method}%
 \label{sub:The fuck is Van Loan}
 
-XX (maybe not even write this section)
+The Van Loan decomposition is a method based on the SVD that can be used to approximate a given matrix as an sum of \( k \) Kronecker products, optimizing the Frobenius norm of the approximation. Originated from Van Loan and Pitsianis's 1993 work on approximations with Kronecker products \cite{van1993approximation}. 
+
+\textbf{Idea:} Given a matrix \( A \), with dimensions \((..., m \cdot m_2, n \cdot n_2)\), find  \(\{ U_i\}\) and \( \{V_i\} \), such that \( A \approx \sum_{i=1}^k U_i \otimes V_i \). The core steps of the algorithm are:
+
+\begin{enumerate}
+    \item Rearrange \( A \) to form a new matrix for decomposition.
+    \item Perform a low-rank SVD to approximate \( A \) by \( U S V^T \) where \( S \) contains the top \( k \) singular values.
+    \item Reshape and scale \( U \) and \( V \) matrices to match the desired Kronecker product forms.
+	\item Returns \( U \) and \( V \) matrices scaled by the square root of the singular values
+\end{enumerate}
+
+The returned matrices, suitable for reconstructing \( A \) with minimized Frobenius error. The matrices \( U \) and \( V \) are of shape \( (..., k, m, n) \) for \( U \) and \( (..., k, m_2, n_2) \) for \( V \). A simple Python script to generate the U_s and V_s is as follows:
+
+
+\begin{verbatim}
+def kronecker_decompose(A, m: int, n: int, *, k: int = 1, niter: int = 10):
+
+    m2, n2 = A.shape[-2] // m, A.shape[-1] // n
+	
+    A = rearrange(A, "... (m m2) (n n2) -> ... (m n) (m2 n2)", m=m, m2=m2, n=n, n2=n2)
+
+    u, s, v = torch.svd_lowrank(A, q=k, niter=niter)
+
+    u = rearrange(u, "... (m n) k -> ... k m n", m=m, n=n, k=k)
+    v = rearrange(v, "... (m2 n2) k -> ... k m2 n2", m2=m2, n2=n2, k=k)
+
+    scale = s[..., None, None].sqrt()
+    return u * scale, v * scale
+\end{verbatim}
+
+\subsubsection{KronZ2: Derivation of Van Loan Decomposition}
+
+To derive the Van Loan decomposition from SVD, consider a matrix \( Z \) that we want to express as a sum of Kronecker products. The steps are as follows:
+
+1. **Perform SVD on \( Z \):**
+   Assume \( Z \) can be decomposed via SVD as:
+   \[
+   Z = U_Z \Sigma_Z V_Z^T.
+   \]
+
+2. **Reshape Singular Values:**
+   Convert the diagonal matrix \( \Sigma_Z \) into a matrix \( M \) appropriate for Kronecker product decomposition. This involves arranging the singular values \( \sigma_i \) along different blocks or matrices that reflect the desired Kronecker product structure.
+
+   3. \textbf{Kronecker Product Formulation:}
+   Identify matrices \( A_i \) and \( B_i \) such that their Kronecker product corresponds to the components in \( U_Z \), \( M \), and \( V_Z^T \). Typically, \( A_i \) can be chosen as different columns or blocks of \( U_Z \), and similarly, \( B_i \) can be derived from \( V_Z \).
+
+   The key is to express each singular vector product term from SVD as a sum of Kronecker products:
+   \[
+   Z = \sum_{i=1}^r \sigma_i (u_i \otimes v_i),
+   \]
+   where \( u_i \) and \( v_i \) are vectors or blocks from \( U_Z \) and \( V_Z \), respectively, and \( r \) is the rank of \( Z \).
+
+
+
+
 
 \subsubsection{Pruning based Initialization}%
 \label{sub:Pruning based Initialization}
