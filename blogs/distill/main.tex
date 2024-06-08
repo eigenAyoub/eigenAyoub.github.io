@@ -5,7 +5,12 @@
 \usepackage{amsmath}
 \usepackage{verbatim}
 
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+
 % this is supposed to the `` of md.
+
 \newtcbox{\cls}{on line,boxrule=0pt,boxsep=0pt,colback=lightgray,top=1pt,bottom=1pt,left=1pt,right=1pt,arc=0pt,fontupper=\ttfamily}
 
 \title{Kronecker Products and GPT2}
@@ -182,16 +187,20 @@ which results in a block matrix of size \( (mp) \times (nq) \).
 \subsubsection{Van Loan Method}%
 \label{sub:The fuck is Van Loan}
 
-The Van Loan decomposition is a method based on the SVD that can be used to approximate a given matrix as an sum of \( k \) Kronecker products, optimizing the Frobenius norm of the approximation. Originated from Van Loan and Pitsianis's 1993 work on approximations with Kronecker products \cite{van1993approximation}. 
+The Van Loan decomposition is a method based on the SVD that can be used to approximate a given matrix as an sum of \( k \) Kronecker products, optimizing the Frobenius norm of the approximation. Originated from Van Loan and Pitsianis's 1993 work on approximations with Kronecker products \cite{van1993approximation}. The algorithm described below decomposes a given matrix \( A \), with dimensions \((..., m \cdot m_2, n \cdot n_2)\), into a sum of \( k \) Kronecker products, i.e., returns \( \{U_i\} \) and \( \{V_i\} \) such that \( A \approx \sum_{i=1}^k U_i \otimes V_i \).
 
-\textbf{Idea:} Given a matrix \( A \), with dimensions \((..., m \cdot m_2, n \cdot n_2)\), find  \(\{ U_i\}\) and \( \{V_i\} \), such that \( A \approx \sum_{i=1}^k U_i \otimes V_i \). The core steps of the algorithm are:
+\begin{algorithm}
+	\caption{Kronecker Product Decomposition}
+	\begin{algorithmic}[1]
+		\State \textbf{Input:} Matrix \( A \), integers \( m, m_2, n, n_2, k \)
+		\State \textbf{Output:} Matrices  \{U_i\} \) and \( \{V_i\} \) 
+		\State Rearrange \( A \) to form a new matrix for decomposition.
+		\State Perform low-rank SVD to approximate \( A \) by \( U S V^T \), where \( S \) contains the top \( k \) singular values.
+		\State Reshape and scale \( U \) and \( V \) matrices to match the desired Kronecker product forms.
+		\State Return \( U \) and \( V \) matrices scaled by the square root of the singular values.
+	\end{algorithmic}
+\end{algorithm}
 
-\begin{enumerate}
-    \item Rearrange \( A \) to form a new matrix for decomposition.
-    \item Perform a low-rank SVD to approximate \( A \) by \( U S V^T \) where \( S \) contains the top \( k \) singular values.
-    \item Reshape and scale \( U \) and \( V \) matrices to match the desired Kronecker product forms.
-	\item Returns \( U \) and \( V \) matrices scaled by the square root of the singular values
-\end{enumerate}
 
 The returned matrices, suitable for reconstructing \( A \) with minimized Frobenius error. The matrices \( U \) and \( V \) are of shape \( (..., k, m, n) \) for \( U \) and \( (..., k, m_2, n_2) \) for \( V \). A simple Python script to generate the U_s and V_s is as follows:
 

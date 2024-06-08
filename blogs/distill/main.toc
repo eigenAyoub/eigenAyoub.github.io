@@ -16,12 +16,12 @@
 \contentsline {subsection}{\numberline {4.1}Training setup}{9}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}Results}{10}{subsection.4.2}%
 \contentsline {subsection}{\numberline {4.3}The 81M class:}{10}{subsection.4.3}%
-\contentsline {subsection}{\numberline {4.4}The 95M class:}{10}{subsection.4.4}%
-\contentsline {subsection}{\numberline {4.5}Scale test}{10}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.4}The 95M class:}{11}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Scale test}{11}{subsection.4.5}%
 \contentsline {subsection}{\numberline {4.6}Multiple Kronecker factors, with scalers.}{11}{subsection.4.6}%
 \contentsline {subsection}{\numberline {4.7}Embeddings freezing:}{11}{subsection.4.7}%
-\contentsline {subsection}{\numberline {4.8}Aggressive learning rate.}{11}{subsection.4.8}%
-\contentsline {subsection}{\numberline {4.9}General trends:}{11}{subsection.4.9}%
+\contentsline {subsection}{\numberline {4.8}Aggressive learning rate.}{12}{subsection.4.8}%
+\contentsline {subsection}{\numberline {4.9}General trends:}{12}{subsection.4.9}%
 \contentsline {section}{\numberline {5}Discussion}{12}{section.5}%
 \contentsline {subsection}{\numberline {5.1}Parameter count:}{12}{subsection.5.1}%
 \contentsline {subsection}{\numberline {5.2}Only 3\% of data}{12}{subsection.5.2}%
