@@ -187,7 +187,7 @@ which results in a block matrix of size \( (mp) \times (nq) \).
 \subsubsection{Van Loan Method}%
 \label{sub:The fuck is Van Loan}
 
-The Van Loan decomposition is a method based on the SVD that can be used to approximate a given matrix as an sum of \( k \) Kronecker products, optimizing the Frobenius norm of the approximation. Originated from Van Loan and Pitsianis's 1993 work on approximations with Kronecker products \cite{van1993approximation}. The algorithm described below decomposes a given matrix \( A \), with dimensions \((..., m \cdot m_2, n \cdot n_2)\), into a sum of \( k \) Kronecker products, i.e., returns \( \{U_i\} \) and \( \{V_i\} \) such that \( A \approx \sum_{i=1}^k U_i \otimes V_i \).
+The Van Loan decomposition is a method based on the SVD that can be used to approximate a given matrix as a sum of \( k \) Kronecker products, optimizing the Frobenius norm of the approximation. Originated from Van Loan and Pitsianis's 1993 work on approximations with Kronecker products \cite{van1993approximation}. The algorithm described below decomposes a given matrix \( A \), with dimensions \((..., m \cdot m_2, n \cdot n_2)\), into a sum of \( k \) Kronecker products, i.e., returns \( \{U_i\} \) and \( \{V_i\} \) such that \( A \approx \sum_{i=1}^k U_i \otimes V_i \).
 
 \begin{algorithm}
 	\caption{Kronecker Product Decomposition}
@@ -221,9 +221,10 @@ def kronecker_decompose(A, m: int, n: int, *, k: int = 1, niter: int = 10):
     return u * scale, v * scale
 \end{verbatim}
 
-\subsubsection{KronZ2: Derivation of Van Loan Decomposition}
+\begin{comment}
+\textbf{some comments}
 
-To derive the Van Loan decomposition from SVD, consider a matrix \( Z \) that we want to express as a sum of Kronecker products. The steps are as follows:
+The steps:
 
 1. **Perform SVD on \( Z \):**
    Assume \( Z \) can be decomposed via SVD as:
@@ -242,6 +243,7 @@ To derive the Van Loan decomposition from SVD, consider a matrix \( Z \) that we
    Z = \sum_{i=1}^r \sigma_i (u_i \otimes v_i),
    \]
    where \( u_i \) and \( v_i \) are vectors or blocks from \( U_Z \) and \( V_Z \), respectively, and \( r \) is the rank of \( Z \).
+\end{comment}
 
 
 
