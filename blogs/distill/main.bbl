@@ -52,6 +52,10 @@ V.~Abronin, A.~Naumov, D.~Mazur, D.~Bystrov, K.~Tsarova, A.~Melnikov,
   improving tensor decomposition methods in neural networks via permutations,''
   {\em arXiv preprint arXiv:2401.16367}, 2024.
 
+\bibitem{Gokaslan2019OpenWeb}
+A.~Gokaslan and V.~Cohen, ``Openwebtext corpus.''
+  \url{http://Skylion007.github.io/OpenWebTextCorpus}, 2019.
+
 \bibitem{van1993approximation}
 C.~F. Van~Loan and N.~Pitsianis, {\em Approximation with Kronecker products}.
 \newblock Springer, 1993.
@@ -61,10 +65,6 @@ J.~Hoffmann, S.~Borgeaud, A.~Mensch, E.~Buchatskaya, T.~Cai, E.~Rutherford,
   D.~de~Las~Casas, L.~A. Hendricks, J.~Welbl, A.~Clark, {\em et~al.},
   ``Training compute-optimal large language models. arxiv,'' {\em arXiv
   preprint arXiv:2203.15556}, 2022.
-
-\bibitem{Gokaslan2019OpenWeb}
-A.~Gokaslan and V.~Cohen, ``Openwebtext corpus.''
-  \url{http://Skylion007.github.io/OpenWebTextCorpus}, 2019.
 
 \bibitem{merity2016pointer}
 S.~Merity, C.~Xiong, J.~Bradbury, and R.~Socher, ``Pointer sentinel mixture
