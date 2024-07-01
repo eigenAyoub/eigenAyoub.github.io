@@ -376,6 +376,8 @@ We refer to our models with the nomenclature \textbf{Krony-PT-XM\{-Y\}}, with $X
 \caption{Perplexity of Krony-PT against other Kronecker based models.}
 \end{table}
 
+\begin{comment}
+	
 \subsection{The 95M class:}%
 \label{sub:The 95M class:}
 
@@ -384,6 +386,7 @@ We refer to our models with the nomenclature \textbf{Krony-PT-XM\{-Y\}}, with $X
 How far can we push down the size? 
 
 Convergence starts to emerge starting from 80M models.   80M with single factors is higher than 80M with small dims and high factors.
+\end{comment}
 
 \subsection{Multiple Kronecker factors, with scalers.}%
 \label{sub:Multiple Kronecker factors, with scalers.}
@@ -417,16 +420,15 @@ To keep things at a comparable level, we train this class of 92.2M parameters, a
 
 \textbf{Conclusion:} Adding multiple factors do not help much, but adding scalers can during training improve model performance.
 
-\subsection{Embeddings freezing:}%
+\subsection{Embeddings freezing, and dynamic lr's:}%
 \label{sub:Embeddings freezing:}
 
 In this setting we test the impact of freezing on the model's performance. I should probb test on the 82M models. Code should be done today. We also noticed that the scalers in the case of 4 factors, -- no matter what the initialization is --, always do converge to around 4. Hence, we tried to to freeze them as well at 4. And see how the learning would react.
 
+We had best 
 
-\subsection{Aggressive learning rate.}%
 
-As opposed to Chinchilla recommendations, we noticed that having an aggressive learning rate helps convergence. (to be confirmed)
-
+\begin{comment}
 \subsection{General trends:}%
 
 Things to add here:
@@ -437,6 +439,7 @@ Things to add here:
 	\item Does pruning help? For training and for inference?
 	\item does re-plugging the matrix work? 
 \end{itemize}
+\end{comment}
 
 \section{Discussion}%
 \label{sec:Discussion}
