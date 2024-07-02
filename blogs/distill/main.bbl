@@ -33,6 +33,11 @@ M.~Reid, N.~Savinov, D.~Teplyashin, D.~Lepikhin, T.~Lillicrap, J.-b. Alayrac,
   1.5: Unlocking multimodal understanding across millions of tokens of
   context,'' {\em arXiv preprint arXiv:2403.05530}, 2024.
 
+\bibitem{wu2016compression}
+J.-N. Wu, ``Compression of fully-connected layer in neural network by kronecker
+  product,'' in {\em 2016 Eighth International Conference on Advanced
+  Computational Intelligence (ICACI)}, pp.~173--179, IEEE, 2016.
+
 \bibitem{tahaei2022kroneckerbert}
 M.~Tahaei, E.~Charlaix, V.~Nia, A.~Ghodsi, and M.~Rezagholizadeh,
   ``Kroneckerbert: Significant compression of pre-trained language models

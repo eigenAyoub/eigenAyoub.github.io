@@ -3,7 +3,7 @@
 \contentsline {section}{\numberline {3}Methodology}{4}{section.3}%
 \contentsline {subsection}{\numberline {3.1}Kronecker Decomposition}{4}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}The 95M model}{4}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Different decomposition schemes:}{4}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.3}Different decomposition schemes:}{5}{subsection.3.3}%
 \contentsline {subsection}{\numberline {3.4}Initialization}{6}{subsection.3.4}%
 \contentsline {subsubsection}{\numberline {3.4.1}Van Loan Decomposition}{7}{subsubsection.3.4.1}%
 \contentsline {subsubsection}{\numberline {3.4.2}Pruning based Initialization}{8}{subsubsection.3.4.2}%
