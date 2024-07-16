@@ -29,5 +29,4 @@ I'm also enrolled [@UniPassau](https://www.uni-passau.de/en/msc-compmaths).
 
 * **Gmail:** `ayoub.benayad.467`
 * [LinkedIn](https://www.linkedin.com/in/benayad/),
-[Twitter](https://www.twitter.com/benayad_) (new acc),
 [Instagram](https://www.instagram.com/curl.ayoub/).

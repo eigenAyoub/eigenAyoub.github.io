@@ -1,4 +1,75 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
+
+\bibitem{radford2019language}
+A.~Radford, J.~Wu, R.~Child, D.~Luan, D.~Amodei, I.~Sutskever, {\em et~al.},
+  ``Language models are unsupervised multitask learners,'' {\em OpenAI blog},
+  vol.~1, no.~8, p.~9, 2019.
+
+\bibitem{branwen2021scaling}
+G.~Branwen, ``The scaling hypothesis,'' 2021.
+
+\bibitem{vaswani2017attention}
+A.~Vaswani, N.~Shazeer, N.~Parmar, J.~Uszkoreit, L.~Jones, A.~N. Gomez,
+  {\L}.~Kaiser, and I.~Polosukhin, ``Attention is all you need,'' {\em Advances
+  in neural information processing systems}, vol.~30, 2017.
+
+\bibitem{achiam2023gpt}
+J.~Achiam, S.~Adler, S.~Agarwal, L.~Ahmad, I.~Akkaya, F.~L. Aleman, D.~Almeida,
+  J.~Altenschmidt, S.~Altman, S.~Anadkat, {\em et~al.}, ``Gpt-4 technical
+  report,'' {\em arXiv preprint arXiv:2303.08774}, 2023.
+
+\bibitem{claude3}
+Anthropic, ``The claude 3 model family: Opus, sonnet, haiku.''
+
+\bibitem{llama}
+Meta, ``Llama 3.''
+
+\bibitem{llama3}
+AI@Meta, ``Llama 3 model card,'' 2024.
+
+\bibitem{reid2024gemini}
+M.~Reid, N.~Savinov, D.~Teplyashin, D.~Lepikhin, T.~Lillicrap, J.-b. Alayrac,
+  R.~Soricut, A.~Lazaridou, O.~Firat, J.~Schrittwieser, {\em et~al.}, ``Gemini
+  1.5: Unlocking multimodal understanding across millions of tokens of
+  context,'' {\em arXiv preprint arXiv:2403.05530}, 2024.
+
+\bibitem{wu2016compression}
+J.-N. Wu, ``Compression of fully-connected layer in neural network by kronecker
+  product,'' in {\em 2016 Eighth International Conference on Advanced
+  Computational Intelligence (ICACI)}, pp.~173--179, IEEE, 2016.
+
+\bibitem{tahaei2022kroneckerbert}
+M.~Tahaei, E.~Charlaix, V.~Nia, A.~Ghodsi, and M.~Rezagholizadeh,
+  ``Kroneckerbert: Significant compression of pre-trained language models
+  through kronecker decomposition and knowledge distillation,'' in {\em
+  Proceedings of the 2022 Conference of the North American Chapter of the
+  Association for Computational Linguistics: Human Language Technologies},
+  pp.~2116--2127, 2022.
+
+\bibitem{edalati2021kroneckr}
+A.~Edalati, M.~Tahaei, A.~Rashid, V.~P. Nia, J.~J. Clark, and
+  M.~Rezagholizadeh, ``Kronecker decomposition for gpt compression,'' {\em
+  arXiv preprint arXiv:2110.08152}, 2021.
+
+\bibitem{abronin2024tqcompressor}
+V.~Abronin, A.~Naumov, D.~Mazur, D.~Bystrov, K.~Tsarova, A.~Melnikov,
+  I.~Oseledets, S.~Dolgov, R.~Brasher, and M.~Perelshtein, ``Tqcompressor:
+  improving tensor decomposition methods in neural networks via permutations,''
+  {\em arXiv preprint arXiv:2401.16367}, 2024.
+
+\bibitem{Gokaslan2019OpenWeb}
+A.~Gokaslan and V.~Cohen, ``Openwebtext corpus.''
+  \url{http://Skylion007.github.io/OpenWebTextCorpus}, 2019.
+
+\bibitem{van1993approximation}
+C.~F. Van~Loan and N.~Pitsianis, {\em Approximation with Kronecker products}.
+\newblock Springer, 1993.
+
+\bibitem{hoffmann2022training}
+J.~Hoffmann, S.~Borgeaud, A.~Mensch, E.~Buchatskaya, T.~Cai, E.~Rutherford,
+  D.~de~Las~Casas, L.~A. Hendricks, J.~Welbl, A.~Clark, {\em et~al.},
+  ``Training compute-optimal large language models. arxiv,'' {\em arXiv
+  preprint arXiv:2203.15556}, 2022.
 
 \bibitem{merity2016pointer}
 S.~Merity, C.~Xiong, J.~Bradbury, and R.~Socher, ``Pointer sentinel mixture
@@ -14,24 +85,5 @@ D.~Paperno, G.~Kruszewski, A.~Lazaridou, Q.~N. Pham, R.~Bernardi, S.~Pezzelle,
 V.~Sanh, L.~Debut, J.~Chaumond, and T.~Wolf, ``Distilbert, a distilled version
   of bert: smaller, faster, cheaper and lighter,'' in {\em NeurIPS EMC^2
   Workshop}, 2019.
-
-\bibitem{tahaei2022kroneckerbert}
-M.~Tahaei, E.~Charlaix, V.~Nia, A.~Ghodsi, and M.~Rezagholizadeh,
-  ``Kroneckerbert: Significant compression of pre-trained language models
-  through kronecker decomposition and knowledge distillation,'' in {\em
-  Proceedings of the 2022 Conference of the North American Chapter of the
-  Association for Computational Linguistics: Human Language Technologies},
-  pp.~2116--2127, 2022.
-
-\bibitem{abronin2024tqcompressor}
-V.~Abronin, A.~Naumov, D.~Mazur, D.~Bystrov, K.~Tsarova, A.~Melnikov,
-  I.~Oseledets, S.~Dolgov, R.~Brasher, and M.~Perelshtein, ``Tqcompressor:
-  improving tensor decomposition methods in neural networks via permutations,''
-  {\em arXiv preprint arXiv:2401.16367}, 2024.
-
-\bibitem{edalati2021kroneckr}
-A.~Edalati, M.~Tahaei, A.~Rashid, V.~P. Nia, J.~J. Clark, and
-  M.~Rezagholizadeh, ``Kronecker decomposition for gpt compression,'' {\em
-  arXiv preprint arXiv:2110.08152}, 2021.
 
 \end{thebibliography}

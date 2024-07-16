@@ -3,8 +3,43 @@
 \usepackage{hyperref}
 \usepackage{tcolorbox}
 \usepackage{amsmath}
+\usepackage{verbatim}
+
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codeblue}{rgb}{0.25,0.5,0.75}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{white},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codeblue},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
 
 % this is supposed to the `` of md.
+
 \newtcbox{\cls}{on line,boxrule=0pt,boxsep=0pt,colback=lightgray,top=1pt,bottom=1pt,left=1pt,right=1pt,arc=0pt,fontupper=\ttfamily}
 
 \title{Kronecker Products and GPT2}
@@ -15,27 +50,7 @@
 \maketitle
 
 \begin{abstract}
-
-What do we do differently: \textbf{We} have empirical evidence not to use distillation, as experiments show better results with just Vanilla supervised training. \textbf{We} don't compress the attention matrices matrices, and focus mainly on the MLPs (why?, see below). \textbf{We} try different compression ratios and see how far we can push down the size. \textbf{We} add multiple Kronecker Factors. \textbf{Finally}, we introduce a new (and efficient, as it doesn't require any extra compute) initialization trick based on pruning.
-
-\begin{center}
-\textbf{Some false narratives of the other papers}
-\begin{itemize}
-	\item \textbf{Parameter count}: It appears like the competitor paper do not count the output matrix, and I quote ``Note that number of parameters of the models are
-reported excluding the output embedding layer in language modelling which is not compressed, is
-equal to row Parameters''. If this is true, then their model would technically be a 120M. The reason why we (and GPT2 paper) don't count the output matrix is because it is identical to the embedding matrix, this known as weight tying or weight sharing. Which does not seem the case with the other papers (I have contacted the other paper for clarifications through github).
-
-	\item  ``\textbf{We only use 3\% of the data}": both papers claim that they only used 3\% of the training data to train their models. We argue that in this set up, limiting your training data to only a fraction  does not imply a better compression/factorization method, for the simple and following reasons:
-		\begin{enumerate}
-			\item They inherit almost half the weights from the old GPT2 checkpoint that was trained for numerous epochs, and has seen the whole data. 
-			\item They use Van Loan method, hence, even, when they don't match the original checkpoint, VL is still a smart init, some knowledge is definitely passed through the SVD. 
-			\item You literally use the output matrix of a pre-trained GPT2.
-		\end{enumerate}
-\end{itemize}
-
-Hence, we don't know ``how much knowledge" has been passed through the already trained parameters. A fair comparison would be to initialize \textbf{all the parameters} of the new compressed model with random values, and not rely on any of the other pre-trained ones. Which is clearly not the case here.
-
-
+	We introduce Krony-PT, a compression technique of GPT2 \cite{radford2019language} based on Kronecker Products. We specifically target the MLP layers of each transformer layer, and systematically compress the feed forward layer matrices to various degrees. We use optimal Van Loan decompositions to initialize the new factors, and also introduce a new pruning-based initialization trick. Our method compresses the original GPT2 124M parameters to various smaller models, 67M being the smallest, and 95M being the largest compressed model. Our 81M model variant outperforms distilgpt2 on next-token prediction on all standard language modeling datasets, and shows competitive scores or performs on par with other Kronecker Products based compressed models of GPT2 that are significantly higher in size. 
 \end{abstract}
 
 \newpage
@@ -43,135 +58,45 @@ Hence, we don't know ``how much knowledge" has been passed through the already t
 \tableofcontents
 \newpage
 
-\section{Resutls:}%
-\label{sec:Resutls}
-
-Early results on wikitext103, wikitext2 \cite{merity2016pointer} and Lambada \cite{paperno2016lambada}. \textbf{KronyPT} is our model, and the suffixes $1350$ and $3950$ refer to different checkpoints. Both models are already outperforming distilGPT2 (\cite{sanh2019distilbert}) on the 3 datasets. And the $3950$ checkpoint is outperforming \textbf{KnGPT2} (\cite{tahaei2022kroneckerbert}) on Lambada, while slightly still behind \textbf{TQCompressedGPT2}  \cite{abronin2024tqcompressor}. We measure perplexity (duh) using the Hugging Face interface that was used by the other papers.
-
-\begin{table}[h]
-\centering
-\begin{tabular}{|c|c|c|c|c|}
-\hline
- & & \multicolumn{3}{c|}{Datasets} \\ \hline
-\# Params &  Model            & wikitext-103 & wikitext-2 & Lambada \\ \hline
-124M      & GPT2              & 29.16        & 24.67      & 45.28      \\ \hline
-82M       & DistilGPT2        & 44.53        & 36.48      & 76.00      \\ \hline
-81M       & \textbf{KronyPT-81M-1350}  & \textbf{41.98}   & \textbf{34.99}      & -          \\ \hline
-81M       & \textbf{KronyPT-81M-3950}  & -            	  & -          & \textbf{64.92}      \\ \hline
-\end{tabular}
-\caption{Perplexity results of Krony-PT and DistilGPT}
-\end{table}
-
-
-\begin{table}[h]
-\centering
-\begin{tabular}{|c|c|c|c|c|}
-\hline
- & & \multicolumn{3}{c|}{Datasets} \\ \hline
-\# Params &  Model            & wikitext-103 & wikitext-2 & Lambada \\ \hline
-81M       & \textbf{KronyPT-81M-1350}  & 41.98        & 34.99      & -          \\ \hline
-81M       & \textbf{KronyPT-81M-3950}  & -            & -          & 64.92      \\ \hline
-119M       & TQCompressedGPT2  & 40.28        & 32.25      & 64.72      \\ \hline
-119M       & KnGPT-2 (Huawei)  & 40.97        & 32.81      & 67.62      \\ \hline
-\end{tabular}
-\caption{Perplexity of Krony-PT against other Kronecker based models.}
-\end{table}
-
-
 \section{Introduction}
 \label{sec:Introduction}
 
-% add the latest paper
+Given their rapid and unprecedented development, Large Language Models (LLMs) are revolutionizing many industries and changing the way we perceive and interact with machines. Their strong ability to understand, generate, and perhaps even ``generalize" in numerous domains including automated text generation, language translation, and notably coding, has led many to believe that scaling up models is ``all you need" to achieve Artificial General Intelligence (AGI) (i.e., The Scaling Hypothesis \cite{branwen2021scaling}). Despite their advanced features, the core of LLMs still fundamentally relies on the initial Transformer architecture \cite{vaswani2017attention}. And specifically the encoder only variants that was first introduced with GPT2 \cite{radford2019language}. 
 
-A lot of work has been done on the compression of LLMs using factorization methods, including Kronecker Products. Most notably for encoder based based, and rarely applied to decoder based methods (\cite{tahaei2022kroneckerbert}, \cite{edalati2021kroneckr}, \cite{abronin2024tqcompressor}).
+Although GPT-4 \cite{achiam2023gpt} has fairly led the race in the past year, a lot of the big actors of the industry seem to have recently caught up (e.g., Anthropic \cite{claude3}, Meta \cite{llama}, \cite{llama3} , and Google \cite{reid2024gemini}), as demonstrated by the independent and open LMSys Leaderboard \footnote{\href{https://chat.lmsys.org/?leaderboard}{https://chat.lmsys.org/?leaderboard}}. Subsequently, many believe that the two main ingredients are \textbf{compute} and \textbf{data}. And while this seems affordable for big corporations, it poses significant challenges for individuals and smaller organizations to reproduce these frontier models. Hence, advancing work on the compression and factorization methods of LLMs is essential to make these powerful tools more accessible and sustainable for broader use, and a necessity for deployment on edge-devices.
 
-
-We study how far we can push the compression ratio, and record then impact of down-scaling on the quality of the model. We also investigate adding multiple Kronecker factors.
-
-\begin{comment}
-To the best of our knowledge, not many have focused on Freezing the initial pre-trained weights, i.e., most methods drop newly factorized matrices into the already pre-trained parameters, without carefully blending, nor assessing/studying how much the model is relying on already trained weights.
-
-In this work:
-
+\textbf{Our contributions} could be summarized as follows:
 \begin{itemize}
-	\item   We investigate the impact of freezing on the quality of learning,  and also demonstrate the capacity for the network to just not rely on the new weights, and just use the already pre-trained one. 
-	\item We also introduce a new distillation / training mechanism to ease the entry of these factorized weights into the old architecture. 
-	\item We also show that freezing the other weights, helps the new introduced get more activation.
+    \item We use weight tying, i.e., the embedding and softmax matrices are identical. This makes our model, the only ``effective" 81M model compared to (X,Y). Which significantly reduces the model size by 38M compared to other methods (see appendix for details regarding parameter count).
+    \item We have a systematic compression scheme, i.e., compress all layers the same way. We don't see any reasons to why we would only compress odd layers (besides to "force" the number of parameters to be under certain threshold).
+    \item We try different compression schemes (67M, 81M, and 95M)
+		\begin{itemize}
+			\item We propose a new simple initialization for the 95M model.
+			\item We use multiple factors for the VL based units.
+			\item We introduce scalers to each factor, which (apparently) helps with generalizing (why? the performance on OWT seems to be ok, but the ppl is  better on other benchmarks, e.g., wiki and lamabada)
+
+		\end{itemize}
+    \item We don't use distillation (empirical evidence shows no benefits compared to only Vanilla supervised learning).
 \end{itemize}
 
-In this work, we demonstrate that without freezing, the network relies more on the pre-trained weights (to a varying degree, depending on how the new proposed weights are initialized). And with freezing, newly introduced weights learn faster.
+\section{Related work}%
+\label{sec:Related work}
 
-Usually the newly introduced weights are brute forced into training, and in many cases not, (knowing how many LLMs are under-trained + many residual connections), the pre-trained carry the weights. We also compare the gradient activations in both cases (when we free and when don't).
+There are three major lines of research in the compression of LLMs, \textbf{Distillation}, \textbf{Quantization}, and \textbf{Factorization}. With the latter being our focus, Matrix Factorization providing a straightforward framework to compress models. Generally speaking, Matrix Factorization techniques aim to combine in certain way (e.g., a product), typically lower rank matrices to reconstruct an original (typically bigger) matrix.  Techniques ranging from X, to Y, to Z, and rarely using Kronecker Products, which was firs used a framework for approximating the weight matrices in fully-connected layers by sum of Kronecker products \cite{wu2016compression}. And then in LLMs,  most notably for encoder based based (e.g., BERT \cite{tahaei2022kroneckerbert}), and rarely applied to decoder based methods like GPT2 (\cite{edalati2021kroneckr}, \cite{abronin2024tqcompressor}).
 
-In this work we demonstrate the effectiveness of freezing, and of slow integration of weights, either through training or distillation.
-
-
-Using Van Loan has no remarkable benefit improvement over $50\%$ pruning.
-
-\subsection{Learning rate, batch size, and gradient accumulation}%
-\label{sub:lr}
-
-In this section, we discuss the impact of the \textbf{learning rate}, \textbf{batch size} and \textbf{gradient accumulation} on the training trajectory,  namely on the first $10000$ iterations of training.
-
-
-> Note: Higher
-
-%%Insert figure here.
-
-Based on these results, we follow the  
-\begin{itemize}
-	\item Learning rate: cosine schedule, with a warm-up of 500 tiers.
-	\item Gradient accumulation: 3 across 4 nodes (a good balance between 2 and 5)
-	\item Batch size: 12, better stability. 
-\end{itemize}
-
-
-This configuration allows a balanced trade-off between speed of updates and stochasticity of the loss with each iterations. And it also allows multiple experiments to be run simultaneously on a node of 4 A100s. Reframe this: you lose a bit of performance, but you gain a lot of memory to try out other approach at the same time, sounds silly, but this is important when you're GPU poor.
-
-So, with this config, and with only 100k steps, avereging approx 0.5% data. 
-
-What can we do better? distillation?
-
-\subsection{Distillation}%
-\label{sub:Distillation}
-
-In this section, we inherit the checkpoint from the section before, and use GPT2 as a teacher network for a classic Inter Layer distillation. We try two methods. 
-
-Result: It is not working. Just supervise it.
-
-\subsection{A subsection Freezing maybe?}%
-\label{sub:lr}
-
-We believe that not freezing the original pre-trained weight, is eventually detrimental to overall training, and the largest the model is, the more the network relies on already pre-trained parameters. This is tracked using gradient checking. When we freeze the weights. To validate our hypothesis, we track gradient activation (also known as the attention matrix, not to be confused with attention matrix of transformer models, and notice that, when we freeze then fine-tune, we notice better gradient activation.)
-
-	grad.sum for :
-		1. resuming training for all params for 3k steps.
-		2. freezing for 2k, train all for 1k
-		3. 1 by 1 training with freezing (at each step, direct flow the flow to origin gpt2) for 2k, the tran all for 1k
-
-	same logic applies in 
-
-We test some interesting properties of distillation. We first position ourselves in a small setup, and then study how these observations scale to larger models. 
-
-
-
-\end{comment}
+We decided not to compress attention layers, and rather compress all feed-forward layers in the same way, without skipping any layers. This decision have been backed empirically, but also with research indicating how important? And dense are the attention layers of each block (insert papers here)
 
 
 
 
-\section{Training Set-up}%
+
+
+
+
+\section{Methodology}%
 \label{sec:Training setups}
 
-Add here the basic set-up that I used to train the latest models, basically Chinchilla recommendations. (for later)
-
-Some key differences:
-\begin{itemize}
-	\item \textbf{Batch size:} We find better and more stable loss curve with higher batch sizes, a typical step would need 6 batches (gradient acc.) of 12 samples. 
-	\item \textbf{Learning rate:} We found better, and more stable results when using a constant learning rate of $6e-4$. (check this again), The other set-up is to use a cosine scheduler, peaking at $6e04$ after a warm-up of 500 steps?.  Learning rate
-\end{itemize}
-
-\section{Kronecker Decomposition}%
+\subsection{Kronecker Decomposition}%
 \label{sub:Kronecker Decomposition}
 
 In this section, we study different Kronecker decomposition setups, and the percentage of compression it would  lead to. So far we only decompose the weights \cls{c\_fc.weight} and \cls{c\_proj.weight} (each has $2.3M$ in the original GPT2-small architecture.). Each transformer layer (there are $12$ in total) has two of these weights. They count to $56.6M$ in total ($45\%$ of GPT2 $124M$). Hence any significant reduction to these matrices would lead to a remarkable compression ratio of the whole model. We choose not to compress the other weights, namely, attention weights and embedding matrix for various reasons that we will expose later on. 
@@ -227,7 +152,6 @@ GPT2	&  (3072, 768)      &   2359297    & 124,439,832 \\ \hline
 \end{table}
 
 
-
 \begin{table}[htb!]
 \centering
 \begin{tabular}{|c|c|c|c|c|c|}
@@ -241,36 +165,11 @@ MF2		&  (1024, 256)      &   262153     & 74M         & 80M   & 86M    \\ \hline
 
 
 \newpage
-\section{How small can we go?}%
-\label{sub:get-down}
 
-In this section, we study the impact of down-scaling on the compressed models, we train 4 different architectures, with variant dimensions:
-
-\begin{itemize}
-	\item 67M: diverges // try with higher batch size (the least we can get)
-	\item 81M: Super.
-	\item 81M: with a Variant scheme (67M with multiple factors / 1025-256 with  two factors)
-	\item 95M: duh duh duh. (the highest we can get)
-\end{itemize}
-
-Keep in mind:
-\begin{itemize}
-	\item You can probably stabilize training using various tricks.  It's just an endless loop. We are not going to play the What-IF game. One single config, that's it.
-	\item One could try to have a mixed strategy:
-		\begin{itemize}
-			\item  higher levels of compression in the early layers.
-			\item  higher levels of compression in the late layers.
-			\item  Every odd layer 
-			\item  In the middle 
-		\end{itemize}
-		\end{itemize}
-\end{itemize}	
-
-
-\section{Initialization}%
+\subsection{Initialization}%
 \label{sub:Initialization}
 
-Since we inherit a GPT2 checkpoint that was trained for multiple epochs on the Open Web Text (OWT) (cite here), we want to initiliaze our weights in a way that leverages the old pre-training as much as possible. This is of course obvious for the parameters that are common between \textbf{GPT2} and \textbf{KronyPT} (i.e., we match).  But more tricky for the weights that are decomposed into Kronecker Factors. In our work, we try two different approaches, Van Loan decomposition (cite here), and a Pruning based method exclusively for the 95M model.
+Since we inherit a GPT2 checkpoint that was trained for multiple epochs on the Open Web Text (OWT) \cite{Gokaslan2019OpenWeb}, we want to initiliaze our weights in a way that leverages the old pre-training as much as possible. This is of course obvious for the parameters that are common between \textbf{GPT2} and \textbf{KronyPT} (i.e., we match).  But more tricky for the weights that are decomposed into Kronecker Factors. In our work, we try two different approaches, Van Loan decomposition \cite{van1993approximation}, and a Pruning based method exclusively for the 95M model.
 
 \begin{table}[h]
 \centering
@@ -284,12 +183,102 @@ Since we inherit a GPT2 checkpoint that was trained for multiple epochs on the O
 \end{tabular}
 \caption{Comparison of different models on various datasets.}
 \end{table}
-\subsection{Van Loan Method}%
-\label{sub:The fuck is Van Loan}
 
-XX (maybe not even write this section)
+\subsubsection{Van Loan Decomposition}
 
-\subsection{Pruning based Initialization}%
+
+\begin{comment}
+The Van Loan (VL) decomposition provides a framework to represnt a matrix \( Z \) as a sum of Kronecker products of smaller matrices. The general form of the decomposition is given by:
+\begin{equation}
+    Z = \sum_{i=1}^k A_i \otimes B_i,
+\end{equation}
+where \( A_i \) and \( B_i \) are matrices of appropriate dimensions, and \( \otimes \) denotes the Kronecker product. 
+
+
+%The challenge lies in determining the matrices \( A_i \) and \( B_i \) such that the sum of their Kronecker products faithfully reconstructs the matrix \( Z \).
+\paragraph{Kronecker Product}
+The Kronecker product, central to this decomposition, is defined for two matrices \( A \) of size \( m \times n \) and \( B \) of size \( p \times q \) as:
+\begin{equation}
+    A \otimes B = 
+    \begin{pmatrix}
+    a_{11}B & \cdots & a_{1n}B \\
+    \vdots & \ddots & \vdots \\
+    a_{m1}B & \cdots & a_{mn}B
+    \end{pmatrix},
+\end{equation}
+which results in a block matrix of size \( (mp) \times (nq) \).
+\end{comment}
+
+The Van Loan decomposition is a method based on the SVD, and used to approximate a given matrix as a sum of \( k \) Kronecker products, optimizing the Frobenius norm of the approximation ($\arg\min \left\| A - \sum_{}^{k} U_i \otimes V_i \right\|_F$). Originated from Van Loan and Pitsianis's 1993 work on approximations with Kronecker products \cite{van1993approximation}. The algorithm described below decomposes a given matrix \( A \), with dimensions \((..., m \cdot m_2, n \cdot n_2)\), into a sum of \( k \) Kronecker products, i.e., returns \( \{U_i\} \) and \( \{V_i\} \) such that \( A \approx \sum_{i=1}^k U_i \otimes V_i \).
+
+
+
+
+
+
+\begin{algorithm}
+	\caption{Kronecker Product Decomposition}
+	\begin{algorithmic}[1]
+		\State \textbf{Input:} Matrix \( A \), integers \( m, m_2, n, n_2, k \)
+		\State \textbf{Output:} Matrices  \{U_i\} \) and \( \{V_i\} \) 
+		\State Rearrange \( A \) to form a new matrix for decomposition.
+		\State Perform low-rank SVD to approximate \( A \) by \( U S V^T \), where \( S \) contains the top \( k \) singular values.
+		\State Reshape and scale \( U \) and \( V \) matrices to match the desired Kronecker product forms.
+		\State Return \( U \) and \( V \) matrices scaled by the square root of the singular values.
+	\end{algorithmic}
+\end{algorithm}
+
+
+The returned matrices, suitable for reconstructing \( A \) with minimized Frobenius error. The matrices \( U \) and \( V \) are of shape \( (..., k, m, n) \) for \( U \) and \( (..., k, m_2, n_2) \) for \( V \). A simple Python script to generate the $\{U_i,V_i\}$ is as follows:
+
+
+
+%\begin{lstlisting}[language=Python, caption=Example Python Code]
+\begin{lstlisting}[language=Python]
+def kronecker_decompose(A, m: int, n: int, *, k: int = 1, niter: int = 10):
+
+    m2, n2 = A.shape[-2] // m, A.shape[-1] // n
+	
+    A = rearrange(A, "... (m m2) (n n2) -> ... (m n) (m2 n2)", m=m, m2=m2, n=n, n2=n2)
+
+    u, s, v = torch.svd_lowrank(A, q=k, niter=niter)
+
+    u = rearrange(u, "... (m n) k -> ... k m n", m=m, n=n, k=k)
+    v = rearrange(v, "... (m2 n2) k -> ... k m2 n2", m2=m2, n2=n2, k=k)
+
+    scale = s[..., None, None].sqrt()
+    return u * scale, v * scale
+\end{lstlisting}
+
+\begin{comment}
+\textbf{some comments}
+
+The steps:
+
+1. **Perform SVD on \( Z \):**
+   Assume \( Z \) can be decomposed via SVD as:
+   \[
+   Z = U_Z \Sigma_Z V_Z^T.
+   \]
+
+2. **Reshape Singular Values:**
+   Convert the diagonal matrix \( \Sigma_Z \) into a matrix \( M \) appropriate for Kronecker product decomposition. This involves arranging the singular values \( \sigma_i \) along different blocks or matrices that reflect the desired Kronecker product structure.
+
+   3. \textbf{Kronecker Product Formulation:}
+   Identify matrices \( A_i \) and \( B_i \) such that their Kronecker product corresponds to the components in \( U_Z \), \( M \), and \( V_Z^T \). Typically, \( A_i \) can be chosen as different columns or blocks of \( U_Z \), and similarly, \( B_i \) can be derived from \( V_Z \).
+
+   The key is to express each singular vector product term from SVD as a sum of Kronecker products:
+   \[
+   Z = \sum_{i=1}^r \sigma_i (u_i \otimes v_i),
+   \]
+   where \( u_i \) and \( v_i \) are vectors or blocks from \( U_Z \) and \( V_Z \), respectively, and \( r \) is the rank of \( Z \).
+\end{comment}
+
+
+
+
+
+\subsubsection{Pruning based Initialization}%
 \label{sub:Pruning based Initialization}
 
 
@@ -335,36 +324,148 @@ a_{61} & a_{62} & a_{63} & a_{64} & a_{65} \\
 
 \]
 
+\section{Experiements}%
+\label{sub:Experiements}
+
+\subsection{Training setup}%
+\label{sub:Setup}
+
+For pre-training, we follow general industry standards, namely of Chinchilla \cite{hoffmann2022training}. We noticed more stable loss curves with higher \textbf{batch sizes}, typically $128$ batch size (attained with a gradient accumulation of $4$, and each forward pass seeing a batch of $32$), and constant \textbf{learning rate} of $6 \times 10^{-5}$ (better than a cosine scheduler with a warm-up). After pre-training on approximately one epoch, we pick the best checkpoint and train further on $\approx$ 500k tokens per step (as suggested in the literature) which amounts in our set up (sequence length of $1024$) to a batch size of $512$. All experiments have been conducted using a single A100 80 GB, for one epoch of on Open Web Text \cite{Gokaslan2019OpenWeb}, an open source reproduction of OpenAI's WebText dataset.
 
 
+We usually train every model for one epoch, and then``fine-tune" aggressively with very large batch size (approx 500k tokens per iteration) for approximetly $10\%$ of data. We had best success with this strategy.
 
 
+\subsection{Results}%
+\label{sub:results}
 
+We refer to our models with the nomenclature \textbf{Krony-PT-XM\{-Y\}}, with $X$ representing the number of the parameters, and optionaly $Y$ referring to separate checkpoints of the same model class. We namely focus on 2 class models, the  \textbf{Krony-PT-81M} and \textbf{Krony-PT-95M}. We evaluate our models next-token prediction capabilities on 3 datasets, wikitext103, wikitext2 \cite{merity2016pointer} and Lambada \cite{paperno2016lambada}. 
+
+\subsection{The 81M class:}%
+\label{sub:The 81M class:}
+
+\textbf{Krony-PT-81M} is our model class of 81M parameters, and the suffixes $1350$ and $3950$ refer to different checkpoints. Both models clearly outperform distilGPT2 (\cite{sanh2019distilbert}) on the 3 datasets, with a noticeable better perplexity on Lambada \cite{paperno2016lambada}.
+
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+ & & \multicolumn{3}{c|}{Datasets} \\ \hline
+\# Params &  Model            & wikitext-103 & wikitext-2 & Lambada \\ \hline
+124M      & GPT2              & 29.16        & 24.67      & 45.28      \\ \hline
+82M       & DistilGPT2        & 44.53        & 36.48      & 76.00      \\ \hline
+81M       & \textbf{KronyPT-81M-1350}  & \textbf{41.98}   & \textbf{34.99}      & -          \\ \hline
+81M       & \textbf{KronyPT-81M-3950}  & -            	  & -          & \textbf{64.92}      \\ \hline
+\end{tabular}
+\caption{Perplexity results of Krony-PT and DistilGPT}
+\end{table}
+
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+ & & \multicolumn{3}{c|}{Datasets} \\ \hline
+\# Params &  Model            & wikitext-103 & wikitext-2 & Lambada \\ \hline
+81M       & \textbf{KronyPT-81M-1350}  & 41.98        & 34.99      & -          \\ \hline
+81M       & \textbf{KronyPT-81M-3950}  & -            & -          & 64.92      \\ \hline
+119M       & TQCompressedGPT2  & 40.28        & 32.25      & 64.72      \\ \hline
+119M       & KnGPT-2   & 40.97        & 32.81      & 67.62      \\ \hline
+\end{tabular}
+\caption{Perplexity of Krony-PT against other Kronecker based models.}
+\end{table}
 
 \begin{comment}
 	
-\subsection{Questions}%
-\label{sub:Questions}
+\subsection{The 95M class:}%
+\label{sub:The 95M class:}
 
+\subsection{Scale test}%
+\label{sub:Scale test}
+How far can we push down the size? 
+
+Convergence starts to emerge starting from 80M models.   80M with single factors is higher than 80M with small dims and high factors.
+\end{comment}
+
+\subsection{Multiple Kronecker factors, with scalers.}%
+\label{sub:Multiple Kronecker factors, with scalers.}
+
+In this section, we study the effect of adding multiple Kronecker Factors, and additionally adding scalers. In this setting, we compare 3 models:
+
+\textbf{Setting number 1} $\rightarrow$ 96M class (i.e., the biggest model class with one factor)
+
+\textbf{Setting number 2} $\rightarrow W = \sum_{n=1}^{r} A_i \otimes B_i $ 
+
+\textbf{Setting number 3} $\rightarrow W  = \sum_{n=1}^{r} s_i (A_i \otimes B_i)$
+
+To keep things at a comparable level, we train this class of 92.2M parameters, attained with $4$ factors of size $(256, 1024)$. 
+
+
+\textbf{Note:} Adding scalers barely adds any complexity to the parameter count, for the setting number 3, we add exactly $96$ parameters, depicted as follows: $96 = (\underbrace{4}_{\text{number of factors}} \times \underbrace{2}_{\text{MLP matrices per layer}}) \times \underbrace{12}_{\text{number of layers}}$. Moreover, it doesn't add any additional latency to inference compared to only using multiple factors (without scalers), as we can multiply the scaler $s_i$ with the first Kronecker factor $A_i$ first and then compute the Kronecker product with $B_i$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+ & & \multicolumn{3}{c|}{Datasets} \\ \hline
+\# Params &  Model            & wikitext-103 & wikitext-2 & Lambada \\ \hline
+96M       & \textbf{KronyPT 96M Parameters}  & 41.80        & 35.50      & 61.34         \\ \hline
+92.2M     & \textbf{4 factors without scalers} & -            & -          &       \\ \hline
+92.2M     & \textbf{4 factors with scalers}  &  \textbf{X}   & \textbf{X}      & \textbf{X} \\ \hline
+%92.2M     & \textbf{4 factors with scalers}  &  \textbf{38.15}   & \textbf{33.08}      & \textbf{61.04} \\ \hline
+\end{tabular}
+\caption{Effect of adding scalers to multiple Kroneckers}
+
+\end{table}
+
+\textbf{Conclusion:} Adding multiple factors do not help much, but adding scalers can during training improve model performance.
+
+\subsection{Embeddings freezing, and dynamic lr's:}%
+\label{sub:Embeddings freezing:}
+
+In this setting we test the impact of freezing on the model's performance. I should probb test on the 82M models. Code should be done today. We also noticed that the scalers in the case of 4 factors, -- no matter what the initialization is --, always do converge to around 4. Hence, we tried to to freeze them as well at 4. And see how the learning would react.
+
+We had best 
+
+
+\begin{comment}
+\subsection{General trends:}%
+
+Things to add here:
 
 \begin{itemize}
-	\item When we plug new KP matrices to the pre-trained model, is it useful to freeze the other weights that are already pre-trained? Or using different learning rates schemes maybe?
-
-	\item When don't don't freeze the weights. Does the network rely on other pre-trained methods?
-	\begin{itemize}
-		\item **The idea that I'm challenging here**: A lot of work on NNs compression using factorized methods,
-			    claim that the network only need to be (post-)trained on small % of the original training steps/data.                                                                   
-		\item But, what the fail to mention or elaborate on at least, is that not the weights matrices of the network are decomposed.                                                 
-		\item And with all the residual connection that are present in most attention networks,                                                                                       
-			    one could suspect, that maybe the weights that were not decomposed are taking over...                                                                                   
-		\item A good remedy for this is to freeze the original weights during the post-training, and only allow the new dropped in (factorized matrices) to be updated with backprop. 
-			   
-	\end{itemize}
-	\item This strategy could also be implemented in distillation. We refer to this method as **forced distillation.**
-	\item When we freeze, we investigate how useful is it to distill matrices one by one, rather than drop in the matrices all at once. And also investigate if the order of dropping has any significance, bottom up or top bottom...
-
+	\item Models do not get better at Wiki, but do improve on Lambada.
+	\item Distillation is not helpful 
+	\item Does pruning help? For training and for inference?
+	\item does re-plugging the matrix work? 
 \end{itemize}
 \end{comment}
+
+\section{Discussion}%
+\label{sec:Discussion}
+
+We clarify in this section some design choices of the other papers:
+
+\subsection{Parameter count:}%
+\label{sub:Parameter count:}
+
+The other papers (\cite{tahaei2022kroneckerbert}, \cite{abronin2024tqcompressor}), count the number of parameters differently than how our method and DistilGPT2 do, which makes the comparison not tit for tat. The difference is that they do not include the output matrix in the parameter count, which is not of a negligible size (approximately 40M), especially when initialized using pre-trained GPT2 weights. Quoting from KnGPT2 \cite{tahaei2022kroneckerbert}: ``Note that number of parameters of the models are reported excluding the output embedding layer in language modelling which is not compressed, is equal to row Parameters''. TQCompressor \cite{abronin2024tqcompressor} follow their lead as well, which was clarified on a GitHub issue \footnote{\href{https://github.com/terra-quantum-public/TQCompressedGPT2/issues/1}{Link to GitHub issue: https://github.com/terra-quantum-public/TQCompressedGPT2/issues/1}}.
+This difference in counting, makes their 81M models, a 120M in reality. The reason why we (and GPT2 paper) don't count the output matrix is because it is identical to the embedding matrix, this known as weight tying or weight sharing. Which does not seem the case with the other papers (I have contacted the other paper for clarifications through github).
+
+\subsection{Only 3\% of data}%
+\label{sub:Only 3\% of data}
+
+Both papers claim that they only used 3\% of the training data to train their models. We argue that in this set up, limiting your training data to only a fraction  does not imply a better compression/factorization method, for (the simple and) following reasons:
+
+\begin{enumerate}
+	\item They inherit almost half the weights from the old GPT2 checkpoint that was trained for numerous epochs, and has seen the whole data. 
+	\item They use Van Loan (VL) method to initialize the Kronecker products, hence, even, when they don't match the original checkpoint, VL is not a random initialization, some knowledge is definitely passed through the SVD. 
+	\item The use the same output matrix as GPT2, without weight trying (one can be fairly sure that this matrix ``distills" all knowledge that was learned). 
+\end{enumerate}
+
+Hence, we can't quantify exactly ``how much knowledge" has been passed through the already trained parameters. A fair comparison would be to initialize \textbf{all the parameters} of the new compressed model with random values, and not rely on any of the other pre-trained ones. Which is clearly not the case here.
+
 
 \newpage
 \bibliography{bib}

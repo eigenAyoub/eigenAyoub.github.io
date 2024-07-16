@@ -16,45 +16,92 @@
 \gdef\HyperFirstAtBeginDocument#1{#1}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
-\citation{merity2016pointer}
-\citation{paperno2016lambada}
-\citation{sanh2019distilbert}
-\citation{tahaei2022kroneckerbert}
-\citation{abronin2024tqcompressor}
+\citation{radford2019language}
+\citation{branwen2021scaling}
+\citation{vaswani2017attention}
+\citation{radford2019language}
+\citation{achiam2023gpt}
+\citation{claude3}
+\citation{llama}
+\citation{llama3}
+\citation{reid2024gemini}
+\citation{wu2016compression}
 \citation{tahaei2022kroneckerbert}
 \citation{edalati2021kroneckr}
 \citation{abronin2024tqcompressor}
-\@writefile{toc}{\contentsline {section}{\numberline {1}Resutls:}{3}{section.1}\protected@file@percent }
-\newlabel{sec:Resutls}{{1}{3}{Resutls:}{section.1}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Perplexity results of Krony-PT and DistilGPT}}{3}{table.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Perplexity of Krony-PT against other Kronecker based models.}}{3}{table.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2}Introduction}{3}{section.2}\protected@file@percent }
-\newlabel{sec:Introduction}{{2}{3}{Introduction}{section.2}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Training Set-up}{3}{section.3}\protected@file@percent }
-\newlabel{sec:Training setups}{{3}{3}{Training Set-up}{section.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Kronecker Decomposition}{4}{section.4}\protected@file@percent }
-\newlabel{sub:Kronecker Decomposition}{{4}{4}{Kronecker Decomposition}{section.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}The 95M model}{4}{subsection.4.1}\protected@file@percent }
-\newlabel{sub:The 95M model}{{4.1}{4}{The 95M model}{subsection.4.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Different decomposition schemes:}{4}{subsection.4.2}\protected@file@percent }
-\newlabel{sec:Different decomposition schemes}{{4.2}{4}{Different decomposition schemes:}{subsection.4.2}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Different compression schemes}}{5}{table.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Adding multiple Kronecker Factors}}{5}{table.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}How small can we go?}{6}{section.5}\protected@file@percent }
-\newlabel{sub:get-down}{{5}{6}{How small can we go?}{section.5}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Initialization}{6}{section.6}\protected@file@percent }
-\newlabel{sub:Initialization}{{6}{6}{Initialization}{section.6}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Comparison of different models on various datasets.}}{6}{table.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Van Loan Method}{6}{subsection.6.1}\protected@file@percent }
-\newlabel{sub:The fuck is Van Loan}{{6.1}{6}{Van Loan Method}{subsection.6.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Pruning based Initialization}{7}{subsection.6.2}\protected@file@percent }
-\newlabel{sub:Pruning based Initialization}{{6.2}{7}{Pruning based Initialization}{subsection.6.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{3}{section.1}\protected@file@percent }
+\newlabel{sec:Introduction}{{1}{3}{Introduction}{section.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related work}{4}{section.2}\protected@file@percent }
+\newlabel{sec:Related work}{{2}{4}{Related work}{section.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Methodology}{4}{section.3}\protected@file@percent }
+\newlabel{sec:Training setups}{{3}{4}{Methodology}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Kronecker Decomposition}{4}{subsection.3.1}\protected@file@percent }
+\newlabel{sub:Kronecker Decomposition}{{3.1}{4}{Kronecker Decomposition}{subsection.3.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}The 95M model}{4}{subsection.3.2}\protected@file@percent }
+\newlabel{sub:The 95M model}{{3.2}{4}{The 95M model}{subsection.3.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Different decomposition schemes:}{5}{subsection.3.3}\protected@file@percent }
+\newlabel{sec:Different decomposition schemes}{{3.3}{5}{Different decomposition schemes:}{subsection.3.3}{}}
+\citation{Gokaslan2019OpenWeb}
+\citation{van1993approximation}
+\citation{van1993approximation}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Different compression schemes}}{6}{table.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Adding multiple Kronecker Factors}}{6}{table.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Initialization}{6}{subsection.3.4}\protected@file@percent }
+\newlabel{sub:Initialization}{{3.4}{6}{Initialization}{subsection.3.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Comparison of different models on various datasets.}}{7}{table.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.1}Van Loan Decomposition}{7}{subsubsection.3.4.1}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Kronecker Product Decomposition}}{7}{algorithm.1}\protected@file@percent }
+\citation{hoffmann2022training}
+\citation{Gokaslan2019OpenWeb}
+\citation{merity2016pointer}
+\citation{paperno2016lambada}
+\citation{sanh2019distilbert}
+\citation{paperno2016lambada}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.2}Pruning based Initialization}{8}{subsubsection.3.4.2}\protected@file@percent }
+\newlabel{sub:Pruning based Initialization}{{3.4.2}{8}{Pruning based Initialization}{subsubsection.3.4.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Experiements}{8}{section.4}\protected@file@percent }
+\newlabel{sub:Experiements}{{4}{8}{Experiements}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Training setup}{8}{subsection.4.1}\protected@file@percent }
+\newlabel{sub:Setup}{{4.1}{8}{Training setup}{subsection.4.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Results}{8}{subsection.4.2}\protected@file@percent }
+\newlabel{sub:results}{{4.2}{8}{Results}{subsection.4.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}The 81M class:}{9}{subsection.4.3}\protected@file@percent }
+\newlabel{sub:The 81M class:}{{4.3}{9}{The 81M class:}{subsection.4.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Perplexity results of Krony-PT and DistilGPT}}{9}{table.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Perplexity of Krony-PT against other Kronecker based models.}}{9}{table.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Multiple Kronecker factors, with scalers.}{9}{subsection.4.4}\protected@file@percent }
+\newlabel{sub:Multiple Kronecker factors, with scalers.}{{4.4}{9}{Multiple Kronecker factors, with scalers}{subsection.4.4}{}}
+\citation{tahaei2022kroneckerbert}
+\citation{abronin2024tqcompressor}
+\citation{tahaei2022kroneckerbert}
+\citation{abronin2024tqcompressor}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Effect of adding scalers to multiple Kroneckers}}{10}{table.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Embeddings freezing, and dynamic lr's:}{10}{subsection.4.5}\protected@file@percent }
+\newlabel{sub:Embeddings freezing:}{{4.5}{10}{Embeddings freezing, and dynamic lr's:}{subsection.4.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion}{10}{section.5}\protected@file@percent }
+\newlabel{sec:Discussion}{{5}{10}{Discussion}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Parameter count:}{10}{subsection.5.1}\protected@file@percent }
+\newlabel{sub:Parameter count:}{{5.1}{10}{Parameter count:}{subsection.5.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Only 3\% of data}{10}{subsection.5.2}\protected@file@percent }
+\newlabel{sub:Only 3\% of data}{{5.2}{10}{Only 3\% of data}{subsection.5.2}{}}
 \bibdata{bib}
-\bibcite{merity2016pointer}{1}
-\bibcite{paperno2016lambada}{2}
-\bibcite{sanh2019distilbert}{3}
-\bibcite{tahaei2022kroneckerbert}{4}
-\bibcite{abronin2024tqcompressor}{5}
-\bibcite{edalati2021kroneckr}{6}
+\bibcite{radford2019language}{1}
+\bibcite{branwen2021scaling}{2}
+\bibcite{vaswani2017attention}{3}
+\bibcite{achiam2023gpt}{4}
+\bibcite{claude3}{5}
+\bibcite{llama}{6}
+\bibcite{llama3}{7}
+\bibcite{reid2024gemini}{8}
+\bibcite{wu2016compression}{9}
+\bibcite{tahaei2022kroneckerbert}{10}
+\bibcite{edalati2021kroneckr}{11}
+\bibcite{abronin2024tqcompressor}{12}
+\bibcite{Gokaslan2019OpenWeb}{13}
+\bibcite{van1993approximation}{14}
+\bibcite{hoffmann2022training}{15}
+\bibcite{merity2016pointer}{16}
+\bibcite{paperno2016lambada}{17}
+\bibcite{sanh2019distilbert}{18}
 \bibstyle{ieeetr}
-\gdef \@abspage@last{8}
+\gdef \@abspage@last{13}

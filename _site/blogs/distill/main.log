@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.16)  5 APR 2024 17:35
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.6.7)  2 JUL 2024 09:51
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -384,32 +384,103 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 744.
 \mathdisplay@stack=\toks34
 LaTeX Info: Redefining \[ on input line 2938.
 LaTeX Info: Redefining \] on input line 2939.
-) (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+) (/usr/share/texlive/texmf-dist/tex/latex/algorithms/algorithm.sty
+Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating environment
+ (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count297
+\float@exts=\toks35
+\float@box=\box67
+\@float@everytoks=\toks36
+\@floatcapt=\box68
+) (/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2020/11/24 v1.1c Standard LaTeX ifthen package (DPC)
+)
+\@float@every@algorithm=\toks37
+\c@algorithm=\count298
+) (/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
+Package: algorithmicx 2005/04/27 v1.2 Algorithmicx
+
+Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
+\c@ALG@line=\count299
+\c@ALG@rem=\count300
+\c@ALG@nested=\count301
+\ALG@tlm=\skip53
+\ALG@thistlm=\skip54
+\c@ALG@Lnr=\count302
+\c@ALG@blocknr=\count303
+\c@ALG@storecount=\count304
+\c@ALG@tmpcounter=\count305
+\ALG@tmplength=\skip55
+) (/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
+Package: algpseudocode 
+
+Document Style - pseudocode environments for use with the `algorithmicx' style
+) (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
+\lst@mode=\count306
+\lst@gtempboxa=\box69
+\lst@token=\toks38
+\lst@length=\count307
+\lst@currlwidth=\dimen193
+\lst@column=\count308
+\lst@pos=\count309
+\lst@lostspace=\dimen194
+\lst@width=\dimen195
+\lst@newlines=\count310
+\lst@lineno=\count311
+\lst@maxwidth=\dimen196
+ (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2020/03/24 1.8d (Carsten Heinz)
+\c@lstnumber=\count312
+\lst@skipnumbers=\count313
+\lst@framebox=\box70
+) (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
+File: listings.cfg 2020/03/24 1.8d listings configuration
+))
+Package: listings 2020/03/24 1.8d (Carsten Heinz)
+ (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count297
-\l__pdf_internal_box=\box67
-) (./main.aux)
+\l__color_backend_stack_int=\count314
+\l__pdf_internal_box=\box71
+) (./main.aux
+./main.aux:86: Missing \endcsname inserted.
+<to be read again> 
+                   \%
+l.86 ...}{10}{Only 3\% of data}{subsection.5.2}{}}
+                                                  
+The control sequence marked <to be read again> should
+not appear between \csname and \endcsname.
+
+./main.aux:86: Missing \endcsname inserted.
+<to be read again> 
+                   \%
+l.86 ...}{10}{Only 3\% of data}{subsection.5.2}{}}
+                                                  
+The control sequence marked <to be read again> should
+not appear between \csname and \endcsname.
+
+)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-Package hyperref Info: Link coloring OFF on input line 13.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+Package hyperref Info: Link coloring OFF on input line 48.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
  (/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty
@@ -417,56 +488,44 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ) (/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count298
+\c@section@level=\count315
 )
-LaTeX Info: Redefining \ref on input line 13.
-LaTeX Info: Redefining \pageref on input line 13.
-LaTeX Info: Redefining \nameref on input line 13.
+LaTeX Info: Redefining \ref on input line 48.
+LaTeX Info: Redefining \pageref on input line 48.
+LaTeX Info: Redefining \nameref on input line 48.
  (./main.out) (./main.out)
 \@outlinefile=\write4
 \openout4 = `main.out'.
 
  (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count299
-\scratchdimen=\dimen193
-\scratchbox=\box68
-\nofMPsegments=\count300
-\nofMParguments=\count301
-\everyMPshowfont=\toks35
-\MPscratchCnt=\count302
-\MPscratchDim=\dimen194
-\MPnumerator=\count303
-\makeMPintoPDFobject=\count304
-\everyMPtoPDFconversion=\toks36
+\scratchcounter=\count316
+\scratchdimen=\dimen197
+\scratchbox=\box72
+\nofMPsegments=\count317
+\nofMParguments=\count318
+\everyMPshowfont=\toks39
+\MPscratchCnt=\count319
+\MPscratchDim=\dimen198
+\MPnumerator=\count320
+\makeMPintoPDFobject=\count321
+\everyMPtoPDFconversion=\toks40
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
  (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-
-./main.tex:39: LaTeX Error: \begin{center} on input line 21 ended by \end{abstract}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.39 \end{abstract}
-                   
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-[1
+\c@lstlisting=\count322
+ [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./main.toc)
 \tf@toc=\write5
 \openout5 = `main.toc'.
 
  [2] [3]
-./main.tex:190: Undefined control sequence.
-l.190 ...tion. In our case, we have $W \in \mathbb
+./main.tex:115: Undefined control sequence.
+l.115 ...tion. In our case, we have $W \in \mathbb
                                                   {R}^{(m,n)}$ where $m = 30...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -474,8 +533,8 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-./main.tex:190: Undefined control sequence.
-l.190 ...im to find the ``optimal'' $A \in \mathbb
+./main.tex:115: Undefined control sequence.
+l.115 ...im to find the ``optimal'' $A \in \mathbb
                                                   {R}^{(m_1, n_1)}$, and $B\...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -483,8 +542,8 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-./main.tex:190: Undefined control sequence.
-l.190 ...athbb{R}^{(m_1, n_1)}$, and $B\in \mathbb
+./main.tex:115: Undefined control sequence.
+l.115 ...athbb{R}^{(m_1, n_1)}$, and $B\in \mathbb
                                                   {R}^{(m_2, n_2)$, i.e.,:
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -492,10 +551,10 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-./main.tex:190: Missing } inserted.
+./main.tex:115: Missing } inserted.
 <inserted text> 
                 }
-l.190 ...n_1)}$, and $B\in \mathbb{R}^{(m_2, n_2)$
+l.115 ...n_1)}$, and $B\in \mathbb{R}^{(m_2, n_2)$
                                                   , i.e.,:
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -503,28 +562,29 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
-./main.tex:199: You can't use `macro parameter character #' in restricted horizontal mode.
+[4]
+./main.tex:124: You can't use `macro parameter character #' in restricted horizontal mode.
 <recently read> ##
                   
-l.199 Name 	& Dimension 		& 	#
+l.124 Name 	& Dimension 		& 	#
                               params 	& Model size\\
 Sorry, but I'm not programmed to handle this case;
 I'll just pretend that you didn't ask for it.
 If you're in the wrong mode, you might be able to
 return to the right one by typing `I}' or `I$' or `I\par'.
 
-./main.tex:216: Missing $ inserted.
+./main.tex:141: Missing $ inserted.
 <inserted text> 
                 $
-l.216 		&  \cdots &
+l.141 		&  \cdots &
                       \cdots    & \cdots \\ \hline
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:216: Extra }, or forgotten $.
+./main.tex:141: Extra }, or forgotten $.
 <template> \unskip \hfil }
                           \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.216 		&  \cdots &
+l.141 		&  \cdots &
                       \cdots    & \cdots \\ \hline
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -532,18 +592,18 @@ you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
-./main.tex:216: Missing $ inserted.
+./main.tex:141: Missing $ inserted.
 <inserted text> 
                 $
-l.216 		&  \cdots &
+l.141 		&  \cdots &
                       \cdots    & \cdots \\ \hline
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:216: Missing } inserted.
+./main.tex:141: Missing } inserted.
 <inserted text> 
                 }
-l.216 		&  \cdots &
+l.141 		&  \cdots &
                       \cdots    & \cdots \\ \hline
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -551,18 +611,18 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
-./main.tex:216: Missing $ inserted.
+./main.tex:141: Missing $ inserted.
 <inserted text> 
                 $
-l.216 		&  \cdots &   \cdots    &
+l.141 		&  \cdots &   \cdots    &
                                   \cdots \\ \hline
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:216: Extra }, or forgotten $.
+./main.tex:141: Extra }, or forgotten $.
 <template> \unskip \hfil }
                           \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.216 		&  \cdots &   \cdots    &
+l.141 		&  \cdots &   \cdots    &
                                   \cdots \\ \hline
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -570,18 +630,18 @@ you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
-./main.tex:216: Missing $ inserted.
+./main.tex:141: Missing $ inserted.
 <inserted text> 
                 $
-l.216 		&  \cdots &   \cdots    &
+l.141 		&  \cdots &   \cdots    &
                                   \cdots \\ \hline
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:216: Missing } inserted.
+./main.tex:141: Missing } inserted.
 <inserted text> 
                 }
-l.216 		&  \cdots &   \cdots    &
+l.141 		&  \cdots &   \cdots    &
                                   \cdots \\ \hline
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -589,18 +649,18 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
-./main.tex:216: Missing $ inserted.
+./main.tex:141: Missing $ inserted.
 <inserted text> 
                 $
-l.216 		&  \cdots &   \cdots    & \cdots \\
+l.141 		&  \cdots &   \cdots    & \cdots \\
                                             \hline
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:216: Extra }, or forgotten $.
+./main.tex:141: Extra }, or forgotten $.
 <template> \unskip \hfil }
                           \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.216 		&  \cdots &   \cdots    & \cdots \\ \hline
+l.141 		&  \cdots &   \cdots    & \cdots \\ \hline
                                                   
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -608,18 +668,18 @@ you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
-./main.tex:216: Missing $ inserted.
+./main.tex:141: Missing $ inserted.
 <inserted text> 
                 $
-l.216 		&  \cdots &   \cdots    & \cdots \\ \hline
+l.141 		&  \cdots &   \cdots    & \cdots \\ \hline
                                                   
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:216: Missing } inserted.
+./main.tex:141: Missing } inserted.
 <inserted text> 
                 }
-l.216 		&  \cdots &   \cdots    & \cdots \\ \hline
+l.141 		&  \cdots &   \cdots    & \cdots \\ \hline
                                                   
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -627,11 +687,10 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
-[4]
-./main.tex:235: You can't use `macro parameter character #' in restricted horizontal mode.
+./main.tex:159: You can't use `macro parameter character #' in restricted horizontal mode.
 <recently read> ##
                   
-l.235 Name 	& Dimension 		& 	#
+l.159 Name 	& Dimension 		& 	#
                               params    & 1 factor    & 2 factors   & 3 fact...
 Sorry, but I'm not programmed to handle this case;
 I'll just pretend that you didn't ask for it.
@@ -640,30 +699,53 @@ return to the right one by typing `I}' or `I$' or `I\par'.
 
 [5]
 
-./main.tex:267: LaTeX Error: \begin{abstract} on input line 17 ended by \end{itemize}.
+LaTeX Warning: `h' float specifier changed to `ht'.
 
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.267 \end{itemize}
-                   	
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
+[6pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.213 
+      pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.213 
+      ]
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 220.
+LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 223.
+ (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 223.
 
-./main.tex:297: Missing $ inserted.
+./main.tex:223: Missing $ inserted.
 <inserted text> 
                 $
-l.297 \begin{bmatrix}
+l.223 		\State \textbf{Output:} Matrices  \{U_
+                                              i\} \) and \( \{V_i\} \)
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+
+Overfull \hbox (6.48926pt too wide) in paragraph at lines 232--233
+\OT1/cmr/m/n/10 nius er-ror. The ma-tri-ces $\OML/cmm/m/it/10 U$ \OT1/cmr/m/n/10 and $\OML/cmm/m/it/10 V$ \OT1/cmr/m/n/10 are of shape $(\OML/cmm/m/it/10 :::; k; m; n\OT1/cmr/m/n/10 )$ for $\OML/cmm/m/it/10 U$ \OT1/cmr/m/n/10 and $(\OML/cmm/m/it/10 :::; k; m[]; n[]\OT1/cmr/m/n/10 )$
+ []
+
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2020/03/24 1.8d listings language file
+)
+./main.tex:286: Missing $ inserted.
+<inserted text> 
+                $
+l.286 \begin{bmatrix}
                      
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:300: Missing $ inserted.
+./main.tex:289: Missing $ inserted.
 <inserted text> 
                 $
-l.300 \end{bmatrix}
+l.289 \end{bmatrix}
                    . Now, we illustrate how this procedure works with a rand...
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -671,46 +753,50 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
-[6]
-./main.tex:334: Missing $ inserted.
+[7pdfTeX warning (ext4): destination with the same identifier (name{table.3}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.290 
+      ]
+./main.tex:323: Missing $ inserted.
 <inserted text> 
                 $
-l.334 
+l.323 
       
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.tex:334: Display math should end with $$.
+./main.tex:323: Display math should end with $$.
 <to be read again> 
                    \tex_par:D 
-l.334 
+l.323 
       
 The `$' that I just saw supposedly matches a previous `$$'.
 So I shall assume that you typed `$$' both times.
 
 
-Overfull \hbox (97.00964pt too wide) detected at line 334
+Overfull \hbox (97.00964pt too wide) detected at line 323
 [] [] [] \OT1/cmr/m/n/10 = [] \OMS/cmsy/m/n/10 
  []
  []
 
 
-./main.tex:336: LaTeX Error: Bad math environment delimiter.
+./main.tex:325: LaTeX Error: Bad math environment delimiter.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.336 \]
+l.325 \]
         
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
-./main.tex:336: Missing $ inserted.
+./main.tex:325: Missing $ inserted.
 <inserted text> 
                 $
-l.336 \]
+l.325 \]
         
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -718,25 +804,57 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
-./main.tex:336: Display math should end with $$.
+./main.tex:325: Display math should end with $$.
 <to be read again> 
                    \endgroup 
-l.336 \]
+l.325 \]
         
 The `$' that I just saw supposedly matches a previous `$$'.
 So I shall assume that you typed `$$' both times.
 
-[7] (./main.bbl
-./main.bbl:15: Missing $ inserted.
+LaTeX Font Info:    Font shape `OMS/cmr/bx/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 342.
+[8]
+Overfull \hbox (0.55147pt too wide) in paragraph at lines 405--406
+\OT1/cmr/m/n/10 96 = ([] \OMS/cmsy/m/n/10 ^^B []\OT1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^B []$\OT1/cmr/m/n/10 . More-over, it doesn't
+ []
+
+
+Overfull \hbox (32.49423pt too wide) in paragraph at lines 409--418
+ [][] 
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[9pdfTeX warning (ext4): destination with the same identifier (name{table.4}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.428 
+      pdfTeX warning (ext4): destination with the same identifier (name{table.5}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.428 
+      ]
+Underfull \hbox (badness 10000) in paragraph at lines 453--453
+[][][][]\OT1/cmr/m/n/8 Link to GitHub is-sue: https://github.com/terra-quantum-
+ []
+
+[10pdfTeX warning (ext4): destination with the same identifier (name{table.6}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.463 	\item T
+              hey use Van Loan (VL) method to initialize the Kronecker produ...] [11] (./main.bbl [12]
+./main.bbl:86: Missing $ inserted.
 <inserted text> 
                 $
-l.15 ...heaper and lighter,'' in {\em NeurIPS EMC^
+l.86 ...heaper and lighter,'' in {\em NeurIPS EMC^
                                                   2
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.bbl:16: Extra }, or forgotten $.
-l.16   Workshop}
+./main.bbl:87: Extra }, or forgotten $.
+l.87   Workshop}
                 , 2019.
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -744,18 +862,18 @@ you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
-./main.bbl:17: Missing $ inserted.
+./main.bbl:88: Missing $ inserted.
 <inserted text> 
                 $
-l.17 
+l.88 
      
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-./main.bbl:17: Missing } inserted.
+./main.bbl:88: Missing } inserted.
 <inserted text> 
                 }
-l.17 
+l.88 
      
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -763,23 +881,35 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
-) [8] (./main.aux)
+) [13] (./main.aux
+./main.aux:86: Missing \endcsname inserted.
+<to be read again> 
+                   \%
+l.86 ...}{10}{Only 3\% of data}{subsection.5.2}{}}
+                                                  
+The control sequence marked <to be read again> should
+not appear between \csname and \endcsname.
+
+)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 2E129533CB69E2538CDD477A412D07F8;1429.
+(rerunfilecheck)             Checksum: A3BF3AB1D170CB412AE9549523977FAD;2733.
  ) 
 Here is how much of TeX's memory you used:
- 18926 strings out of 480247
- 354239 string characters out of 5896151
- 631783 words of memory out of 5000000
- 36534 multiletter control sequences out of 15000+600000
- 476937 words of font info for 55 fonts, out of 8000000 for 9000
- 14 hyphenation exceptions out of 8191
- 99i,11n,104p,799b,558s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/ayoub/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm0900.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb>
-Output written on main.pdf (8 pages, 271771 bytes).
+ 21493 strings out of 480171
+ 390469 string characters out of 5894490
+ 983844 words of memory out of 5000000
+ 39031 multiletter control sequences out of 15000+600000
+ 476521 words of font info for 54 fonts, out of 8000000 for 9000
+ 59 hyphenation exceptions out of 8191
+ 99i,11n,104p,954b,1329s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </home/ayoub/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
+Output written on main.pdf (13 pages, 299151 bytes).
 PDF statistics:
- 237 PDF objects out of 1000 (max. 8388607)
- 184 compressed objects within 2 object streams
- 36 named destinations out of 1000 (max. 500000)
- 93 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 366 PDF objects out of 1000 (max. 8388607)
+ 306 compressed objects within 4 object streams
+ 79 named destinations out of 1000 (max. 500000)
+ 157 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -50,9 +50,10 @@
 <span class="nv">$ </span><span class="nb">du</span> <span class="nt">-h</span> <span class="nt">--max-depth</span><span class="o">=</span>1 | <span class="nb">grep</span> <span class="s1">'G'</span> 
 </code></pre></div></div>
 
-<h3 id="delete-all-files-starting-with-some-pattern-pattern_x"><strong>Delete all files starting with some pattern <code class="language-plaintext highlighter-rouge">pattern_X</code>:</strong></h3>
+<h3 id="delete-all-files-starting-or-ending-with-some-pattern-pattern_x"><strong>Delete all files starting (or ending) with some pattern <code class="language-plaintext highlighter-rouge">pattern_X</code>:</strong></h3>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">ls</span>  | <span class="nb">grep</span> <span class="s2">"^pattern_X"</span> | xargs <span class="nb">rm</span>
+<span class="nv">$ </span><span class="nb">ls</span>  | <span class="nb">grep</span> <span class="s2">"pattern_X$"</span> | xargs <span class="nb">rm</span>  <span class="c"># ending with pattern_X</span>
 </code></pre></div></div>
 
 <h3 id="only-view-sub-directories-of-a-current-directory"><strong>Only view sub-directories of a current directory:</strong></h3>
@@ -83,6 +84,10 @@
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-t</span> check2/ | <span class="nb">grep</span> <span class="s2">"^256"</span> | <span class="nb">head</span> <span class="nt">-n</span> 9 | <span class="k">while </span><span class="nb">read</span> <span class="nt">-r</span> line<span class="p">;</span> <span class="k">do</span> 
 <span class="nv">$ </span>	python owt_eval.py <span class="s2">"./check2/</span><span class="nv">$line</span><span class="s2">"</span><span class="p">;</span> 
 <span class="nv">$ </span><span class="k">done</span>
+</code></pre></div></div>
+<p>Another way is, now my preferred way:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ls</span> <span class="nt">-t</span> check2/ | <span class="nb">grep</span> <span class="s2">"^256"</span> | <span class="nb">head</span> <span class="nt">-n</span> 9 | xargs <span class="nt">-I</span> <span class="o">{}</span> python owt_eval.py check2/<span class="o">{}</span>
 </code></pre></div></div>
 
 <ul>
