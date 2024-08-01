@@ -59,14 +59,14 @@
 \]
 </div>
 
-<p>Obviously here \(p_{\theta}(x_i \mid x_{&lt; i})\) refers to softmaxe’d output that the autoregressive model assigns to the token \(x_i\) after the seeing the past sequence \(x_{&lt;i}\).</p>
+<p>Obviously here \(p_{\theta}(x_i \mid x_{&lt; i})\) refers to softmaxe’d output that the autoregressive model assigns to the token \(x_i\) after the seeing the past sequence \(x_{\lt i}\).</p>
 
 <h2 id="code">Code:</h2>
 
-<p>The following code snippet (provided by Hugging Face, see references section) computes the perplexity score of GPT2-small on Lambada.</p>
+<p>The following code snippet (provided by Hugging Face, see references section) computes the perplexity score of GPT2-small on Lambada. Hidden is the pre-processing code (model loading, and configs), followed by the main loop.</p>
 
 <details>
-	<summary> Load the model, tokenizer, dataset, and configs.</summary>
+	<summary>Pre-processing: </summary>
 <div>
 
     <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -163,9 +163,10 @@
   <li><strong>Let’s dissect the main loop:</strong></li>
 </ul>
 
-<p>By matching the <a href="#eq">equation above</a> and the line #X of the code snippet. We understand that <code class="language-plaintext highlighter-rouge">nlls[i]</code> must represent the quantity:
-\[
-\log p_{\theta}(x_i \mid x_{&lt; i})
+<p>By matching the <a href="#eq">equation above</a> and <code class="language-plaintext highlighter-rouge">ppl = torch.exp(torch.stack(nlls).mean())</code>. We understand that <code class="language-plaintext highlighter-rouge">nlls[i]</code> must represent the quantity:</p>
+
+<p>\[
+\log p_{\theta}(x_i \mid x_{\lt i})
 \]</p>
 
 <ul>
@@ -175,18 +176,16 @@
 <p>The variable <code class="language-plaintext highlighter-rouge">outputs</code> is of type <code class="language-plaintext highlighter-rouge">transformers.modeling_outputs.CausalLMOutputWithCrossAttentions</code>, and has three keys:</p>
 
 <ol>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">outputs.loss</code>: a single scaler, it represents exactly the quantity  \(\log p_{\theta}(x_i \mid x_{&lt; i})\)</p>
-  </li>
-  <li><code class="language-plaintext highlighter-rouge">outputs.logits</code>: the output matrix of the LM, is has a shape of <code class="language-plaintext highlighter-rouge">[1, seq_len, vocab_len]</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">outputs.loss</code>: a single scaler that apparently represnts the negative log likelihood loss of the current sequence.</li>
+  <li><code class="language-plaintext highlighter-rouge">outputs.logits</code>: the output matrix of the LM, has a shape of <code class="language-plaintext highlighter-rouge">[1, seq_len, vocab_len]</code>.</li>
   <li><code class="language-plaintext highlighter-rouge">past_key_values</code> will ignore for now.</li>
 </ol>
 
-<p>Hence, for each element in the sequence, you get a list of size <code class="language-plaintext highlighter-rouge">vocab-size</code> of un-normalized scores over</p>
+<ul>
+  <li><strong>How exactly can we compute the</strong> <code class="language-plaintext highlighter-rouge">outputs.loss</code> <strong>from the</strong> <code class="language-plaintext highlighter-rouge">outputs.logits</code>:</li>
+</ul>
 
-<p>How to compute the <code class="language-plaintext highlighter-rouge">loss</code> from the <code class="language-plaintext highlighter-rouge">logits</code>:</p>
-
-<p>We have:</p>
+<p>The <code class="language-plaintext highlighter-rouge">output</code> matrix, compute the un-normalized scores of the next token of each input_token over the <code class="language-plaintext highlighter-rouge">vocab_size</code>. Hence, for each element in the sequence, you get a list of size <code class="language-plaintext highlighter-rouge">vocab-size</code> of un-normalized scores over… Also, the <code class="language-plaintext highlighter-rouge">target</code> is exactly a clone of the <code class="language-plaintext highlighter-rouge">input</code>. Hence, the first element of <code class="language-plaintext highlighter-rouge">target</code> shouldn’t be used. But also the last element of <code class="language-plaintext highlighter-rouge">input</code> as we don’t have it’s ground truth at that moment, it would be computed at the next iteration of the loop.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
@@ -196,18 +195,40 @@
 # target_ids &gt;&gt; a clone of input_ids. 
 </span></pre></td></tr></tbody></table></code></pre></div></div>
 
-<p>Hence, for each run:</p>
+<p>Test:</p>
 
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="c1"># code
+</span>
+
+<span class="c1"># for this:
+</span><span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Manual nll from logits &gt;&gt;  </span><span class="si">{}</span><span class="s">"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"HF nnl output (output.loss) &gt;&gt; </span><span class="si">{</span><span class="n">outputs</span><span class="p">.</span><span class="n">loss</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Hence, for each run:</p>
 <ul>
   <li>We are only interested in the model prediction for the <strong>BEFORE</strong> last token, which is <strong>32002</strong> in this example.</li>
   <li>We need to look at <code class="language-plaintext highlighter-rouge">outputs[0,-2]</code> and not <code class="language-plaintext highlighter-rouge">outputs[0,-1]</code>.</li>
   <li><code class="language-plaintext highlighter-rouge">outputs[0, -2]</code> has a <code class="language-plaintext highlighter-rouge">[1, vocab_size]</code> shape. And, <code class="language-plaintext highlighter-rouge">outputs[0, -2][379]</code> would be represent exactly how much weight does the model think that the next token after 32002 would be <strong>379</strong>.</li>
-  <li><code class="language-plaintext highlighter-rouge">outputs[0, -2]</code> is not normalized. Hence, it should be softmax’d first.</li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">outputs[0, -2]</code> is not normalized. Hence, it should be softmax’d first.</p>
+  </li>
+  <li><strong>Important note</strong></li>
 </ul>
+
+<p>One should be careful as some models implements <code class="language-plaintext highlighter-rouge">input</code> and <code class="language-plaintext highlighter-rouge">target</code> differently. For instance, in Karpathy’s GPT2 implementation, the <code class="language-plaintext highlighter-rouge">target</code> is usually <code class="language-plaintext highlighter-rouge">input[1:]</code> plus the true next token of <code class="language-plaintext highlighter-rouge">input[-1]</code>, where as Hugging Face models, expect <code class="language-plaintext highlighter-rouge">input</code> and <code class="language-plaintext highlighter-rouge">target</code> to be the exact same.</p>
 
 <h2 id="beyond-perplexity">Beyond perplexity:</h2>
 
-<h2 id="references">References:</h2>
+<p>Here I thought we discussed</p>
+
+<p>#e References:</p>
 
 <ul>
   <li><a href="https://huggingface.co/docs/transformers/en/perplexity">Hugging Face blog</a></li>

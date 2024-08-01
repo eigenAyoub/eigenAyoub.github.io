@@ -25,14 +25,14 @@ Perplexity is defined as the exponentiated average negative log-likelihood of a 
 \]
 </div>
 
-Obviously here $$p_{\theta}(x_i \mid x_{< i}) $$ refers to softmaxe'd output that the autoregressive model assigns to the token $$x_i$$ after the seeing the past sequence $$x_{<i}$$.
+Obviously here $$p_{\theta}(x_i \mid x_{< i}) $$ refers to softmaxe'd output that the autoregressive model assigns to the token $$x_i$$ after the seeing the past sequence $$ x_{\lt i}$$.
 
 ## Code:
 
-The following code snippet (provided by Hugging Face, see references section) computes the perplexity score of GPT2-small on Lambada.
+The following code snippet (provided by Hugging Face, see references section) computes the perplexity score of GPT2-small on Lambada. Hidden is the pre-processing code (model loading, and configs), followed by the main loop.
 
 <details>
-	<summary> Load the model, tokenizer, dataset, and configs.</summary>
+	<summary>Pre-processing: </summary>
 <div markdown="1">
 
 ```python?linenos
@@ -63,7 +63,7 @@ prev_end_loc = 0
 
 Main loop:
 
-```python?linenos
+```python
 for begin_loc in tqdm(range(0, seq_len, stride)):
     end_loc = min(begin_loc + max_length, seq_len)
     trg_len = end_loc - prev_end_loc  
@@ -88,10 +88,11 @@ print(ppl.item())
 
 * **Let's dissect the main loop:**
 
-By matching the [equation above](#eq) and the line #X of the code snippet. We understand that `nlls[i]` must represent the quantity:
+By matching the [equation above](#eq) and `ppl = torch.exp(torch.stack(nlls).mean())`. We understand that `nlls[i]` must represent the quantity:
+
 \\[
-\log p_{\theta}(x_i \mid x_{< i})
-\\]
+\log p_{\theta}(x_i \mid x_{\lt i})
+\\] 
 
 
 * **What is the nature of:** `outputs = model(input_ids, labels=target_ids)`.
@@ -99,17 +100,14 @@ By matching the [equation above](#eq) and the line #X of the code snippet. We un
 
 The variable `outputs` is of type `transformers.modeling_outputs.CausalLMOutputWithCrossAttentions`, and has three keys:
 
-1. `outputs.loss`: a single scaler, it represents exactly the quantity  $$\log p_{\theta}(x_i \mid x_{< i})$$
-
-2. `outputs.logits`: the output matrix of the LM, is has a shape of `[1, seq_len, vocab_len]`.
+1. `outputs.loss`: a single scaler that apparently represnts the negative log likelihood loss of the current sequence.
+2. `outputs.logits`: the output matrix of the LM, has a shape of `[1, seq_len, vocab_len]`.
 3. `past_key_values` will ignore for now.
 
-Hence, for each element in the sequence, you get a list of size `vocab-size` of un-normalized scores over
+* **How exactly can we compute the** `outputs.loss` **from the** `outputs.logits`:
 
+The `output` matrix, compute the un-normalized scores of the next token of each input_token over the `vocab_size`. Hence, for each element in the sequence, you get a list of size `vocab-size` of un-normalized scores over... Also, the `target` is exactly a clone of the `input`. Hence, the first element of `target` shouldn't be used. But also the last element of `input` as we don't have it's ground truth at that moment, it would be computed at the next iteration of the loop.
 
-How to compute the `loss` from the `logits`:
-
-We have:
 
 ```python
 outputs = model(input_ids, labels=target_ids)
@@ -117,20 +115,35 @@ outputs = model(input_ids, labels=target_ids)
 # target_ids >> a clone of input_ids. 
 ```
 
-Hence, for each run:
 
+Test:
+
+```python
+# code
+
+
+# for this:
+print(f"Manual nll from logits >>  {}")
+print(f"HF nnl output (output.loss) >> {outputs.loss}")
+```
+
+Hence, for each run:
 * We are only interested in the model prediction for the **BEFORE** last token, which is **32002** in this example.
 * We need to look at `outputs[0,-2]` and not `outputs[0,-1]`.
 * `outputs[0, -2]` has a `[1, vocab_size]` shape. And, `outputs[0, -2][379]` would be represent exactly how much weight does the model think that the next token after 32002 would be **379**.
 * `outputs[0, -2]` is not normalized. Hence, it should be softmax'd first. 
 
+* **Important note** 
+
+One should be careful as some models implements `input` and `target` differently. For instance, in Karpathy's GPT2 implementation, the `target` is usually `input[1:]` plus the true next token of `input[-1]`, where as Hugging Face models, expect `input` and `target` to be the exact same.
 
 ## Beyond perplexity:
 
+Here I thought we discussed
 
 
 
-## References:
+#e References:
 
 * [Hugging Face blog](https://huggingface.co/docs/transformers/en/perplexity)
 * [The gradient blog](https://thegradient.pub/understanding-evaluation-metrics-for-language-models/)
