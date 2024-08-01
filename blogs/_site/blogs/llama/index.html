@@ -1,0 +1,60 @@
+<p>Some personal notes from Llama 3.1 technical report &gt;</p>
+
+<p>Links:</p>
+
+<p>https://ai.meta.com/research/publications/the-llama-3-herd-of-models/ 
+https://www.reddit.com/r/LocalLLaMA/comments/1eabf4l/lets_discuss_llama31_paper_a_lot_of_details_on/</p>
+
+<h2 id="main-take-away-s">Main take away-s:</h2>
+
+<ul>
+  <li>Dense transformer model (nothing fancy, no MoE).</li>
+  <li>408B parameters, 128K context window.</li>
+  <li>15T tokens.</li>
+  <li>
+    <p>Image, video and audio are added via a compositional approach for test purposes only, not yet prod ready?</p>
+  </li>
+  <li>Keys: Data, Scale, and managing complexity.
+    <ul>
+      <li>While data and scale are obvious terms.</li>
+      <li>Managing complexity, i.e., we have enough compute to just keep simple and scale. Less fancy architecture, more engineering <code class="language-plaintext highlighter-rouge">flex</code>.</li>
+    </ul>
+  </li>
+  <li>What has been released: pre-training, post-training and Llama Guard model (in/output safety?)</li>
+</ul>
+
+<h2 id="general-overview">General overview:</h2>
+
+<ul>
+  <li>
+    <p>Pre-training: Massive training of the 408B model on 15.6T tokens. First a standard pre-training on 8k context window, and then followed by continued pre-training on 128K context window.</p>
+  </li>
+  <li>
+    <p>Post-training: Align the model with HF, each round with SFT on instruction tuning data and DPO (link to DPO). Utilities added in post-training: tool use, safety measures.</p>
+  </li>
+</ul>
+
+<h2 id="pre-training">Pre-training:</h2>
+
+<h3 id="data-cleaning">Data cleaning:</h3>
+
+<p>Without saying much, clearly of engineering has been spent to make such high quality data.</p>
+
+<p>Data mix:</p>
+<ul>
+  <li>Annealing Data: wtf is this?  3.4.3</li>
+</ul>
+
+<h3 id="general-architecture">General architecture:</h3>
+
+<p>All notes there are equally important.</p>
+
+<h3 id="infra-stuff">Infra stuff:</h3>
+
+<p>This is just nuts.</p>
+
+<p>MAST
+Tectonic</p>
+<ul>
+  <li>tf does this mean: we aim to minimize GPU pause time during checkpointing and increase heckpoint frequency to reduce the amount of lost work after a recovery.</li>
+</ul>

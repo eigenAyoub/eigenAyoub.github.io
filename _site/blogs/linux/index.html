@@ -46,30 +46,37 @@
 
 <h3 id="size-of-each-sub-directories"><strong>Size of each sub-directories:</strong></h3>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">du</span> <span class="nt">-h</span> <span class="nt">--max-depth</span><span class="o">=</span>1 
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="nv">$ </span><span class="nb">du</span> <span class="nt">-h</span> <span class="nt">--max-depth</span><span class="o">=</span>1 
 <span class="nv">$ </span><span class="nb">du</span> <span class="nt">-h</span> <span class="nt">--max-depth</span><span class="o">=</span>1 | <span class="nb">grep</span> <span class="s1">'G'</span> 
-</code></pre></div></div>
+</pre></td></tr></tbody></table></code></pre></div></div>
 
 <h3 id="delete-all-files-starting-or-ending-with-some-pattern-pattern_x"><strong>Delete all files starting (or ending) with some pattern <code class="language-plaintext highlighter-rouge">pattern_X</code>:</strong></h3>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">ls</span>  | <span class="nb">grep</span> <span class="s2">"^pattern_X"</span> | xargs <span class="nb">rm</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="nv">$ </span><span class="nb">ls</span>  | <span class="nb">grep</span> <span class="s2">"^pattern_X"</span> | xargs <span class="nb">rm</span>
 <span class="nv">$ </span><span class="nb">ls</span>  | <span class="nb">grep</span> <span class="s2">"pattern_X$"</span> | xargs <span class="nb">rm</span>  <span class="c"># ending with pattern_X</span>
-</code></pre></div></div>
+</pre></td></tr></tbody></table></code></pre></div></div>
 
 <h3 id="only-view-sub-directories-of-a-current-directory"><strong>Only view sub-directories of a current directory:</strong></h3>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-l</span> | <span class="nb">grep</span> <span class="s2">"^d"</span>
-</code></pre></div></div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-l</span> | <span class="nb">grep</span> <span class="s2">"^d"</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
 
 <h3 id="view-all-files-of-certain-pattern-pattern_x-except-one-pattern_xy"><strong>View all files of certain pattern <code class="language-plaintext highlighter-rouge">pattern_X</code>, except one <code class="language-plaintext highlighter-rouge">pattern_XY</code>:</strong></h3>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">ls</span> | <span class="nb">grep</span> <span class="s2">"^pattern_X"</span> | <span class="nb">grep</span> <span class="nt">-v</span> <span class="s2">"^pattern_XY"</span> 
-</code></pre></div></div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nv">$ </span><span class="nb">ls</span> | <span class="nb">grep</span> <span class="s2">"^pattern_X"</span> | <span class="nb">grep</span> <span class="nt">-v</span> <span class="s2">"^pattern_XY"</span> 
+</pre></td></tr></tbody></table></code></pre></div></div>
 
 <h3 id="view-the-last-added-files-of-some-pattern-pattern_x"><strong>View the last added files of some pattern <code class="language-plaintext highlighter-rouge">pattern_X</code></strong></h3>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-t</span> | <span class="nb">grep</span> <span class="s2">"^pattern_X"</span> | <span class="nb">head</span> <span class="nt">-n</span> 10 
-</code></pre></div></div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-t</span> | <span class="nb">grep</span> <span class="s2">"^pattern_X"</span> | <span class="nb">head</span> <span class="nt">-n</span> 10 
+</pre></td></tr></tbody></table></code></pre></div></div>
 
 <blockquote>
   <p>Example of use: When managing checkpoints while still training, and you would like to delete most your checkpoints, except maybe the last one.</p>
@@ -81,24 +88,32 @@
   <li>I have a bunch of checkpoints that I need to evaluate using the script <code class="language-plaintext highlighter-rouge">owt_eval.py</code>:</li>
 </ul>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-t</span> check2/ | <span class="nb">grep</span> <span class="s2">"^256"</span> | <span class="nb">head</span> <span class="nt">-n</span> 9 | <span class="k">while </span><span class="nb">read</span> <span class="nt">-r</span> line<span class="p">;</span> <span class="k">do</span> 
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-t</span> check2/ | <span class="nb">grep</span> <span class="s2">"^256"</span> | <span class="nb">head</span> <span class="nt">-n</span> 9 | <span class="k">while </span><span class="nb">read</span> <span class="nt">-r</span> line<span class="p">;</span> <span class="k">do</span> 
 <span class="nv">$ </span>	python owt_eval.py <span class="s2">"./check2/</span><span class="nv">$line</span><span class="s2">"</span><span class="p">;</span> 
 <span class="nv">$ </span><span class="k">done</span>
-</code></pre></div></div>
+</pre></td></tr></tbody></table></code></pre></div></div>
 <p>Another way is, now my preferred way:</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ls</span> <span class="nt">-t</span> check2/ | <span class="nb">grep</span> <span class="s2">"^256"</span> | <span class="nb">head</span> <span class="nt">-n</span> 9 | xargs <span class="nt">-I</span> <span class="o">{}</span> python owt_eval.py check2/<span class="o">{}</span>
-</code></pre></div></div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nv">$ls</span> <span class="nt">-t</span> check2/ | <span class="nb">grep</span> <span class="s2">"^256"</span> | <span class="nb">head</span> <span class="nt">-n</span> 9 | xargs <span class="nt">-I</span> <span class="o">{}</span> python owt_eval.py check2/<span class="o">{}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
 
 <ul>
   <li>I want to use another script <code class="language-plaintext highlighter-rouge">kron_to_gpt.py</code>, I need for each checkpoint an <code class="language-plaintext highlighter-rouge">output_directory</code> that usually depends on the checkpoint iteration step.</li>
 </ul>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-t</span> check2/ | <span class="nb">grep</span> <span class="s2">"^256"</span> | <span class="nb">head</span> <span class="nt">-n</span> 9 | <span class="k">while </span><span class="nb">read</span> <span class="nt">-r</span> line<span class="p">;</span> <span class="k">do</span> 
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-t</span> check2/ | <span class="nb">grep</span> <span class="s2">"^256"</span> | <span class="nb">head</span> <span class="nt">-n</span> 9 | <span class="k">while </span><span class="nb">read</span> <span class="nt">-r</span> line<span class="p">;</span> <span class="k">do</span> 
 <span class="nv">$ </span>	<span class="nv">number</span><span class="o">=</span><span class="k">${</span><span class="nv">line</span>:31:-3<span class="k">}</span>
 <span class="nv">$ </span>	python kron_to_gpt.py <span class="nv">$line</span> <span class="nv">$number</span>
 <span class="nv">$ </span><span class="k">done</span>
-</code></pre></div></div>
+</pre></td></tr></tbody></table></code></pre></div></div>
 
 <p>My checkpoints are all of the format <code class="language-plaintext highlighter-rouge">checkpoint_long_string_number.pt</code>, hence <code class="language-plaintext highlighter-rouge">${line:31:-3}</code> extracts the number before pt.</p>
 

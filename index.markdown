@@ -6,6 +6,7 @@ layout: home
 <ins> **Blog:**</ins>
 
 
+* [Some notes on perplexity and beyond!](/blogs/ppl)
 * [Handling checkpoints from terminal - some useful tricks.](/blogs/linux)
 * [Quick reset of my compute pod.](/blogs/container)
 <!-- [Investigating Kronecker Products as  xx](/blogs/distill/main.pdf) -->
@@ -23,10 +24,8 @@ layout: home
 * Reinforcement Learning $$\rightarrow$$ [Github link](https://github.com/eigenAyoub/reinforcement-learning).
 
 <ins>**Bio/Contact:**</ins>
-
-I'm Ayoub, I do ML R&D [@CAROLL](https://ca-roll.github.io/), mainly working on "tiny" LLMs. 
-I'm also enrolled [@UniPassau](https://www.uni-passau.de/en/msc-compmaths). 
-
+* I am part-time research assistant [@CAROLL](https://ca-roll.github.io/), mainly working on tiny-sized LLMs. 
+* I'm also enrolled [@UniPassau](https://www.uni-passau.de/en/msc-compmaths). 
 * **Gmail:** `ayoub.benayad.467`
 * [LinkedIn](https://www.linkedin.com/in/benayad/),
 [Instagram](https://www.instagram.com/curl.ayoub/).

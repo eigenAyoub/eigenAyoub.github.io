@@ -9,14 +9,14 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="10k" />
 <meta property="og:description" content="10k" />
-<link rel="canonical" href="http://localhost:4000/" />
-<meta property="og:url" content="http://localhost:4000/" />
+<link rel="canonical" href="http://localhost:4000/blogs/llama/" />
+<meta property="og:url" content="http://localhost:4000/blogs/llama/" />
 <meta property="og:site_name" content="Kaizen" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Kaizen" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","description":"10k","headline":"Kaizen","name":"Kaizen","url":"http://localhost:4000/"}</script>
+{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Kaizen","url":"http://localhost:4000/blogs/llama/"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kaizen" /></head>
 
@@ -38,43 +38,66 @@
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <div class="home"><p><ins> <strong>Blog:</strong></ins></p>
+        <p>Some personal notes from Llama 3.1 technical report &gt;</p>
+
+<p>Links:</p>
+
+<p>https://ai.meta.com/research/publications/the-llama-3-herd-of-models/ 
+https://www.reddit.com/r/LocalLLaMA/comments/1eabf4l/lets_discuss_llama31_paper_a_lot_of_details_on/</p>
+
+<h2 id="main-take-away-s">Main take away-s:</h2>
 
 <ul>
-  <li><a href="/blogs/ppl">Some notes on perplexity and beyond!</a></li>
-  <li><a href="/blogs/linux">Handling checkpoints from terminal - some useful tricks.</a></li>
-  <li><a href="/blogs/container">Quick reset of my compute pod.</a>
-<!-- [Investigating Kronecker Products as  xx](/blogs/distill/main.pdf) --></li>
-  <li><a href="/blogs/fastinference">Recent trends to speed up autoregressive inference of LLMs (unifinished).</a></li>
-  <li>Quick hacks that you might find useful:
+  <li>Dense transformer model (nothing fancy, no MoE).</li>
+  <li>408B parameters, 128K context window.</li>
+  <li>15T tokens.</li>
+  <li>
+    <p>Image, video and audio are added via a compositional approach for test purposes only, not yet prod ready?</p>
+  </li>
+  <li>Keys: Data, Scale, and managing complexity.
     <ul>
-      <li><a href="/blogs/vim">Speed up your migration to VIM.</a></li>
-      <li><a href="/blogs/enter_the_matrix">Matrix Differential Calculus.</a></li>
+      <li>While data and scale are obvious terms.</li>
+      <li>Managing complexity, i.e., we have enough compute to just keep simple and scale. Less fancy architecture, more engineering <code class="language-plaintext highlighter-rouge">flex</code>.</li>
     </ul>
   </li>
-  <li>Convex Optimization:
-    <ul>
-      <li><a href="/blogs/SGD">Convergence Rates of SGD in convex and non-convex cases.</a></li>
-    </ul>
+  <li>What has been released: pre-training, post-training and Llama Guard model (in/output safety?)</li>
+</ul>
+
+<h2 id="general-overview">General overview:</h2>
+
+<ul>
+  <li>
+    <p>Pre-training: Massive training of the 408B model on 15.6T tokens. First a standard pre-training on 8k context window, and then followed by continued pre-training on 128K context window.</p>
+  </li>
+  <li>
+    <p>Post-training: Align the model with HF, each round with SFT on instruction tuning data and DPO (link to DPO). Utilities added in post-training: tool use, safety measures.</p>
   </li>
 </ul>
 
-<p><ins><strong>Some projects:</strong></ins></p>
+<h2 id="pre-training">Pre-training:</h2>
+
+<h3 id="data-cleaning">Data cleaning:</h3>
+
+<p>Without saying much, clearly of engineering has been spent to make such high quality data.</p>
+
+<p>Data mix:</p>
 <ul>
-  <li>Backpropagation from scratch \(\rightarrow\) <a href="https://github.com/eigenAyoub/check-your-gradients">Github link</a>.</li>
-  <li>Randomized Algorithms \(\rightarrow\) <a href="https://github.com/eigenAyoub/randomised-algorithms">Github link</a>.</li>
-  <li>Reinforcement Learning \(\rightarrow\) <a href="https://github.com/eigenAyoub/reinforcement-learning">Github link</a>.</li>
+  <li>Annealing Data: wtf is this?  3.4.3</li>
 </ul>
 
-<p><ins><strong>Bio/Contact:</strong></ins></p>
+<h3 id="general-architecture">General architecture:</h3>
+
+<p>All notes there are equally important.</p>
+
+<h3 id="infra-stuff">Infra stuff:</h3>
+
+<p>This is just nuts.</p>
+
+<p>MAST
+Tectonic</p>
 <ul>
-  <li>I am part-time research assistant <a href="https://ca-roll.github.io/">@CAROLL</a>, mainly working on tiny-sized LLMs.</li>
-  <li>I’m also enrolled <a href="https://www.uni-passau.de/en/msc-compmaths">@UniPassau</a>.</li>
-  <li><strong>Gmail:</strong> <code class="language-plaintext highlighter-rouge">ayoub.benayad.467</code></li>
-  <li><a href="https://www.linkedin.com/in/benayad/">LinkedIn</a>,
-<a href="https://www.instagram.com/curl.ayoub/">Instagram</a>.</li>
+  <li>tf does this mean: we aim to minimize GPU pause time during checkpointing and increase heckpoint frequency to reduce the amount of lost work after a recovery.</li>
 </ul>
-</div>
 
       </div>
     </main><footer class="site-footer h-card">
