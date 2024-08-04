@@ -68,13 +68,10 @@
 
 <p>Code:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-</pre></td><td class="rouge-code"><pre>data = pd.read_csv("input.csv", sep = ';', header=None)`
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>data = pd.read_csv("input.csv", sep = ';', header=None)`
 data.columns = data.iloc[6,:]+'_'+data.iloc[7,:]
 data = data.iloc[9:,].reset_index(drop = True)
-</pre></td></tr></tbody></table></code></pre></div></div>
+</code></pre></div></div>
 
 <p>Result:</p>
 
@@ -92,11 +89,9 @@ data = data.iloc[9:,].reset_index(drop = True)
 
 <p>We fix this with the following  code snipit:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-</pre></td><td class="rouge-code"><pre>data.to_csv("data2.csv", sep = ";")
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>data.to_csv("data2.csv", sep = ";")
 data = pd.read_csv("data2.csv", sep=";" , decimal = ",", thousands='.').drop(["Unnamed: 0"], axis=1)
-</pre></td></tr></tbody></table></code></pre></div></div>
+</code></pre></div></div>
 <p><em>Remark:</em> This can’t be done from the first call, as the dataset is mixed.</p>
 
 <p>And now, we get the following <code class="language-plaintext highlighter-rouge">data.head()</code>:</p>

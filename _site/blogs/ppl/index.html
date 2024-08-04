@@ -41,14 +41,14 @@
         <p>This mini blog answers:</p>
 
 <ol>
-  <li>What is the famous  the famous perplexity score.</li>
+  <li>What is the perplexity score.</li>
   <li>How is it implemented, e.g., with Hugging Face models.</li>
   <li>Can we do better than perplexity?</li>
 </ol>
 
 <h2 id="quick-wiki">Quick wiki:</h2>
 
-<p>Perplexity is defined as the exponentiated average negative log-likelihood of a sequence. If we have a tokenized sequence \(X = (x_0, x_1, \ldots, x_t)\), then the perplexity of \(X\) is,</p>
+<p>Given a  tokenized sequence \(X = (x_0, x_1, \ldots, x_t)\) and an autoregressive model \(p_{\theta}(. \mid .)\) the perplexity (of \(p_{\theta}\) on \(X\)) is defined as follows:</p>
 
 <div id="eq">
 \[
@@ -59,38 +59,20 @@
 \]
 </div>
 
-<p>Obviously here \(p_{\theta}(x_i \mid x_{&lt; i})\) refers to softmaxe’d output that the autoregressive model assigns to the token \(x_i\) after the seeing the past sequence \(x_{\lt i}\).</p>
+<ul>
+  <li>The quantity \(p_{\theta}(x_i \mid x_{&lt; i})\) represents the normalized score (i.e., probability) that the model generates the token \(x_i\) after seeing the context \(x_{\lt i} = (x_0, x_1, \ldots, x_{i-1})\).</li>
+  <li>In practice, LMs usually outputs the logits (un-normalized scores), for each sequence input, we get a list of scores of size <code class="language-plaintext highlighter-rouge">vocab_size</code>. This is usually done in parallel over all input sequence.</li>
+</ul>
 
 <h2 id="code">Code:</h2>
 
-<p>The following code snippet (provided by Hugging Face, see references section) computes the perplexity score of GPT2-small on Lambada. Hidden is the pre-processing code (model loading, and configs), followed by the main loop.</p>
+<p>The following code snippet (provided by Hugging Face, see references section) computes the perplexity score of GPT2-small on Lambada. Hidden is the pre-processing code (model loading, tokenizer, and configs) followed by the main loop.</p>
 
 <details>
 	<summary>Pre-processing: </summary>
 <div>
 
-    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-</pre></td><td class="rouge-code"><pre><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">GPT2LMHeadModel</span><span class="p">,</span> <span class="n">GPT2TokenizerFast</span>
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">GPT2LMHeadModel</span><span class="p">,</span> <span class="n">GPT2TokenizerFast</span>
 <span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
@@ -111,33 +93,11 @@
 
 <span class="n">nlls</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">prev_end_loc</span> <span class="o">=</span> <span class="mi">0</span>
-</pre></td></tr></tbody></table></code></pre></div>    </div>
+</code></pre></div>    </div>
   </div>
 </details>
 
-<p>Main loop:</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-</pre></td><td class="rouge-code"><pre><span class="k">for</span> <span class="n">begin_loc</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">,</span> <span class="n">stride</span><span class="p">)):</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">begin_loc</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">,</span> <span class="n">stride</span><span class="p">)):</span>
     <span class="n">end_loc</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">begin_loc</span> <span class="o">+</span> <span class="n">max_length</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">)</span>
     <span class="n">trg_len</span> <span class="o">=</span> <span class="n">end_loc</span> <span class="o">-</span> <span class="n">prev_end_loc</span>  
 	<span class="c1"># may be different from stride on last loop
@@ -157,7 +117,7 @@
 
 <span class="n">ppl</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">stack</span><span class="p">(</span><span class="n">nlls</span><span class="p">).</span><span class="n">mean</span><span class="p">())</span>
 <span class="k">print</span><span class="p">(</span><span class="n">ppl</span><span class="p">.</span><span class="n">item</span><span class="p">())</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
+</code></pre></div></div>
 
 <ul>
   <li><strong>Let’s dissect the main loop:</strong></li>
@@ -178,38 +138,39 @@
 <ol>
   <li><code class="language-plaintext highlighter-rouge">outputs.loss</code>: a single scaler that apparently represnts the negative log likelihood loss of the current sequence.</li>
   <li><code class="language-plaintext highlighter-rouge">outputs.logits</code>: the output matrix of the LM, has a shape of <code class="language-plaintext highlighter-rouge">[1, seq_len, vocab_len]</code>.</li>
-  <li><code class="language-plaintext highlighter-rouge">past_key_values</code> will ignore for now.</li>
+  <li><code class="language-plaintext highlighter-rouge">past_key_values</code>: will ignore for now.</li>
 </ol>
 
 <ul>
   <li><strong>How exactly can we compute the</strong> <code class="language-plaintext highlighter-rouge">outputs.loss</code> <strong>from the</strong> <code class="language-plaintext highlighter-rouge">outputs.logits</code>:</li>
 </ul>
 
-<p>The <code class="language-plaintext highlighter-rouge">output</code> matrix, compute the un-normalized scores of the next token of each input_token over the <code class="language-plaintext highlighter-rouge">vocab_size</code>. Hence, for each element in the sequence, you get a list of size <code class="language-plaintext highlighter-rouge">vocab-size</code> of un-normalized scores over… Also, the <code class="language-plaintext highlighter-rouge">target</code> is exactly a clone of the <code class="language-plaintext highlighter-rouge">input</code>. Hence, the first element of <code class="language-plaintext highlighter-rouge">target</code> shouldn’t be used. But also the last element of <code class="language-plaintext highlighter-rouge">input</code> as we don’t have it’s ground truth at that moment, it would be computed at the next iteration of the loop.</p>
+<p>The <code class="language-plaintext highlighter-rouge">output</code> matrix, compute the un-normalized scores of the next token of each input_token over the <code class="language-plaintext highlighter-rouge">vocab_size</code>. Hence, for each element in the sequence, you get a list of size <code class="language-plaintext highlighter-rouge">vocab-size</code> of un-normalized scores over… Also, the <code class="language-plaintext highlighter-rouge">target</code> is exactly a clone of the <code class="language-plaintext highlighter-rouge">input</code>. Hence, the first element of <code class="language-plaintext highlighter-rouge">target</code> shouldn’t be used. But also the last element of <code class="language-plaintext highlighter-rouge">input</code> as we don’t have it’s ground truth at that moment, it would be computed at the next iteration of the loop. Hence, manually, this code snippet should do the job:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-</pre></td><td class="rouge-code"><pre><span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">input_ids</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">target_ids</span><span class="p">)</span>
-<span class="c1"># input_ids &gt;&gt; tensor([[  257,  1598,  7815,  ...,  1175, 32002,   379]], device='cuda:0')
-# target_ids &gt;&gt; a clone of input_ids. 
-</span></pre></td></tr></tbody></table></code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c1"># model outputs
+</span><span class="n">logits</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">input_ids</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">target_ids</span><span class="p">)</span>
+
+<span class="c1"># softmax over dim 0 (over the vocab_sized for each input token)
+</span><span class="n">logits_softmax</span>  <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">logits</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># for each input token, we gather the score assigned for it's true next token (`logits[input[ind], target[ind+1]` )
+</span>
+
+
+<span class="n">scores</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">gather</span><span class="p">(</span><span class="n">logits_softmax</span><span class="p">,</span> <span class="n">indices</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+</code></pre></div></div>
 
 <p>Test:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-</pre></td><td class="rouge-code"><pre><span class="c1"># code
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># code
 </span>
 
 <span class="c1"># for this:
 </span><span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Manual nll from logits &gt;&gt;  </span><span class="si">{}</span><span class="s">"</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"HF nnl output (output.loss) &gt;&gt; </span><span class="si">{</span><span class="n">outputs</span><span class="p">.</span><span class="n">loss</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
+</code></pre></div></div>
 
 <p>Hence, for each run:</p>
 <ul>

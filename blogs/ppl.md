@@ -8,13 +8,13 @@ permalink: /blogs/ppl/
 
 This mini blog answers:
 
-1. What is the famous  the famous perplexity score.
+1. What is the perplexity score.
 2. How is it implemented, e.g., with Hugging Face models.
 3. Can we do better than perplexity?
 
 ## Quick wiki:
 
-Perplexity is defined as the exponentiated average negative log-likelihood of a sequence. If we have a tokenized sequence $$X = (x_0, x_1, \ldots, x_t)$$, then the perplexity of $$X$$ is,
+Given a  tokenized sequence $$X = (x_0, x_1, \ldots, x_t)$$ and an autoregressive model $$p_{\theta}(. \mid .)$$ the perplexity (of $$p_{\theta}$$ on $$X$$) is defined as follows:
 
 <div id="eq">
 \[
@@ -25,17 +25,18 @@ Perplexity is defined as the exponentiated average negative log-likelihood of a 
 \]
 </div>
 
-Obviously here $$p_{\theta}(x_i \mid x_{< i}) $$ refers to softmaxe'd output that the autoregressive model assigns to the token $$x_i$$ after the seeing the past sequence $$ x_{\lt i}$$.
+* The quantity $$p_{\theta}(x_i \mid x_{< i})$$ represents the normalized score (i.e., probability) that the model generates the token $$x_i$$ after seeing the context $$ x_{\lt i} = (x_0, x_1, \ldots, x_{i-1})$$. 
+* In practice, LMs usually outputs the logits (un-normalized scores), for each sequence input, we get a list of scores of size `vocab_size`. This is usually done in parallel over all input sequence.
 
 ## Code:
 
-The following code snippet (provided by Hugging Face, see references section) computes the perplexity score of GPT2-small on Lambada. Hidden is the pre-processing code (model loading, and configs), followed by the main loop.
+The following code snippet (provided by Hugging Face, see references section) computes the perplexity score of GPT2-small on Lambada. Hidden is the pre-processing code (model loading, tokenizer, and configs) followed by the main loop.
 
 <details>
 	<summary>Pre-processing: </summary>
 <div markdown="1">
 
-```python?linenos
+```python
 from transformers import GPT2LMHeadModel, GPT2TokenizerFast
 from datasets import load_dataset
 
@@ -61,7 +62,6 @@ prev_end_loc = 0
 </div>
 </details>
 
-Main loop:
 
 ```python
 for begin_loc in tqdm(range(0, seq_len, stride)):
@@ -102,17 +102,27 @@ The variable `outputs` is of type `transformers.modeling_outputs.CausalLMOutputW
 
 1. `outputs.loss`: a single scaler that apparently represnts the negative log likelihood loss of the current sequence.
 2. `outputs.logits`: the output matrix of the LM, has a shape of `[1, seq_len, vocab_len]`.
-3. `past_key_values` will ignore for now.
+3. `past_key_values`: will ignore for now.
 
 * **How exactly can we compute the** `outputs.loss` **from the** `outputs.logits`:
 
-The `output` matrix, compute the un-normalized scores of the next token of each input_token over the `vocab_size`. Hence, for each element in the sequence, you get a list of size `vocab-size` of un-normalized scores over... Also, the `target` is exactly a clone of the `input`. Hence, the first element of `target` shouldn't be used. But also the last element of `input` as we don't have it's ground truth at that moment, it would be computed at the next iteration of the loop.
+The `output` matrix, compute the un-normalized scores of the next token of each input_token over the `vocab_size`. Hence, for each element in the sequence, you get a list of size `vocab-size` of un-normalized scores over... Also, the `target` is exactly a clone of the `input`. Hence, the first element of `target` shouldn't be used. But also the last element of `input` as we don't have it's ground truth at that moment, it would be computed at the next iteration of the loop. Hence, manually, this code snippet should do the job:
 
 
 ```python
-outputs = model(input_ids, labels=target_ids)
-# input_ids >> tensor([[  257,  1598,  7815,  ...,  1175, 32002,   379]], device='cuda:0')
-# target_ids >> a clone of input_ids. 
+
+# model outputs
+logits, loss, _ = model(input_ids, labels=target_ids)
+
+# softmax over dim 0 (over the vocab_sized for each input token)
+logits_softmax  = torch.softmax(logits[0])
+
+# for each input token, we gather the score assigned for it's true next token (`logits[input[ind], target[ind+1]` )
+
+
+
+scores = torch.gather(logits_softmax, indices)[-1]
+
 ```
 
 

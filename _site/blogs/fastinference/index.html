@@ -117,23 +117,7 @@
 
 <p>Here’s the provided script for completeness: <a name="mha-script"></a></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-</pre></td><td class="rouge-code"><pre><span class="k">def</span> <span class="nf">MultiheadAttentionBatched</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">P_q</span><span class="p">,</span> <span class="n">P_k</span><span class="p">,</span> <span class="n">P_v</span><span class="p">,</span> <span class="n">P_o</span><span class="p">):</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">MultiheadAttentionBatched</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">P_q</span><span class="p">,</span> <span class="n">P_k</span><span class="p">,</span> <span class="n">P_v</span><span class="p">,</span> <span class="n">P_o</span><span class="p">):</span>
     <span class="s">"""
     [...]
     P_q: a tensor with shape [h, d, k] # keep a look at the dim
@@ -149,7 +133,7 @@
     <span class="p">[...]</span>
     <span class="c1"># the rest in un-changed in MQA.
 </span>    
-</pre></td></tr></tbody></table></code></pre></div></div>
+</code></pre></div></div>
 
 <p><strong>– Performance analysis of Batched MHA:</strong></p>
 
@@ -189,35 +173,7 @@
 
 <p>Same as before, except here, we introduce and append  the <code class="language-plaintext highlighter-rouge">KV cache</code> along the way.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-</pre></td><td class="rouge-code"><pre><span class="k">def</span> <span class="nf">MHA</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">prev_K</span><span class="p">,</span> <span class="n">prev_V</span><span class="p">,</span> <span class="n">P_q</span><span class="p">,</span> <span class="n">P_k</span><span class="p">,</span> <span class="n">P_v</span><span class="p">,</span> <span class="n">P_o</span><span class="p">):</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">MHA</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">prev_K</span><span class="p">,</span> <span class="n">prev_V</span><span class="p">,</span> <span class="n">P_q</span><span class="p">,</span> <span class="n">P_k</span><span class="p">,</span> <span class="n">P_v</span><span class="p">,</span> <span class="n">P_o</span><span class="p">):</span>
     <span class="s">"""Multi-Head Self-Attention (one step).
     
     Args:
@@ -245,7 +201,7 @@
     <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">"bhv,hdv-&gt;bd"</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">P_o</span><span class="p">)</span>
     
     <span class="k">return</span> <span class="n">y</span><span class="p">,</span> <span class="n">new_K</span><span class="p">,</span> <span class="n">new_V</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
+</code></pre></div></div>
 
 <p><strong>– Analysis of Incremental batched MHA (Inference):</strong></p>
 
@@ -263,23 +219,7 @@
 
 <p>As you can see in the script below, MQA is literally MHA without the <code class="language-plaintext highlighter-rouge">h</code> dimension in <code class="language-plaintext highlighter-rouge">K</code>, and <code class="language-plaintext highlighter-rouge">V</code>.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-</pre></td><td class="rouge-code"><pre><span class="k">def</span> <span class="nf">MultiQueryAttBatched</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">P_q</span><span class="p">,</span> <span class="n">P_k</span><span class="p">,</span> <span class="n">P_v</span><span class="p">,</span> <span class="n">P_o</span><span class="p">):</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">MultiQueryAttBatched</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">P_q</span><span class="p">,</span> <span class="n">P_k</span><span class="p">,</span> <span class="n">P_v</span><span class="p">,</span> <span class="n">P_o</span><span class="p">):</span>
     <span class="s">"""
     Args:
     [...]
@@ -295,33 +235,12 @@
     <span class="c1"># we recoved the same dim of the logits as the MHA,
 </span>    <span class="c1"># everything is the same as MHA from now onwards.
 </span>    <span class="p">[...]</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
+</code></pre></div></div>
 
 <p><strong>– Incremental MQA (Inference)</strong> <a name="incremental-batched-mqa"></a>
 Differences in code are marked as <code class="language-plaintext highlighter-rouge">#no h</code>.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-</pre></td><td class="rouge-code"><pre><span class="k">def</span> <span class="nf">MultiquerySelfAttentionIncremental</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">prev_K</span><span class="p">,</span> <span class="n">prev_V</span><span class="p">,</span> <span class="n">P_q</span><span class="p">,</span> <span class="n">P_k</span><span class="p">,</span> <span class="n">P_v</span><span class="p">,</span> <span class="n">P_o</span><span class="p">):</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">MultiquerySelfAttentionIncremental</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">prev_K</span><span class="p">,</span> <span class="n">prev_V</span><span class="p">,</span> <span class="n">P_q</span><span class="p">,</span> <span class="n">P_k</span><span class="p">,</span> <span class="n">P_v</span><span class="p">,</span> <span class="n">P_o</span><span class="p">):</span>
     <span class="s">"""
     Args:
     x: a tensor with shape [b, d]
@@ -342,7 +261,7 @@ Differences in code are marked as <code class="language-plaintext highlighter-ro
     <span class="n">logits</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">"bhk,bmk-&gt;bhm"</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span> 
     <span class="c1"># we revoved the dim `bhm`, the rest is same as before MHA.
 </span>    <span class="p">[...]</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
+</code></pre></div></div>
 
 <p><strong>– Performance analysis for incremental MQA (Inference)</strong></p>
 
