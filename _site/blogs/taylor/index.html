@@ -9,14 +9,14 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="10k" />
 <meta property="og:description" content="10k" />
-<link rel="canonical" href="http://localhost:4000/src/progress/" />
-<meta property="og:url" content="http://localhost:4000/src/progress/" />
+<link rel="canonical" href="http://localhost:4000/blogs/taylor/" />
+<meta property="og:url" content="http://localhost:4000/blogs/taylor/" />
 <meta property="og:site_name" content="Kaizen" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Kaizen" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Kaizen","url":"http://localhost:4000/src/progress/"}</script>
+{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Kaizen","url":"http://localhost:4000/blogs/taylor/"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kaizen" /></head>
 
@@ -38,102 +38,74 @@
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <h4 id="courses">Courses:</h4>
+        <p>Problem setting and terminology:</p>
+
+<p>We position ourselves in a classic supervised learning setting, and we are given:</p>
 
 <ul>
-  <li>Advanced Probabilistic Machine Learning:
-    <ul>
-      <li>Lectures:    /</li>
-      <li>Homework:</li>
-      <li>Link:</li>
-    </ul>
-  </li>
+  <li>A finite training set \({(x_i, t_i)}\) (drawn i.i.d from a \(p_{\text{data}}\)) .</li>
+  <li>A loss function</li>
+  <li>A class of parametric functions \({f_w(.)}\)</li>
 </ul>
 
-<blockquote>
-  <p>I’m attending the theoretical lectures live on Zoom with Tubingen students. Currently on week 3.</p>
-</blockquote>
+<p>And we do so by minimizing the empirical risk over the training set:</p>
 
-<ul>
-  <li>Probabilistic Machine Learning: Phillip Hennig course @Tubingen:
-    <ul>
-      <li>Lectures:  7/24</li>
-    </ul>
-  </li>
-</ul>
+<p>\[</p>
 
-<blockquote>
-  <ul>
-    <li>
-      <p>This is my favourite course.</p>
-    </li>
-    <li>
-      <p>This course doesn’t provide any assignments/homeworks.</p>
-    </li>
-    <li>But it’s very broad +</li>
-    <li>Sometimes, Prof. Hennig likes to go deep on the mathematical aspects, provide proofs or at least sketches.</li>
-    <li>Perfect accompany for Bishop/Murphy.</li>
-  </ul>
-</blockquote>
+<p>\]</p>
 
-<ul>
-  <li>Reinforcement Learning: Amir-MAssoud Fahramand course @UToronto
-    <ul>
-      <li>Lectures: /</li>
-      <li>Homework:    /</li>
-    </ul>
-  </li>
-</ul>
+<p>Ideally though, we are interested in finding \(w\) that minimizes the true risk:
+\[
+R(w) = 
+\]</p>
 
-<blockquote>
-  <ul>
-    <li>
-      <p>This is a great course on RL.</p>
-    </li>
-    <li>
-      <p>Prof. Fahramand does the proofs of a lot of methods which is always cool. Also,</p>
-    </li>
-  </ul>
-</blockquote>
+<h2 id="first-order-taylor-approximation">First order Taylor Approximation:</h2>
 
-<ul>
-  <li>Learning Theory: Shai Ben-David course at UToronto
-    <ul>
-      <li>Lectures:</li>
-    </ul>
-  </li>
-</ul>
+<p>Generally speaking:</p>
 
-<blockquote>
-  <p>Great lectures.</p>
-</blockquote>
+<p>In most cases in DL, \(f\) is real valued, hence \(J\) represents the gradient:</p>
 
-<h4 id="textbooks-that-im-using">Textbooks that I’m using:</h4>
+<p>\[</p>
 
-<ul>
-  <li>Bishop (2006)</li>
+<p>\]</p>
+
+<h2 id="jax--mini">Jax – mini:</h2>
+
+<ol>
+  <li>The gradient:</li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> 
+</code></pre></div></div>
+
+<h2 id="good-questions">Good questions:</h2>
+
+<ol>
   <li>
-    <p>Murphy (2012)</p>
+    <p>Reverse mode autodiff, i.e., backprop (to compute gradients for instance in the case where f is a scalar function.</p>
   </li>
-  <li>**Coding/Tools: **PyTorch, Python, VIM, Latex</li>
-</ul>
-
-<h4 id="interests-projects">Interests/ Projects:</h4>
-
-<p>I’m interested in 2 topics:</p>
+  <li>
+    <p>Forward mode autodiff:  compute the directional derivative</p>
+  </li>
+  <li>
+    <p>Computing with the Jacobian.</p>
+  </li>
+</ol>
 
 <ul>
-  <li>ML for Medical Imaging</li>
-  <li>Generative Modelling for Compression</li>
+  <li>
+    <p>How can the directional derivative determine how the network would change if the weights are slightly perturbed?</p>
+  </li>
+  <li>
+    <p>How a model would change if we slightly perturb the training data?</p>
+  </li>
+  <li>
+    <p>Hessian and inverse Hessian, check that section on Bishop</p>
+  </li>
 </ul>
 
-<p>I’ll start working on these projects soon to build my CV. The first in mid-November ad the second in Mid-December.</p>
+<h2 id="the-networks-jacobian">The network’s Jacobian:</h2>
 
-<h4 id="misc">Misc:</h4>
-
-<p>I was studying some Measure theory, Functional analysis (From Claudio Landim at IMPA), but I stopped by the beginning November to focus more on Probabilistic ML. I felt like I was drifting too much into the theory and It was consuming a lot of my energy. I will get back to do more pure Maths on Mid-Dec, definitely before I start applying for Jobs.</p>
-
-<p>I also have a good background on Probability Theory, Linear Algebra ad Matrix Calculus. But I might consider devoting some time to High-Dimensional Probability.</p>
 
       </div>
     </main><footer class="site-footer h-card">

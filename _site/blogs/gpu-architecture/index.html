@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Kaizen | 10k</title>
+<meta name="generator" content="Jekyll v3.9.5" />
+<meta property="og:title" content="Kaizen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="10k" />
+<meta property="og:description" content="10k" />
+<link rel="canonical" href="http://localhost:4000/blogs/gpu-architecture/" />
+<meta property="og:url" content="http://localhost:4000/blogs/gpu-architecture/" />
+<meta property="og:site_name" content="Kaizen" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Kaizen" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Kaizen","url":"http://localhost:4000/blogs/gpu-architecture/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kaizen" /></head>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Kaizen</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/gal/">Cuties</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <p><strong>Content:</strong></p>
+
+<ul>
+  <li>GPU Architecture</li>
+  <li>Block scheduling:</li>
+</ul>
+
+<h2 id="gpu-architecture">GPU architecture:</h2>
+
+<ul>
+  <li>GPUs are organized into an array of highly threaded SMs (Streaming Multiprocessors).</li>
+  <li>Each SM contains:
+    <ul>
+      <li>GPU cores (processing units)</li>
+      <li>Control units (manage instruction fetching, scheduling, and execution flow)</li>
+      <li>Shared Memory (on-chip) (accessed and shared between threads of the same blog)</li>
+    </ul>
+  </li>
+  <li>
+    <p>Cores inside the same SM share the same control logic and memory resources.</p>
+  </li>
+  <li>All SMs have access to global memory (DRAM) (off-chip).</li>
+</ul>
+
+<p><img src="/src/media-gpu/gpu-architecture.png" alt="Fig" /></p>
+
+<h2 id="block-scheduling">Block scheduling:</h2>
+
+<ul>
+  <li>
+    <p>A kernel launches a grid of threads that are organized in thread blocks. Each thread block is assigned to the same SM. But, multiple blocks are likely to be assigned to the same SM.</p>
+  </li>
+  <li>
+    <p>Before execution, each block must reserve the necessary hardware resources, such as registers and shared memory. Since the number of thread blocks typically exceeds what a single SM can handle simultaneously, the runtime system maintains a queue of pending blocks. As SMs complete execution of current blocks, new blocks from the queue are assigned to them.</p>
+  </li>
+  <li>This block-by-block assignment simplifies coordination for threads under the same block, by using:
+    <ul>
+      <li>Barrier synchronization.</li>
+      <li>Accessing a low-latency shared memory that resides on the SM.</li>
+    </ul>
+  </li>
+  <li>Note: Threads in different blocks can perform barrier synchronization through the Cooperative Groups API.</li>
+</ul>
+
+<h2 id="synchronisation-and-transparent-scalability">Synchronisation and transparent scalability:</h2>
+
+<ul>
+  <li>
+    <p>The <code class="language-plaintext highlighter-rouge">__syncthreads()</code> function ensures that all threads within a block reach the same point before any proceed further. The threads that reach the barrier early will wait until all others have arrived.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">__syncthreads()</code> must be called by <strong>all</strong> threads in the block. Placing it inside an if-else block (where threads diverge) can lead to deadlocks, or undefined behavior.</p>
+  </li>
+  <li>When using barrier sync, threads (of the same block) should execute in close time proximity with each other to avoid excessively long waiting times.
+    <ul>
+      <li>The system needs to make sure that all threads involved in the barrier synchronization have access to the necessary resources to eventually arrive at the barrier.</li>
+      <li>Not only do all threads in a block have to be assigned to the same SM, but also they need to be assigned to that SM simultaneously. That is, a block can begin execution only when the runtime system has <strong>secured all the resources needed</strong> by <strong>all threads</strong> in the block to complete execution.</li>
+    </ul>
+  </li>
+  <li>CUDA runtime system can execute blocks at any order (none of them need to wait for each other). This flexibility enables <strong>transparent scalability</strong>, i.e., the ability to execute the same code on different devices. Not requiring threads across different blocks to sync makes it easier to change order or execution from one device to another, and how many blocks are processed simultaneously.</li>
+</ul>
+
+<h2 id="warps-and-simd-hardware">Warps and SIMD hardware:</h2>
+
+<ul>
+  <li>
+    <p>Now we focus on threads of the same block. Threads can be executed at any order with respect to each other.</p>
+  </li>
+  <li>
+    <p>In algorithms with phases (all threads have to be at the same level), one should use barrier sync to impose that.</p>
+  </li>
+  <li>
+    <p>A warp is a unit of thread scheduling in SMs, and are executed SIMD style.</p>
+  </li>
+  <li>
+    <p>Once a block has been assigned to an SM. Is it divided into warps (units of 32 threads of consecutive <code class="language-plaintext highlighter-rouge">threadIdx</code>, what if there was multi-dim blocks?).</p>
+    <ul>
+      <li>If blocks are multi-dim, the dimensions will be linearised first, row major layout.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/src/media-gpu/warps-blocks-per-sm.png" alt="warps" /></p>
+
+<p>Within each thread block assigned to an SM, threads are further organized into warps. A warp is the fundamental unit of thread scheduling in NVIDIA GPUs, consisting of 32 threads executed in a Single Instruction, Multiple Data (SIMD) fashion. Here’s how warps function within the GPU architecture:</p>
+
+<ul>
+  <li>
+    <p>Warp Formation: Once a thread block is assigned to an SM, it is divided into warps of 32 consecutive threads based on their threadIdx. For multi-dimensional thread blocks, thread indices are linearized in a row-major order before warp formation.</p>
+  </li>
+  <li>
+    <p>Handling Non-Multiples of Warp Size: If a thread block size is not a multiple of 32, the final warp is padded with inactive threads to complete the 32-thread structure. These inactive threads do not participate in execution, ensuring uniform warp processing.</p>
+  </li>
+  <li>
+    <p>SIMD Execution: An SM fetches and executes a single instruction for all active threads within a warp simultaneously. Each thread in the warp processes different data elements, enabling high throughput for parallel workloads.</p>
+  </li>
+  <li>
+    <p>Processing Blocks within SMs: Modern GPUs, such as the NVIDIA A100, divide each SM into smaller processing blocks. For instance, an A100 SM contains 64 CUDA cores, which are grouped into 4 processing blocks of 16 cores each. Warps are assigned to these processing blocks, allowing multiple warps to be active within an SM and facilitating efficient instruction dispatch and execution.</p>
+  </li>
+  <li>
+    <p>Resource Efficiency: By grouping threads into warps and executing them in lockstep, GPUs minimize the resources required for control logic. All threads in a warp share the same instruction stream and execution order, reducing the complexity of the scheduling hardware.</p>
+  </li>
+</ul>
+
+<p><strong>Parallel to the VN computer model:</strong></p>
+
+<p>The von Neumann computer model:
+<img src="/src/media-gpu/vn-model.png" alt="vn" /></p>
+
+<p>Executing threads in warps reflects upon this model:,</p>
+
+<p><img src="/src/media-gpu/vn-model.png" alt="vn-gpu" /></p>
+
+<p>Some notes on the analogy:</p>
+
+<ul>
+  <li>A processor is a processing block</li>
+  <li>A processing unit is a core a of processing block.</li>
+  <li>Cores of the same processing block receive the same control signals.</li>
+  <li>Warps are assigned to the same processing block, and executed SIMD style.</li>
+</ul>
+
+<h2 id="control-divergence">Control divergence:</h2>
+
+<ul>
+  <li>
+    <p>SIMD work best when all threads follow the same control flow.</p>
+  </li>
+  <li>
+    <p>When threads within the same warp take different paths (some go through an if, some go through an else). The SIMD hardware will take multiple passes. One through each path. During each path, the threads that do not follow the path are not allowed to take effect.</p>
+  </li>
+  <li>
+    <p>If threads following different control flow, we say: “threads exhibit control divergence”.</p>
+  </li>
+  <li>
+    <p>In PASCAL architecture, these passes are executed sequentially, one after another. From Volta Architecture onwards, the passes may be executed concurrently. The latter feature » <strong>independent thread scheduling</strong>.</p>
+  </li>
+  <li>
+    <p>To ensure that all threads of a warp sync use: <code class="language-plaintext highlighter-rouge">__syncwarps()</code>.</p>
+  </li>
+</ul>
+
+<h2 id="warps-scheduling-and-latency-tolerance">Warps scheduling and latency tolerance:</h2>
+
+<ul>
+  <li>
+    <p>An SM can execute instructions for only a small number of the warps that are assigned to it at once.</p>
+  </li>
+  <li>Why assign more warps than capable of? This is a feature and not a bug. This is how GPUs hide long-latency operation, such as global memory access. Often referred to as <strong>latency hiding</strong>:
+    <ul>
+      <li>When an instruction to be executed by a warp needs to wait for the result of a previously initiated long-latency operation, the warp is not selected for execution.</li>
+      <li>Instead, another resident warp that is no longer waiting for results of previous instructions will be selected for execution.</li>
+      <li>If more than one warp is ready for execution, a priority mechanism is used to select one for execution.</li>
+    </ul>
+  </li>
+  <li>
+    <p>The selection of ready-to-go warps does not introduce any additional wasted time &gt; zero-overhead thread scheduling.</p>
+  </li>
+  <li>
+    <p>This ability to hide latency by switching between warps, is why GPUs do not need any sophisticated mechanisms like advanced control logic, cache memories and so on (how CPUs work), hence, again, GPUs can dedicate more on-chip area to floating-point execution and memory access channel resources.</p>
+  </li>
+  <li>
+    <p><strong>Zero-overhead scheduling:</strong> The GPU’s ability to put a warp that needs to wait for a long-latency instruction result to sleep and activate a warp that is ready to go without introducing any extra idle cycles in the processing units.</p>
+  </li>
+  <li>
+    <p>In CPUs, switching the execution from one thread to another requires saving the execution state to memory and loading the execution state of the incoming thread from memory.</p>
+  </li>
+  <li>
+    <p>GPU SMs achieves zero-overhead scheduling by holding all the execution states for the assigned warps in the hardware registers so there is no need to save and restore states when switching from one warp to another.</p>
+  </li>
+  <li>For an A100, is it normal to have a ratio of 32 threads per core, i.e., 2048 threads per SM.</li>
+</ul>
+
+<h2 id="resource-partitioning-and-occupancy">Resource partitioning and occupancy:</h2>
+
+<ul>
+  <li>Occupancy = number of warps assigned to an SM / maximum number it supports.</li>
+  <li>
+    <p>How SM resources are partitioned:</p>
+  </li>
+  <li>SM execution resources (for an A100):
+    <ul>
+      <li>Registers</li>
+      <li>Shared memory</li>
+      <li>thread block slots</li>
+      <li>thread slots (2048 in each SM)</li>
+    </ul>
+  </li>
+  <li>
+    <p>These resources are dynamically partitioned, for an A100, block size could vary between 1024 and 64, leading to 2-32 blocks per SM.</p>
+  </li>
+  <li>
+    <p>Some kernels may use many automatic variables. Hence, threads may have to use many registers. Leading to the SM accommodating variant number of blocks at once, depends on how much registers they require.</p>
+  </li>
+  <li>
+    <p>For an A100, it has 65k registers per SM. To run at full capacity, each thread should be satisfied with 32 registers.</p>
+  </li>
+  <li>
+    <p>In some cases, the compiler may perform register spilling to reduce the register requirement per thread and thus increase the occupancy. May add some additional execution time for the thread to access the spilled registers.</p>
+  </li>
+  <li>
+    <p>The fuck is a spilled register? »</p>
+  </li>
+  <li>Check the CUDA Occupancy Calculator.</li>
+</ul>
+
+<h2 id="querying-device-properties">Querying device properties:</h2>
+
+<ul>
+  <li>The CUDA runtime API provide a built-in C struct cadaver’s with many interesting fields to query the device properties as shown below:</li>
+  <li>Running the following code:</li>
+</ul>
+
+<pre><code class="language-Cpp">int main(){
+
+    int devCount;
+    cudaGetDeviceCount(&amp;devCount);
+
+    std::cout &lt;&lt; "Number of CUDA devices: " &lt;&lt; devCount &lt;&lt; std::endl;
+
+    cudaDeviceProp devProp;
+
+    for (int i = 0; i &lt; devCount; i++){
+        cudaGetDeviceProperties(&amp;devProp, i);
+        std::cout &lt;&lt; "Device " &lt;&lt; i &lt;&lt; ": " &lt;&lt; devProp.name &lt;&lt; std::endl;
+        std::cout &lt;&lt; "Compute capability: " &lt;&lt; devProp.major &lt;&lt; "." &lt;&lt; devProp.minor &lt;&lt; std::endl;
+        std::cout &lt;&lt; "Total global memory: " &lt;&lt; devProp.totalGlobalMem &lt;&lt; std::endl;
+        std::cout &lt;&lt; "Shared memory per block: " &lt;&lt; devProp.sharedMemPerBlock &lt;&lt; std::endl;
+        std::cout &lt;&lt; "Registers per block: " &lt;&lt; devProp.regsPerBlock &lt;&lt; std::endl;
+        std::cout &lt;&lt; "Warp size: " &lt;&lt; devProp.warpSize &lt;&lt; std::endl;
+        std::cout &lt;&lt; "Max threads per block: " &lt;&lt; devProp.maxThreadsPerBlock &lt;&lt; std::endl;
+        std::cout &lt;&lt; "Max threads dimensions: " &lt;&lt; devProp.maxThreadsDim[0] &lt;&lt; " x " &lt;&lt; devProp.maxThreadsDim[1] &lt;&lt; " x " &lt;&lt; devProp.maxThreadsDim[2] &lt;&lt; std::endl;
+        std::cout &lt;&lt; "Max grid size: " &lt;&lt; devProp.maxGridSize[0] &lt;&lt; " x " &lt;&lt; devProp.maxGridSize[1] &lt;&lt; " x " &lt;&lt; devProp.maxGridSize[2] &lt;&lt; std::endl;
+        std::cout &lt;&lt; "Clock rate: " &lt;&lt; devProp.clockRate &lt;&lt; std::endl;
+        std::cout &lt;&lt; "Total constant memory: " &lt;&lt; devProp.totalConstMem &lt;&lt; std::endl;
+        std::cout &lt;&lt; "Texture alignment: " &lt;&lt; devProp.textureAlignment &lt;&lt; std::endl;
+        std::cout &lt;&lt; "Multiprocessor count: " &lt;&lt; devProp.multiProcessorCount &lt;&lt; std::endl;
+    }
+    return 0;
+}
+</code></pre>
+
+<p>Will return the following on my A100 remote machine:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>nvcc <span class="nt">-o</span> props props.cu
+<span class="nv">$ </span>./props
+Number of CUDA devices: 1
+Device 0: NVIDIA A100 80GB PCIe
+Compute capability: 8.0
+Total global memory: 84974239744
+Shared memory per block: 49152
+Registers per block: 65536
+Warp size: 32
+Max threads per block: 1024
+Max threads dimensions: 1024 x 1024 x 64
+Max grid size: 2147483647 x 65535 x 65535
+Clock rate: 1410000
+Total constant memory: 65536
+Texture alignment: 512
+Multiprocessor count: 108A
+</code></pre></div></div>
+
+<ul>
+  <li><strong>Compute Capability</strong> is a versioning system used primarily by NVIDIA to define the features and capabilities of their GPU architectures, for example:
+    <ul>
+      <li>7.x: Corresponds to the Volta architecture (Introduced Tensor core, and so on).</li>
+      <li>8.x: Relates to the Ampere architecture.</li>
+      <li>9.x: Pertains to the Hopper architecture.</li>
+    </ul>
+  </li>
+</ul>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+  <div class="wrapper">
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+              Kaizen
+          </li>
+        </ul>
+      </div>
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/eigenAyoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">eigenAyoub</span></a></li><li><a href="https://instagram.com/curl.ayoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#instagram"></use></svg> <span class="username">curl.ayoub</span></a></li><li><a href="https://www.linkedin.com/in/benayad"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">benayad</span></a></li><li><a href="https://www.twitter.com/benayad_"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">benayad_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>10k</p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+</body>
+
+</html>

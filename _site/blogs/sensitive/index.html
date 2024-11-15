@@ -9,14 +9,14 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="10k" />
 <meta property="og:description" content="10k" />
-<link rel="canonical" href="http://localhost:4000/" />
-<meta property="og:url" content="http://localhost:4000/" />
+<link rel="canonical" href="http://localhost:4000/blogs/sensitive/" />
+<meta property="og:url" content="http://localhost:4000/blogs/sensitive/" />
 <meta property="og:site_name" content="Kaizen" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Kaizen" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","description":"10k","headline":"Kaizen","name":"Kaizen","url":"http://localhost:4000/"}</script>
+{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Kaizen","url":"http://localhost:4000/blogs/sensitive/"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kaizen" /></head>
 
@@ -38,49 +38,70 @@
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <div class="home"><p>\(\rightarrow\) <strong>CUDA/C++ learning series:</strong></p>
+        <p>Title: Floating point arithmetic, from Ariane flight V88 to LLMs training.</p>
+
+<h2 id="motivation">Motivation:</h2>
+
+<p>From, <a href="https://en.wikipedia.org/wiki/Ariane_flight_V88">Ariane flight V88</a>, To, LLMs training.</p>
+
+<h2 id="sources-of-error">Sources of error:</h2>
+
+<p>Generally speaking, there two main sources of error induced by numerical approximations (ignoring errors induced by modeling assumptions):</p>
+
+<ol>
+  <li>Rounding: Computers can only do finite precision arithmetic.</li>
+  <li>Discretization: We approximate continues phenomenons with discrete counterparts.</li>
+</ol>
+
+<p>While <code class="language-plaintext highlighter-rouge">Rounding</code> usually gets all the blame, errors stemming from discretization are as important if not even more.</p>
+
+<p><strong>Example:</strong> We want to approximate \(\quad f'(x) \quad\) using \(\quad f_{\text{diff}}(x; h) \equiv \frac{f(x+h) - f(x)}{h} \quad\) for some small \(h\).</p>
+
+<p>Assuming that \(f\) is nice enough (twice diff and \(f''\) is \(M\)-bounded) and using Taylor’s theorem with a remainder, there exists some \(\theta \in [x , x+h]\) :</p>
+
+\[f(x+h) = f(x) + hf'(x) + f''(\theta) \frac{h^2}{2}\]
+
+<p>Which yields the following <strong>discretization error</strong>:</p>
+
+\[f_{\text{diff}}(x; h) =   f'(x) + f''(\theta) \frac{h}{2}
+\implies \left| f'(x) - f_{\text{diff}}(x; h) \right| \leq \frac{Mh}{2}.\]
+
+<p>Additionally, we can introduce a <strong>rounding error</strong>. The numerator of \(f_{\text{diff}}\) can not be computed exactly. Say we approximate it with \(\tilde{f}_{\text{diff}}(x; h) = \frac{f(x+h) - f(x) + \epsilon f(x)}{h}\) with \(\epsilon \approx 10^{-16}\). We get the following upper bound:</p>
+
+\[\left| f'(x) - \tilde{f}_{\text{diff}}(x; h) \right|
+\leq
+\underbrace{\frac{Mh}{2}}_{\text{discretization err.}}
++ 
+\underbrace{\frac{\epsilon f(x)}{h}}_{\text{rounding err.}}\]
+
+<h2 id="numerical-sensitivity">Numerical sensitivity:</h2>
+
+<p>Say \(y = f(x)\), the idea is to measure how a small perturbation to the input \(x\) reflects on the output \(y\). Obviously, we want this rate of change to be small. For now, and w.l.o.g we define <strong>the condition number</strong> (of \(f\))as follows:</p>
+
+\[C = \frac{\left|\Delta y  / y \right|}{\left|\Delta x  / x \right|}\]
+
 <ul>
-  <li><a href="/blogs/gpu-architecture">GPU architecture and warp scheduling</a></li>
+  <li>Condition number » 1</li>
 </ul>
 
-<p>\(\rightarrow\) <strong>LLMs</strong></p>
-<ul>
-  <li><a href="/blogs/ppl">Some notes on perplexity and beyond!</a></li>
-  <li><a href="/blogs/fastinference">Recent trends to speed up autoregressive inference of LLMs (unifinished).</a></li>
-</ul>
+<h2 id="finite-precision-arithmetic">Finite precision arithmetic:</h2>
 
-<p>\(\rightarrow\) <strong>Technical</strong></p>
-<ul>
-  <li><a href="/blogs/linux">Handling checkpoints from terminal - some useful tricks.</a></li>
-  <li><a href="/blogs/container">Quick reset of my compute pod.</a></li>
-  <li><a href="/blogs/vim">Speed up your migration to VIM.</a>
-<!-- [Investigating Kronecker Products as  xx](/blogs/distill/main.pdf) --></li>
-</ul>
+<p>Check the section from Matrix computation.</p>
 
-<p>\(\rightarrow\) <strong>Math:</strong></p>
-<ul>
-  <li><a href="/blogs/enter_the_matrix">Matrix Differential Calculus.</a></li>
-  <li><a href="/blogs/SGD">Convergence Rates of SGD in convex and non-convex cases.</a></li>
-</ul>
-
-<p><ins><strong>Some GitHub repos:</strong></ins></p>
+<h3 id="link-to-llms-and-host-providers">Link to LLMs and host providers.</h3>
 
 <ul>
-  <li>GPT2 factorized with (multiple) Kronecker Factors: \(\rightarrow\) <a href="https://github.com/eigenAyoub/krony-PT">Github link</a>.</li>
-  <li>Backpropagation from scratch \(\rightarrow\) <a href="https://github.com/eigenAyoub/check-your-gradients">Github link</a>.</li>
-  <li>Randomized Algorithms \(\rightarrow\) <a href="https://github.com/eigenAyoub/randomised-algorithms">Github link</a>.</li>
-  <li>Reinforcement Learning \(\rightarrow\) <a href="https://github.com/eigenAyoub/reinforcement-learning">Github link</a>.</li>
+  <li>This is the interesting part</li>
+  <li>Link to LLMs training, and hosting companies..</li>
+  <li>Why training requires full precision, but hosting/inference is Ok?</li>
 </ul>
 
-<p><ins><strong>Bio/Contact:</strong></ins></p>
+<h2 id="references">References:</h2>
 
-<p>📍Passau, Germany.</p>
 <ul>
-  <li>I’m a part-time ML research assistant <a href="https://ca-roll.github.io/">@CAROLL</a>, working on LLMs.</li>
-  <li>I’m also a computational math master’s student at <a href="https://www.uni-passau.de/en/msc-compmaths">@UniPassau</a>.</li>
-  <li><strong>Gmail:</strong> <code class="language-plaintext highlighter-rouge">ayoub.benayad.467</code> ;  <a href="https://www.linkedin.com/in/benayad/">LinkedIn</a> ; <a href="https://www.instagram.com/curl.ayoub/">Instagram</a>.</li>
+  <li><a href="https://people.math.wisc.edu/~chr/am205/">Harvard Applied Math 205</a></li>
+  <li>Matrix Computation.</li>
 </ul>
-</div>
 
       </div>
     </main><footer class="site-footer h-card">

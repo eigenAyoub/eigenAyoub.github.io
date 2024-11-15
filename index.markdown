@@ -3,6 +3,8 @@ layout: home
 ---
 
 
+$$\rightarrow$$ **CUDA/C++ learning series:** 
+* [GPU architecture and warp scheduling](/blogs/gpu-architecture)
 
 $$\rightarrow$$ **LLMs** 
 * [Some notes on perplexity and beyond!](/blogs/ppl)
@@ -27,5 +29,7 @@ $$\rightarrow$$ **Math:**
 
 <ins>**Bio/Contact:**</ins>
 
-* I am part-time research assistant [@CAROLL](https://ca-roll.github.io/), working on LLMs factorization. And also enrolled [@UniPassau](https://www.uni-passau.de/en/msc-compmaths). 
+ 📍Passau, Germany. 
+* I'm a part-time ML research assistant [@CAROLL](https://ca-roll.github.io/), working on LLMs. 
+* I'm also a computational math master's student at [@UniPassau](https://www.uni-passau.de/en/msc-compmaths). 
 * **Gmail:** `ayoub.benayad.467` ;  [LinkedIn](https://www.linkedin.com/in/benayad/) ; [Instagram](https://www.instagram.com/curl.ayoub/).
