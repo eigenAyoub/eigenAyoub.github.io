@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Kaizen | 10k</title>
+<meta name="generator" content="Jekyll v3.9.5" />
+<meta property="og:title" content="Kaizen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="10k" />
+<meta property="og:description" content="10k" />
+<link rel="canonical" href="http://localhost:4000/blogs/on-chip-memory/" />
+<meta property="og:url" content="http://localhost:4000/blogs/on-chip-memory/" />
+<meta property="og:site_name" content="Kaizen" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Kaizen" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Kaizen","url":"http://localhost:4000/blogs/on-chip-memory/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kaizen" /></head>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Kaizen</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/gal/">Cuties</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <p><strong>Content:</strong></p>
+
+<ul>
+  <li>Arithmetic intensity.</li>
+  <li>CUDA memory types.</li>
+  <li></li>
+</ul>
+
+<h2 id="a-primer-on-the-arithmetic-intensity">A primer on the arithmetic intensity:</h2>
+
+<p>Consider the main loop of a simple matrix  multiplication:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">width</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">){</span>
+	<span class="n">Pvalue</span> <span class="o">+=</span> <span class="n">M</span><span class="p">[</span><span class="n">row</span><span class="o">*</span><span class="n">Width</span><span class="o">+</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span><span class="p">[</span><span class="n">k</span><span class="o">*</span><span class="n">width</span> <span class="o">+</span> <span class="n">col</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The arithmetic (or computational) intensity is defined as the ratio of floating point operations <strong>to</strong> bytes accessed from the global memory (it’s equal to 0.25 flops/byte in the example above).</p>
+
+<p>An A100, DRAM peak bandwidth is 1555 GB/second, hence for the simple example above, we can barely do 389 GFLOPS (Giga Flops per second). This accounts to only 2% of the (theoretical) peak single-precision operations throughput ~ 19.5k GFLOPS. The peak operation throughput is equivalent to performing 12 ops per second.</p>
+
+<h2 id="cuda-memory-types">CUDA memory types:</h2>
+
+<p><img src="/src/media-gpu/mem.png" alt="Memory" /></p>
+
+<p>The Global memory (DRAM) and the Constant memory share the same access latency. The host can W and R on both, while the device can only R the constant memory.</p>
+
+<p>The Local memory is placed in Global memory, and has the same latency.</p>
+<ul>
+  <li>BUT, it is not shared between threads, every thread has it’s own region.</li>
+  <li>Every thread places elements that can’t be placed in their own registers:
+    <ul>
+      <li>Statically allocated arrays.</li>
+      <li>Spilled registers.</li>
+      <li>Elements of the thread’s call stack. (like what, wdym?)</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Registers and shared memory are on-chip memories.
+	* Registers are allocated to individual threads.
+	* A kernel typically uses registers to allocate frequently (and privately) accessed variables to each thread. 
+	* Shared memory is allocated to thread blocks, and shared between threads on the same block. Usually used to share data, and cooperate between threads, and share intermediate results.</p>
+
+<p>Differences between registers, shared memory and global memory:</p>
+
+<ul>
+  <li>
+    <p>Global memory is implemented with DRAM technology (long access latency, low access bandwidth).</p>
+  </li>
+  <li>
+    <p>Registers: very short access latency, and drastically higher access bandwidth compared to the global memory.</p>
+  </li>
+</ul>
+
+<p>Each access to registers involves fewer instructions than an access to the global memory.</p>
+
+<p>The scope and lifetime of each variable:</p>
+
+<h2 id="tiling">Tiling:</h2>
+
+<p>Link to code:</p>
+
+<h2 id="impact-of-memory-usage-on-occupancy">Impact of memory usage on occupancy:</h2>
+
+<h3 id="registers-how-different-are-they-used-in-cpu-vs-gpu">Registers, how different are they used in CPU Vs GPU:</h3>
+
+<h3 id="the-roofline-model">The roofline model:</h3>
+
+<ul>
+  <li>The question: Is your program compute-bound or memory-bound.</li>
+  <li>I am too dumb, always struggle to understand this.</li>
+</ul>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+  <div class="wrapper">
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+              Kaizen
+          </li>
+        </ul>
+      </div>
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/eigenAyoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">eigenAyoub</span></a></li><li><a href="https://instagram.com/curl.ayoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#instagram"></use></svg> <span class="username">curl.ayoub</span></a></li><li><a href="https://www.linkedin.com/in/benayad"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">benayad</span></a></li><li><a href="https://www.twitter.com/benayad_"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">benayad_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>10k</p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+</body>
+
+</html>

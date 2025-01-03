@@ -9,14 +9,14 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="10k" />
 <meta property="og:description" content="10k" />
-<link rel="canonical" href="http://localhost:4000/" />
-<meta property="og:url" content="http://localhost:4000/" />
+<link rel="canonical" href="http://localhost:4000/blogs/gpu-perf/" />
+<meta property="og:url" content="http://localhost:4000/blogs/gpu-perf/" />
 <meta property="og:site_name" content="Kaizen" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Kaizen" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","description":"10k","headline":"Kaizen","name":"Kaizen","url":"http://localhost:4000/"}</script>
+{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Kaizen","url":"http://localhost:4000/blogs/gpu-perf/"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kaizen" /></head>
 
@@ -38,54 +38,62 @@
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <div class="home"><p>\(\rightarrow\) <strong>CUDA/C++ learning series:</strong></p>
+        <p>Performance considerations.</p>
+
+<p><strong>Content:</strong></p>
 <ul>
-  <li><a href="/blogs/gpu-architecture/">GPU architecture and warp scheduling</a></li>
+  <li>*</li>
 </ul>
 
-<p>\(\rightarrow\) <strong>Random C++:</strong></p>
-<ul>
-  <li><a href="/blogs/mnist-cpp/">Loading MNIST dataset in C++</a></li>
-</ul>
+<p>The main bottlenecks in GPU computing are CPU-GPU data transfer, and global memory (DRAM) access, for each thread, DRAM access is usually 500x clocks cycles, registers access takes 1 clock cycle.</p>
 
-<p>\(\rightarrow\) <strong>LLMs</strong></p>
-<ul>
-  <li><a href="/blogs/ppl">Some notes on perplexity and beyond!</a></li>
-  <li><a href="/blogs/fastinference">Recent trends to speed up autoregressive inference of LLMs (unifinished).</a></li>
-</ul>
+<h2 id="memory-access">Memory access:</h2>
 
-<p>\(\rightarrow\) <strong>Technical</strong></p>
-<ul>
-  <li><a href="/blogs/linux">Handling checkpoints from terminal - some useful tricks.</a></li>
-  <li><a href="/blogs/container">Quick reset of my compute pod.</a></li>
-  <li><a href="/blogs/vim">Speed up your migration to VIM.</a>
-<!-- [Investigating Kronecker Products as  xx](/blogs/distill/main.pdf) --></li>
-</ul>
+<h3 id="latency-hiding-and-occupancy">Latency hiding and occupancy.</h3>
 
-<p>\(\rightarrow\) <strong>Math:</strong></p>
-<ul>
-  <li><a href="/blogs/enter_the_matrix">Matrix Differential Calculus.</a></li>
-  <li><a href="/blogs/SGD">Convergence Rates of SGD in convex and non-convex cases.</a></li>
-</ul>
+<p>To hide latency, it is important to have enough warps in the SM Sub-Partition (SMSP). Occupancy is the ratio of active warps per max (can you even write english bro?).</p>
 
-<p><ins><strong>Some GitHub repos:</strong></ins></p>
+<p>Add an example of the occupancy calculator.</p>
+<blockquote>
+  <p>use NSIGHT or .xls idgaf. Do it!</p>
+</blockquote>
+
+<h3 id="coalescing-memory-accesses">Coalescing memory accesses:</h3>
+
+<p>How tf does a DRAM work?
+<img src="/src/gpu-media/dram01.png" alt="dram-top-down" /></p>
 
 <ul>
-  <li>GPT2 factorized with (multiple) Kronecker Factors: \(\rightarrow\) <a href="https://github.com/eigenAyoub/krony-PT">Github link</a>.</li>
-  <li>Backpropagation from scratch \(\rightarrow\) <a href="https://github.com/eigenAyoub/check-your-gradients">Github link</a>.</li>
-  <li>Randomized Algorithms \(\rightarrow\) <a href="https://github.com/eigenAyoub/randomised-algorithms">Github link</a>.</li>
-  <li>Reinforcement Learning \(\rightarrow\) <a href="https://github.com/eigenAyoub/reinforcement-learning">Github link</a>.</li>
+  <li><strong>Channels</strong> connect the CPU/GPU to the memory itself.</li>
+  <li>The memory itself is composed by DIMMs.</li>
+  <li>Inside each <strong>DIMM</strong>, we have <strong>ranks</strong> which are composed of <strong>chips</strong> which contains memory <strong>ebanks</strong>.</li>
+  <li>Banks are 2D-organized (rows/columns) memory cells.</li>
 </ul>
 
-<p><ins><strong>Bio/Contact:</strong></ins></p>
+<p>Closer threads need to access data in the same regions.</p>
 
-<p>📍Passau, Germany.</p>
-<ul>
-  <li>I’m a part-time ML research assistant <a href="https://ca-roll.github.io/">@CAROLL</a>, working on LLMs.</li>
-  <li>I’m also a computational math master’s student at <a href="https://www.uni-passau.de/en/msc-compmaths">@UniPassau</a>.</li>
-  <li><strong>Gmail:</strong> <code class="language-plaintext highlighter-rouge">ayoub.benayad.467</code> ;  <a href="https://www.linkedin.com/in/benayad/">LinkedIn</a> ; <a href="https://www.instagram.com/curl.ayoub/">Instagram</a>.</li>
-</ul>
-</div>
+<h3 id="shared-memory-usage-avoid-conflict-related-to-bankingstrides">Shared memory usage, avoid conflict related to banking/strides:</h3>
+
+<h2 id="execution-simd-and-divergence">Execution, SIMD and divergence.</h2>
+
+<p>Title:  Memory coalescing and thread coarsening.</p>
+
+<h2 id="memory-coalescing">Memory coalescing:</h2>
+
+<p>DRAM cell:</p>
+
+<p>Capacitor stores a charge, and three-state transistor based IC allowing data to be read/written.A</p>
+
+<p>If the value stored is 1 » it will discharge.</p>
+
+<p>DRAM array:</p>
+
+<p>Multiple DRAM cells, connected to a column wire. At a point of time, you can only read one DRAM cell of the array.</p>
+
+<p>DRAM bank; is a 2D-array of DRAM cells // a stack of DRAM arrays, activated one row at a time, and red at the column.</p>
+
+<p>How many elements can you fit in one array of a single DRAM bank?</p>
+
 
       </div>
     </main><footer class="site-footer h-card">

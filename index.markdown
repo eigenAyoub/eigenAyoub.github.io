@@ -4,7 +4,10 @@ layout: home
 
 
 $$\rightarrow$$ **CUDA/C++ learning series:** 
-* [GPU architecture and warp scheduling](/blogs/gpu-architecture)
+* [GPU architecture and warp scheduling](/blogs/gpu-architecture/)
+
+$$\rightarrow$$ **Random C++:** 
+* [Loading MNIST dataset in C++](/blogs/mnist-cpp/)
 
 $$\rightarrow$$ **LLMs** 
 * [Some notes on perplexity and beyond!](/blogs/ppl)

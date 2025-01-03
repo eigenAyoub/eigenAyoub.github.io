@@ -9,14 +9,14 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="10k" />
 <meta property="og:description" content="10k" />
-<link rel="canonical" href="http://localhost:4000/" />
-<meta property="og:url" content="http://localhost:4000/" />
+<link rel="canonical" href="http://localhost:4000/blogs/simd/" />
+<meta property="og:url" content="http://localhost:4000/blogs/simd/" />
 <meta property="og:site_name" content="Kaizen" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Kaizen" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","description":"10k","headline":"Kaizen","name":"Kaizen","url":"http://localhost:4000/"}</script>
+{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Kaizen","url":"http://localhost:4000/blogs/simd/"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kaizen" /></head>
 
@@ -38,54 +38,63 @@
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <div class="home"><p>\(\rightarrow\) <strong>CUDA/C++ learning series:</strong></p>
+        <p>SIMD for GPUs.</p>
+
+<p><strong>Content:</strong></p>
 <ul>
-  <li><a href="/blogs/gpu-architecture/">GPU architecture and warp scheduling</a></li>
+  <li>SIMD?</li>
+  <li>Show me the instructions.</li>
 </ul>
 
-<p>\(\rightarrow\) <strong>Random C++:</strong></p>
+<h2 id="simd">SIMD</h2>
+
+<p>SIMD is a computer architecture class (following Flynn’s taxonomy) that leverages the principle of a Single Instruction operating on Multiple Data. It is fundamentally a hardware design.SIMD processors are the basic paradigm of GPUS (although in GPUs it’s more of SIMT).</p>
+
+<p>Assuming a SIMD device has multiple execution units (or processing elements), SIMD processing can either be in time or space. This time-space duality gives the following two sub-classes:</p>
 <ul>
-  <li><a href="/blogs/mnist-cpp/">Loading MNIST dataset in C++</a></li>
+  <li>Array processors: The classic understanding of SIMD.
+    <ul>
+      <li>Same instructions, on multiple data, on different PEs.</li>
+      <li>PEs can do different instructions in time.</li>
+    </ul>
+  </li>
+  <li>Vector processors:
+    <ul>
+      <li>Instruction operates on multiple data consecutively, using <strong>the same PE</strong>.</li>
+      <li>PEs do the same instruction over time.</li>
+    </ul>
+  </li>
 </ul>
 
-<p>\(\rightarrow\) <strong>LLMs</strong></p>
-<ul>
-  <li><a href="/blogs/ppl">Some notes on perplexity and beyond!</a></li>
-  <li><a href="/blogs/fastinference">Recent trends to speed up autoregressive inference of LLMs (unifinished).</a></li>
-</ul>
+<p><img src="/src/media-gpu/simd01.png" alt="simd" /></p>
 
-<p>\(\rightarrow\) <strong>Technical</strong></p>
-<ul>
-  <li><a href="/blogs/linux">Handling checkpoints from terminal - some useful tricks.</a></li>
-  <li><a href="/blogs/container">Quick reset of my compute pod.</a></li>
-  <li><a href="/blogs/vim">Speed up your migration to VIM.</a>
-<!-- [Investigating Kronecker Products as  xx](/blogs/distill/main.pdf) --></li>
-</ul>
+<p>For instance, in an A100 SM, the are PEs specific for loading/storing.</p>
 
-<p>\(\rightarrow\) <strong>Math:</strong></p>
-<ul>
-  <li><a href="/blogs/enter_the_matrix">Matrix Differential Calculus.</a></li>
-  <li><a href="/blogs/SGD">Convergence Rates of SGD in convex and non-convex cases.</a></li>
-</ul>
+<p>In modern GPUs,</p>
 
-<p><ins><strong>Some GitHub repos:</strong></ins></p>
+<h2 id="ptx">PTX</h2>
+
+<p>SIMD can be internal (part of the hardware design) and it can be directly accessible through an instruction set architecture (ISA), but it should not be confused with an ISA.</p>
+
+<p>PTX (Parallel Thread Execution) is NVIDIA ‘s low-level intermediate assembly language for CUDA. PTX serves as a virtual ISA that abstracts the underlying GPU architecture. When you compile CUDA code, it is first compiled to PTX code, before being compiled to the machine-specific code by the NVIDIA driver.</p>
+
+<h3 id="things-to-add"><strong>Things to add:</strong></h3>
 
 <ul>
-  <li>GPT2 factorized with (multiple) Kronecker Factors: \(\rightarrow\) <a href="https://github.com/eigenAyoub/krony-PT">Github link</a>.</li>
-  <li>Backpropagation from scratch \(\rightarrow\) <a href="https://github.com/eigenAyoub/check-your-gradients">Github link</a>.</li>
-  <li>Randomized Algorithms \(\rightarrow\) <a href="https://github.com/eigenAyoub/randomised-algorithms">Github link</a>.</li>
-  <li>Reinforcement Learning \(\rightarrow\) <a href="https://github.com/eigenAyoub/reinforcement-learning">Github link</a>.</li>
+  <li>Memory banking?</li>
+  <li>Registers in CPUs vs GPUs?</li>
+  <li>Bottlenecks:
+    <ul>
+      <li>CPU-GPU transfer (PCIe, NVLink)</li>
+      <li>DRAM bandwidth.</li>
+    </ul>
+  </li>
 </ul>
 
-<p><ins><strong>Bio/Contact:</strong></ins></p>
+<p><strong>Title:</strong></p>
 
-<p>📍Passau, Germany.</p>
-<ul>
-  <li>I’m a part-time ML research assistant <a href="https://ca-roll.github.io/">@CAROLL</a>, working on LLMs.</li>
-  <li>I’m also a computational math master’s student at <a href="https://www.uni-passau.de/en/msc-compmaths">@UniPassau</a>.</li>
-  <li><strong>Gmail:</strong> <code class="language-plaintext highlighter-rouge">ayoub.benayad.467</code> ;  <a href="https://www.linkedin.com/in/benayad/">LinkedIn</a> ; <a href="https://www.instagram.com/curl.ayoub/">Instagram</a>.</li>
-</ul>
-</div>
+<p>SIMD, PTX, Memory banking issues, DRAM?
+New architectures.</p>
 
       </div>
     </main><footer class="site-footer h-card">
