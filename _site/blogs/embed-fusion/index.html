@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Models: | Kaizen</title>
+<meta name="generator" content="Jekyll v3.9.5" />
+<meta property="og:title" content="Models:" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="10k" />
+<meta property="og:description" content="10k" />
+<link rel="canonical" href="http://localhost:4000/blogs/embed-fusion/" />
+<meta property="og:url" content="http://localhost:4000/blogs/embed-fusion/" />
+<meta property="og:site_name" content="Kaizen" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Models:" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Models:","url":"http://localhost:4000/blogs/embed-fusion/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kaizen" /></head>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Kaizen</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blogs/cast-cpp/">Casting Operators: static_cast reinterpret_cast.</a><a class="page-link" href="/blogs/embed-fusion/">Models:</a><a class="page-link" href="/gal/">Cuties</a><a class="page-link" href="/blogs/rand-cpp/">Demystifying Random Numbers and Uniform Distribution in C++</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <h2 id="models">Models:</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Model</th>
+      <th style="text-align: left">NFCorpus</th>
+      <th style="text-align: left">SciFact</th>
+      <th style="text-align: center">Dim</th>
+      <th style="text-align: center"># Params</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">bge-small</td>
+      <td style="text-align: left">0.33708</td>
+      <td style="text-align: left">0.72</td>
+      <td style="text-align: center">768</td>
+      <td style="text-align: center">33M</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">arctic-m</td>
+      <td style="text-align: left">0.36201</td>
+      <td style="text-align: left">0.71586</td>
+      <td style="text-align: center">384</td>
+      <td style="text-align: center">109M</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">concat</td>
+      <td style="text-align: left">0.37287</td>
+      <td style="text-align: left">0.73095</td>
+      <td style="text-align: center">1152</td>
+      <td style="text-align: center">142M</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="simple-encoder--1152--768--512-simple_m1">Simple encoder:  1152 &gt; 768 &gt; 512 (<code class="language-plaintext highlighter-rouge">simple_m1</code>)</h2>
+
+<details>
+```python
+
+import torch.nn as nn
+
+class EncoderConfig:
+    DEFAULT = {
+        'input_dim': 1152,
+        'hidden_dim': 768,
+        'output_dim': 512,
+        'dropout': 0.1
+    }
+
+class EncoderOnly(nn.Module):
+    def __init__(self, config: dict = None):
+        super().__init__()
+        cfg = config or EncoderConfig.DEFAULT
+        
+        self.encoder = nn.Sequential(
+            nn.Linear(cfg['input_dim'], cfg['hidden_dim']),
+            nn.BatchNorm1d(cfg['hidden_dim']),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Dropout(cfg['dropout']),
+            
+            nn.Linear(cfg['hidden_dim'], cfg['output_dim']),
+            nn.BatchNorm1d(cfg['output_dim']),
+            nn.LeakyReLU(0.2, inplace=True)
+        )
+        
+        self._initialize_weights()
+    
+    def _initialize_weights(self):
+        for m in self.modules():
+            if isinstance(m, nn.Linear):
+                nn.init.kaiming_normal_(m.weight, mode='fan_in', nonlinearity='leaky_relu')
+                if m.bias is not None:
+                    nn.init.zeros_(m.bias)
+            elif isinstance(m, nn.BatchNorm1d):
+                nn.init.constant_(m.weight, 1)
+                nn.init.constant_(m.bias, 0)
+    
+    def forward(self, x, dim):
+        return self.encoder(x)[:,:dim]
+```
+
+
+Output-dim = 512
+
+Numbers: 
+	* NFCorpus: 0.31671
+	* SciFact:  0.63541
+
+* Epoch 1/30:  Train Loss: 0.000102, Val Loss: 0.000053
+* Epoch 10/30: Train Loss: 0.000036, Val Loss: 0.000039
+
+
+### Simple model: 1152 &gt; 512
+
+
+
+```python
+class EncoderConfig:
+    DEFAULT = {
+        'input_dim': 1152,
+        'output_dim': 512,
+        'dropout': 0.1
+    }
+
+class EncoderOnly(nn.Module):
+    def __init__(self, config: dict = None):
+        super().__init__()
+        cfg = config or EncoderConfig.DEFAULT
+        
+        self.encoder = nn.Sequential(
+            nn.Linear(cfg['input_dim'], cfg['output_dim']),
+            nn.BatchNorm1d(cfg['output_dim']),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Dropout(cfg['dropout'])
+        )
+        
+        self._initialize_weights()
+    
+    def _initialize_weights(self):
+        for m in self.modules():
+            if isinstance(m, nn.Linear):
+                nn.init.kaiming_normal_(m.weight, mode='fan_in', nonlinearity='leaky_relu')
+                if m.bias is not None:
+                    nn.init.zeros_(m.bias)
+            elif isinstance(m, nn.BatchNorm1d):
+                nn.init.constant_(m.weight, 1)
+                nn.init.constant_(m.bias, 0)
+    
+    def forward(self, x, dim):
+        return self.encoder(x)[:,:dim]
+```
+</details>
+
+<h2 id="simple-model-1152--512-with-normalized-without-dropout">Simple model: 1152 &gt; 512 with Normalized, without dropout.</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">EncoderConfig</span><span class="p">:</span>
+    <span class="n">DEFAULT</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'input_dim'</span><span class="p">:</span> <span class="mi">1152</span><span class="p">,</span>
+        <span class="s">'output_dim'</span><span class="p">:</span> <span class="mi">512</span><span class="p">,</span>
+        <span class="s">'dropout'</span><span class="p">:</span> <span class="mf">0.1</span>
+    <span class="p">}</span>
+<span class="k">class</span> <span class="nc">EncoderOnly</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="n">cfg</span> <span class="o">=</span> <span class="n">config</span> <span class="ow">or</span> <span class="n">EncoderConfig</span><span class="p">.</span><span class="n">DEFAULT</span>
+        
+        <span class="bp">self</span><span class="p">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="p">.</span><span class="n">LayerNorm</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s">'input_dim'</span><span class="p">]),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s">'input_dim'</span><span class="p">],</span> <span class="n">cfg</span><span class="p">[</span><span class="s">'output_dim'</span><span class="p">]),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="n">BatchNorm1d</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s">'output_dim'</span><span class="p">]),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+            
+            <span class="n">nn</span><span class="p">.</span><span class="n">LayerNorm</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s">'output_dim'</span><span class="p">]),</span>
+        <span class="p">)</span>
+        
+        <span class="bp">self</span><span class="p">.</span><span class="n">_initialize_weights</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">_initialize_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">modules</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">):</span>
+                <span class="n">nn</span><span class="p">.</span><span class="n">init</span><span class="p">.</span><span class="n">kaiming_normal_</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">'fan_in'</span><span class="p">,</span> <span class="n">nonlinearity</span><span class="o">=</span><span class="s">'leaky_relu'</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">nn</span><span class="p">.</span><span class="n">init</span><span class="p">.</span><span class="n">zeros_</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">bias</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">nn</span><span class="p">.</span><span class="n">BatchNorm1d</span><span class="p">):</span>
+                <span class="n">nn</span><span class="p">.</span><span class="n">init</span><span class="p">.</span><span class="n">constant_</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">weight</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">nn</span><span class="p">.</span><span class="n">init</span><span class="p">.</span><span class="n">constant_</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">bias</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">F</span><span class="p">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">out</span><span class="p">[:,:</span><span class="n">dim</span><span class="p">],</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+<ul>
+  <li>
+    <p>Loss with MRL on <code class="language-plaintext highlighter-rouge">COMPRESSED_DIMENSIONS = [32, 64, 128, 256, 384, 512]</code>.</p>
+  </li>
+  <li>
+    <p>Some numbers:</p>
+  </li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Epoch</th>
+      <th style="text-align: left">SciFact</th>
+      <th style="text-align: left">NFCorpus</th>
+      <th style="text-align: left">Train / Val Loss</th>
+      <th style="text-align: left">NFCor-384</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Epoch 001</td>
+      <td style="text-align: left">0.x</td>
+      <td style="text-align: left">0.34725</td>
+      <td style="text-align: left">0.000778  0.000317</td>
+      <td style="text-align: left">0.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Epoch 003</td>
+      <td style="text-align: left">0.x</td>
+      <td style="text-align: left">0.3592</td>
+      <td style="text-align: left">0.000258  0.000274</td>
+      <td style="text-align: left">0.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Epoch 005</td>
+      <td style="text-align: left">0.70568</td>
+      <td style="text-align: left">0.36465</td>
+      <td style="text-align: left">0.000225  0.000253</td>
+      <td style="text-align: left">0.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Epoch 007</td>
+      <td style="text-align: left">0.x</td>
+      <td style="text-align: left">0.3639</td>
+      <td style="text-align: left">0.000222  0.000250</td>
+      <td style="text-align: left">0.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Epoch 009</td>
+      <td style="text-align: left">0.x</td>
+      <td style="text-align: left">0.36421</td>
+      <td style="text-align: left">0.000219  0.000247</td>
+      <td style="text-align: left">0.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Epoch 012</td>
+      <td style="text-align: left">0.x</td>
+      <td style="text-align: left">0.36438</td>
+      <td style="text-align: left">0.000218  0.000246</td>
+      <td style="text-align: left">0.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Epoch 015</td>
+      <td style="text-align: left">0.70823</td>
+      <td style="text-align: left"><strong>0.36441</strong></td>
+      <td style="text-align: left">0.000218  0.000247</td>
+      <td style="text-align: left">0.36485</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">[bge-small]</td>
+      <td style="text-align: left">0.72</td>
+      <td style="text-align: left">0.33708</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">[arctic-m]</td>
+      <td style="text-align: left">0.71586</td>
+      <td style="text-align: left">0.36201</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">[Concat]</td>
+      <td style="text-align: left">0.73095</td>
+      <td style="text-align: left">0.37287</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left"> </td>
+    </tr>
+  </tbody>
+</table>
+
+<details>
+
+
+## Auto-Encoder: 
+
+### With reconstruction loss:
+
+
+
+
+### With MRL style loss:
+
+
+
+
+## Attention based:
+
+
+## TODO:
+
+* Understand transformer dimensions 
+* Throw a batch in it and see how it evolves.
+* Code the thing
+* to google ai studio: I have this bert model, I want to do surgery upon. and recover the outputs after layer 5. how can i do so?
+
+
+* Back to the model;
+* Back to AE, simple stuff.
+
+
+* Understand the data..
+
+
+
+<details>
+
+Try:
+
+```
+class ImprovedSimilarityLoss(nn.Module):
+    def __init__(self, weight: float = 1.0, margin: float = 0.1, temperature: float = 0.05):
+        super().__init__()
+        self.weight = weight
+        self.margin = margin
+        self.temperature = temperature
+
+    def forward(self, model_output: torch.Tensor, targets: torch.Tensor) -&gt; torch.Tensor:
+        # Compute similarities
+        sim_outputs = F.cosine_similarity(model_output.unsqueeze(1), 
+                                        model_output.unsqueeze(0), dim=-1) / self.temperature
+        sim_targets = F.cosine_similarity(targets.unsqueeze(1), 
+                                        targets.unsqueeze(0), dim=-1) / self.temperature
+        
+        # Create mask for positive and negative pairs
+        batch_size = sim_outputs.size(0)
+        mask = torch.eye(batch_size, device=sim_outputs.device)
+        
+        # Compute loss with margin
+        pos_loss = ((sim_outputs - sim_targets) ** 2) * mask
+        neg_loss = torch.relu(sim_outputs - self.margin) * (1 - mask)
+        
+        loss = (pos_loss.sum() + neg_loss.sum()) / (batch_size * (batch_size - 1))
+        return self.weight * loss
+```
+</details></details>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+  <div class="wrapper">
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+              Kaizen
+          </li>
+        </ul>
+      </div>
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/eigenAyoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">eigenAyoub</span></a></li><li><a href="https://instagram.com/curl.ayoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#instagram"></use></svg> <span class="username">curl.ayoub</span></a></li><li><a href="https://www.linkedin.com/in/benayad"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">benayad</span></a></li><li><a href="https://www.twitter.com/benayad_"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">benayad_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>10k</p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+</body>
+
+</html>

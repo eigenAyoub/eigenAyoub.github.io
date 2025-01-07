@@ -7,7 +7,7 @@ permalink: /blogs/mnist-cpp/
 * A quick workaround to get started with `mnist` dataset in C++. 
 * Next: Train a small MLP from scratch in CUDA/C++.
 
-## Get the data: 
+### **Get the data:**
 
 Sadly you can't download it from Yann Lecun's website anymore, it is hosted by Hugging Face now.
 
@@ -17,7 +17,7 @@ wget https://huggingface.co/datasets/ylecun/mnist/resolve/main/mnist/test-00000-
 ```
 
 
-## Decoding the images with Python:
+### **Decoding and saving the images with Python:**
 
 * Some requirements and a check-up of the files:
 
@@ -99,54 +99,39 @@ train_mnist_images.bin
 train_mnist_labels.bin
 ```
 
-3. Loading in C++:
+### **Loading in C++:**
 
 ```cpp
-#include <iostream>
-#include <fstream>
-#include <vector>
+    std::ifstream X_train_file("data/train_mnist_images.bin", std::ios::binary);
+    std::ifstream y_train_file("data/train_mnist_labels.bin", std::ios::binary);
 
-const int IMAGE_SIZE = 28 * 28; // Total pixels per image
-const int NUM_IMAGES = 60000;   // Adjust based on the number of images you saved
-
-int main() {
-
-    std::vector<std::vector<uint8_t>> images(NUM_IMAGES, std::vector<uint8_t>(IMAGE_SIZE));
-    std::vector<uint8_t> labels(NUM_IMAGES);
-
-    std::ifstream imageFile("train_mnist_images.bin", std::ios::binary);
-    std::ifstream labelFile("train_mnist_labels.bin", std::ios::binary);
-
-    if (!imageFile || !labelFile) {
-        std::cerr << "Error opening one or both files." << std::endl;
-        return 1;
+    if (!X_train_file || !y_train_file){
+        std::cout << "Oupsie" << "\n";
+        //return -1;
     }
 
-    // Read the label /  image data
-    labelFile.read(reinterpret_cast<char*>(labels.data()), NUM_IMAGES);
+    std::vector<uint8_t> X_train_buff(NUM_IMAGES*IMAGE_SIZE);
+    std::vector<uint8_t> y_train_buff(NUM_IMAGES);
 
-    for (int i = 0; i < NUM_IMAGES; ++i) {
-        imageFile.read(reinterpret_cast<char*>(images[i].data()), IMAGE_SIZE);
-    }
+    std::vector<float> X_train(NUM_IMAGES*IMAGE_SIZE);
+    std::vector<float> y_train(NUM_IMAGES);
 
-    imageFile.close();
-    labelFile.close();
+    // ignore multiplying by `sizeof(uint8_t)` as it's = 1
+    X_train_file.read(reinterpret_cast<char *>(X_train_buff.data()), IMAGE_SIZE*NUM_IMAGES);
+    y_train_file.read(reinterpret_cast<char *>(y_train_buff.data()), NUM_IMAGES);
 
-    int image_id;
-    std::cout << "Image id = " ;
-    std::cin >> image_id;
+    std::copy(X_train_buff.begin(), X_train_buff.end(), X_train.begin());
+    std::copy(y_train_buff.begin(), y_train_buff.end(), y_train.begin());
 
-    std::cout << "Label of the first image: " << static_cast<int>(labels[image_id]) << std::endl;
-    std::cout << "Image data:" << std::endl;
-    for (int i = 0; i < 28; ++i) { // Print the first 28 bytes as the first row
-        for (int j = 0; j < 28; ++j) {
-            std::cout << (images[image_id][i * 28 + j] > 0 ? '#' : ' ');
+    int image_id = 27;
+    std::cout << y_train[27] << "\n\n";
+    for (int i=0; i < IMAGE_WIDTH; i++){
+        for (int j=0; j < IMAGE_WIDTH; j++){
+            int pix = X_train[image_id*IMAGE_SIZE + i*IMAGE_WIDTH + j];
+            std::cout << (!pix ? "#" : " ");
         }
-        std::cout << std::endl;
+        std::cout << "\n";
     }
-
-    return 0;
-}
 ```
 
 Now you get this cool illustration from your terminal:

@@ -33,7 +33,7 @@
           </span>
         </label>
 
-        <div class="trigger"><a class="page-link" href="/gal/">Cuties</a></div>
+        <div class="trigger"><a class="page-link" href="/blogs/cast-cpp/">Casting Operators: static_cast reinterpret_cast.</a><a class="page-link" href="/blogs/embed-fusion/">Models:</a><a class="page-link" href="/gal/">Cuties</a><a class="page-link" href="/blogs/rand-cpp/">Demystifying Random Numbers and Uniform Distribution in C++</a></div>
       </nav></div>
 </header>
 <main class="page-content" aria-label="Content">
@@ -43,7 +43,7 @@
   <li>Next: Train a small MLP from scratch in CUDA/C++.</li>
 </ul>
 
-<h2 id="get-the-data">Get the data:</h2>
+<h3 id="get-the-data"><strong>Get the data:</strong></h3>
 
 <p>Sadly you can’t download it from Yann Lecun’s website anymore, it is hosted by Hugging Face now.</p>
 
@@ -51,7 +51,7 @@
 wget https://huggingface.co/datasets/ylecun/mnist/resolve/main/mnist/test-00000-of-00001.parquet
 </code></pre></div></div>
 
-<h2 id="decoding-the-images-with-python">Decoding the images with Python:</h2>
+<h3 id="decoding-and-saving-the-images-with-python"><strong>Decoding and saving the images with Python:</strong></h3>
 
 <ul>
   <li>Some requirements and a check-up of the files:</li>
@@ -128,55 +128,38 @@ train_mnist_images.bin
 train_mnist_labels.bin
 </code></pre></div></div>
 
-<ol>
-  <li>Loading in C++:</li>
-</ol>
+<h3 id="loading-in-c"><strong>Loading in C++:</strong></h3>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
-#include</span> <span class="cpf">&lt;fstream&gt;</span><span class="cp">
-#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
-</span>
-<span class="k">const</span> <span class="kt">int</span> <span class="n">IMAGE_SIZE</span> <span class="o">=</span> <span class="mi">28</span> <span class="o">*</span> <span class="mi">28</span><span class="p">;</span> <span class="c1">// Total pixels per image</span>
-<span class="k">const</span> <span class="kt">int</span> <span class="n">NUM_IMAGES</span> <span class="o">=</span> <span class="mi">60000</span><span class="p">;</span>   <span class="c1">// Adjust based on the number of images you saved</span>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">std</span><span class="o">::</span><span class="n">ifstream</span> <span class="nf">X_train_file</span><span class="p">(</span><span class="s">"data/train_mnist_images.bin"</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">ifstream</span> <span class="nf">y_train_file</span><span class="p">(</span><span class="s">"data/train_mnist_labels.bin"</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span><span class="p">);</span>
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-
-    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;&gt;</span> <span class="n">images</span><span class="p">(</span><span class="n">NUM_IMAGES</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">IMAGE_SIZE</span><span class="p">));</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span> <span class="n">labels</span><span class="p">(</span><span class="n">NUM_IMAGES</span><span class="p">);</span>
-
-    <span class="n">std</span><span class="o">::</span><span class="n">ifstream</span> <span class="n">imageFile</span><span class="p">(</span><span class="s">"train_mnist_images.bin"</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span><span class="p">);</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">ifstream</span> <span class="n">labelFile</span><span class="p">(</span><span class="s">"train_mnist_labels.bin"</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span><span class="p">);</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">imageFile</span> <span class="o">||</span> <span class="o">!</span><span class="n">labelFile</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Error opening one or both files."</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">X_train_file</span> <span class="o">||</span> <span class="o">!</span><span class="n">y_train_file</span><span class="p">){</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Oupsie"</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+        <span class="c1">//return -1;</span>
     <span class="p">}</span>
 
-    <span class="c1">// Read the label /  image data</span>
-    <span class="n">labelFile</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">labels</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span> <span class="n">NUM_IMAGES</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span> <span class="n">X_train_buff</span><span class="p">(</span><span class="n">NUM_IMAGES</span><span class="o">*</span><span class="n">IMAGE_SIZE</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span> <span class="n">y_train_buff</span><span class="p">(</span><span class="n">NUM_IMAGES</span><span class="p">);</span>
 
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">NUM_IMAGES</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">imageFile</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">()),</span> <span class="n">IMAGE_SIZE</span><span class="p">);</span>
-    <span class="p">}</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">X_train</span><span class="p">(</span><span class="n">NUM_IMAGES</span><span class="o">*</span><span class="n">IMAGE_SIZE</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">y_train</span><span class="p">(</span><span class="n">NUM_IMAGES</span><span class="p">);</span>
 
-    <span class="n">imageFile</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
-    <span class="n">labelFile</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
+    <span class="c1">// ignore multiplying by `sizeof(uint8_t)` as it's = 1</span>
+    <span class="n">X_train_file</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">char</span> <span class="o">*&gt;</span><span class="p">(</span><span class="n">X_train_buff</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span> <span class="n">IMAGE_SIZE</span><span class="o">*</span><span class="n">NUM_IMAGES</span><span class="p">);</span>
+    <span class="n">y_train_file</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">char</span> <span class="o">*&gt;</span><span class="p">(</span><span class="n">y_train_buff</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span> <span class="n">NUM_IMAGES</span><span class="p">);</span>
 
-    <span class="kt">int</span> <span class="n">image_id</span><span class="p">;</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Image id = "</span> <span class="p">;</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">image_id</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">X_train_buff</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">X_train_buff</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">X_train</span><span class="p">.</span><span class="n">begin</span><span class="p">());</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">y_train_buff</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">y_train_buff</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">y_train</span><span class="p">.</span><span class="n">begin</span><span class="p">());</span>
 
-    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Label of the first image: "</span> <span class="o">&lt;&lt;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">image_id</span><span class="p">])</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Image data:"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">28</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// Print the first 28 bytes as the first row</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">28</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="n">image_id</span><span class="p">][</span><span class="n">i</span> <span class="o">*</span> <span class="mi">28</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="sc">'#'</span> <span class="o">:</span> <span class="sc">' '</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">image_id</span> <span class="o">=</span> <span class="mi">27</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">y_train</span><span class="p">[</span><span class="mi">27</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">IMAGE_WIDTH</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">IMAGE_WIDTH</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
+            <span class="kt">int</span> <span class="n">pix</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[</span><span class="n">image_id</span><span class="o">*</span><span class="n">IMAGE_SIZE</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="n">IMAGE_WIDTH</span> <span class="o">+</span> <span class="n">j</span><span class="p">];</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="o">!</span><span class="n">pix</span> <span class="o">?</span> <span class="s">"#"</span> <span class="o">:</span> <span class="s">" "</span><span class="p">);</span>
         <span class="p">}</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
     <span class="p">}</span>
-
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
 </code></pre></div></div>
 
 <p>Now you get this cool illustration from your terminal:</p>

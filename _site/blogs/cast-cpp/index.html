@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Casting Operators: static_cast reinterpret_cast. | Kaizen</title>
+<meta name="generator" content="Jekyll v3.9.5" />
+<meta property="og:title" content="Casting Operators: static_cast reinterpret_cast." />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="10k" />
+<meta property="og:description" content="10k" />
+<link rel="canonical" href="http://localhost:4000/blogs/cast-cpp/" />
+<meta property="og:url" content="http://localhost:4000/blogs/cast-cpp/" />
+<meta property="og:site_name" content="Kaizen" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Casting Operators: static_cast reinterpret_cast." />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Casting Operators: static_cast reinterpret_cast.","url":"http://localhost:4000/blogs/cast-cpp/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kaizen" /></head>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Kaizen</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blogs/cast-cpp/">Casting Operators: static_cast reinterpret_cast.</a><a class="page-link" href="/blogs/embed-fusion/">Models:</a><a class="page-link" href="/gal/">Cuties</a><a class="page-link" href="/blogs/rand-cpp/">Demystifying Random Numbers and Uniform Distribution in C++</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <h2 id="casting-operators-static_cast-reinterpret_cast">Casting Operators: <code class="language-plaintext highlighter-rouge">static_cast</code> <code class="language-plaintext highlighter-rouge">reinterpret_cast</code>.</h2>
+
+<p>Both these two operators deal with <code class="language-plaintext highlighter-rouge">void *</code> pointers.</p>
+
+<p>** <code class="language-plaintext highlighter-rouge">void*</code> - The Universal Pointer**</p>
+
+<p>A <code class="language-plaintext highlighter-rouge">void*</code> pointer can hold the address of any data type. However, you can’t directly dereference it because the compiler doesn’t know the underlying type it points to. To use the data, you must cast it back to the appropriate type.</p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">static_cast</code> - The Safe Bet (Usually)</strong></p>
+
+<p><code class="language-plaintext highlighter-rouge">static_cast</code> is generally considered the safer option when dealing with related types. It performs compile-time checks and ensures that the conversion is at least somewhat plausible.</p>
+
+<p><strong>When <code class="language-plaintext highlighter-rouge">static_cast</code> works with <code class="language-plaintext highlighter-rouge">void*</code>:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Casting to <code class="language-plaintext highlighter-rouge">void*</code>:</strong> You can safely cast any pointer type to <code class="language-plaintext highlighter-rouge">void*</code> using <code class="language-plaintext highlighter-rouge">static_cast</code>. This is an implicit conversion, so <code class="language-plaintext highlighter-rouge">static_cast</code> is not strictly required, but using it can make it clear what you are doing.</p>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kt">int</span><span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">int</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+ <span class="kt">void</span><span class="o">*</span> <span class="n">vptr</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span> <span class="c1">// Upcast to void*</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>Casting from <code class="language-plaintext highlighter-rouge">void*</code> back to the <em>original</em> type:</strong>  If you know the original type a <code class="language-plaintext highlighter-rouge">void*</code> was cast from, you can safely use <code class="language-plaintext highlighter-rouge">static_cast</code> to convert it back.</p>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kt">int</span><span class="o">*</span> <span class="n">originalPtr</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">vptr</span><span class="p">);</span> <span class="c1">// Downcast back to int*</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p><strong>When <code class="language-plaintext highlighter-rouge">static_cast</code> might fail:</strong></p>
+
+<p><code class="language-plaintext highlighter-rouge">static_cast</code> will not let you directly cast a <code class="language-plaintext highlighter-rouge">void*</code> to an unrelated pointer type. If you made a mistake and <code class="language-plaintext highlighter-rouge">vptr</code> doesn’t actually hold an <code class="language-plaintext highlighter-rouge">int*</code>, but <code class="language-plaintext highlighter-rouge">static_cast</code> it back to an <code class="language-plaintext highlighter-rouge">int*</code>, you will get undefined behavior.</p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">reinterpret_cast</code> - The Power (and Peril) of Reinterpretation</strong></p>
+
+<p><code class="language-plaintext highlighter-rouge">reinterpret_cast</code> is the most powerful and potentially dangerous casting operator. It essentially tells the compiler, “Treat this memory address as if it holds data of this other type,” without any real checks.</p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">reinterpret_cast</code> and <code class="language-plaintext highlighter-rouge">void*</code>:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Casting between <code class="language-plaintext highlighter-rouge">void*</code> and any pointer type:</strong> You can use <code class="language-plaintext highlighter-rouge">reinterpret_cast</code> to cast between <code class="language-plaintext highlighter-rouge">void*</code> and any other pointer type, even unrelated ones.</p>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kt">char</span><span class="o">*</span> <span class="n">charPtr</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">vptr</span><span class="p">);</span> <span class="c1">// Reinterpreting int* as char*</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p><strong>The Dangers of <code class="language-plaintext highlighter-rouge">reinterpret_cast</code>:</strong></p>
+
+<ul>
+  <li><strong>Undefined Behavior:</strong> If you <code class="language-plaintext highlighter-rouge">reinterpret_cast</code> a <code class="language-plaintext highlighter-rouge">void*</code> to an incorrect type, your program will likely exhibit undefined behavior, leading to crashes or unpredictable results. This is because <code class="language-plaintext highlighter-rouge">reinterpret_cast</code> does not check if the cast actually makes sense, it just forces it to happen.</li>
+  <li><strong>Portability Issues:</strong> <code class="language-plaintext highlighter-rouge">reinterpret_cast</code> can lead to code that is less portable, as the results might depend on the specific memory layout and architecture.</li>
+</ul>
+
+<p><strong>Key Takeaways:</strong></p>
+
+<ul>
+  <li>Prefer <code class="language-plaintext highlighter-rouge">static_cast</code> when casting to <code class="language-plaintext highlighter-rouge">void*</code> and back to the <em>original</em> type. It provides some level of safety.</li>
+  <li>Use <code class="language-plaintext highlighter-rouge">reinterpret_cast</code> with extreme caution when dealing with <code class="language-plaintext highlighter-rouge">void*</code>. Only use it when you are absolutely sure about the underlying type and the implications of reinterpreting the memory.</li>
+  <li>Always double-check your logic when using <code class="language-plaintext highlighter-rouge">reinterpret_cast</code>. One wrong move can lead to hard-to-debug issues.</li>
+</ul>
+
+<p><strong>In essence, <code class="language-plaintext highlighter-rouge">static_cast</code> is like a guided conversion, while <code class="language-plaintext highlighter-rouge">reinterpret_cast</code> is like a forceful override. Choose wisely!</strong></p>
+
+<p>An interesting point:</p>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+  <div class="wrapper">
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+              Kaizen
+          </li>
+        </ul>
+      </div>
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/eigenAyoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">eigenAyoub</span></a></li><li><a href="https://instagram.com/curl.ayoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#instagram"></use></svg> <span class="username">curl.ayoub</span></a></li><li><a href="https://www.linkedin.com/in/benayad"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">benayad</span></a></li><li><a href="https://www.twitter.com/benayad_"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">benayad_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>10k</p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+</body>
+
+</html>
