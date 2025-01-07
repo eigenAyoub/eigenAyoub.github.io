@@ -7,7 +7,7 @@ permalink: /blogs/embed-fusion/
 
 
 
-## Models:
+**Models:**
 
 | Model     | NFCorpus | SciFact  | Dim |# Params |
 | :-------- | :------- | :------- | :-: |:-: 	  |
