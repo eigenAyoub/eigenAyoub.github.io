@@ -4,7 +4,7 @@ title:
 permalink: /blogs/cast-cpp/
 ---
 
-## Casting Operators: `static_cast` `reinterpret_cast`.
+Casting Operators: `static_cast` `reinterpret_cast`.
 
 Both these two operators deal with `void *` pointers.
 

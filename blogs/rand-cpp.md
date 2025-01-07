@@ -4,7 +4,7 @@ title:
 permalink: /blogs/rand-cpp/
 ---
 
-## Demystifying Random Numbers and Uniform Distribution in C++
+Demystifying Random Numbers and Uniform Distribution in C++
 
 Random number generation is a cornerstone of many applications, from simulations and games to, importantly, machine learning. In this post, we'll dive into how C++ handles random numbers and explore how to generate numbers following a uniform distribution.
 
