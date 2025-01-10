@@ -11,8 +11,8 @@ permalink: /blogs/embed-fusion/
 
 | Model     | NFCorpus | SciFact  | Dim |# Params |
 | :-------- | :------- | :------- | :-: |:-: 	  |
-| bge-small | 0.33708  | 0.72	  | 768 | 33M     |
-| arctic-m  | 0.36201  | 0.71586  | 384 | 109M    |
+| bge-small | 0.33708  | 0.72	  | 384 | 33M     |
+| arctic-m  | 0.36201  | 0.71586  | 768 | 109M    |
 | concat    | 0.37287  | 0.73095  | 1152| 142M    |
 
 

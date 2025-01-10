@@ -9,14 +9,14 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="10k" />
 <meta property="og:description" content="10k" />
-<link rel="canonical" href="http://localhost:4000/blogs/jacobi/" />
-<meta property="og:url" content="http://localhost:4000/blogs/jacobi/" />
+<link rel="canonical" href="http://localhost:4000/blogs/cuda-performance/" />
+<meta property="og:url" content="http://localhost:4000/blogs/cuda-performance/" />
 <meta property="og:site_name" content="Kaizen" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Kaizen" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Kaizen","url":"http://localhost:4000/blogs/jacobi/"}</script>
+{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Kaizen","url":"http://localhost:4000/blogs/cuda-performance/"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kaizen" /></head>
 
@@ -38,48 +38,65 @@
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <p>I answer the following questions:</p>
+        <p>Based on lecture 06 and chapter 05.</p>
+
+<p>Some obvious tricks that we’ve already discussed:</p>
 
 <ul>
-  <li>Why does the spectral radius matter?</li>
-  <li>Why do convergent matrices matter?</li>
-  <li>How to determine the eigenvalues of a matrix?</li>
-  <li>Practically speaking, we try to solve the following linear problem using the point Jacobi iterative method:</li>
+  <li>Maximizing occupancy (playing with your <code class="language-plaintext highlighter-rouge">blockDim</code>, <code class="language-plaintext highlighter-rouge">gridDim</code>).</li>
+  <li>Minimizing control divergence (high SIMD utilization).</li>
+  <li>Shared memory usage and tiling.</li>
 </ul>
 
-<p>\[
-Ax = b, \quad \text{s.t: \(A\) is invertible and } A_{ii}\neq 0 \quad \forall i
-\]</p>
-
-<h3 id="a-primal-on-convergent-and-bounded-matrices">A primal on convergent and bounded matrices:</h3>
-
+<p>This time:</p>
 <ul>
-  <li>Let \(A\) be a squared matrix of size \(n\), we have:</li>
+  <li>Memory coalescing.</li>
+  <li>Thread coarsening.</li>
 </ul>
 
-<p>\[
-A \quad \text{is convergent}  \iff  \rho(A) &lt; 1 \quad \text{(the spectral radius of \(A\))}
-\]</p>
-
-<p><strong>Proof:</strong></p>
-
-<h2 id="extra">Extra:</h2>
+<h2 id="dram-bank">DRAM bank:</h2>
 
 <ul>
+  <li>How it works, on a high level:</li>
+</ul>
+
+<p><img src="/src/media-gpu/dram/dram-bank-clear.png" alt="dram-bank" /></p>
+
+<ol>
   <li>
-    <p>Jacobi method shines: Large sparse linear systems (Gaussian elimination is impractical)
-Why?</p>
+    <p>The incoming row address is decoded by the Row Decoder, which activates the corresponding row in the DRAM array.</p>
   </li>
   <li>
-    <p>Is it still actively used?</p>
+    <p>The contents of that row are sensed and amplified by the Sense Amps, temporarily stored in Column Latches, and then passed through a multiplexer (MUX) where the specific columns—selected by the column address—are read out in a burst.</p>
   </li>
-</ul>
+</ol>
 
-<h2 id="references">References:</h2>
+<p><img src="/src/media-gpu/dram/row-col-adr.png" alt="dram-bank" /></p>
+
+<ol>
+  <li>
+    <p>The second figure zooms in on the process of splitting the memory address: one portion selects the row while the other portion selects the columns within that row.</p>
+  </li>
+  <li>
+    <p>After the appropriate row is activated, the data from the selected columns is routed through the MUX to be sent back on the data lines, facilitating a complete memory read or write transaction.</p>
+  </li>
+</ol>
+
+<h2 id="dram-bank-1">DRAM bank:</h2>
+
+<h2 id="memory-coalescing">Memory coalescing:</h2>
 
 <ul>
-  <li>The matrix</li>
+  <li>Memory coalescing is when threads within the same warp access elements from the same DRAM burst.</li>
 </ul>
+
+<p>Let’s see a few examples of code:</p>
+
+<p><code class="language-plaintext highlighter-rouge">Cpp
+int idx = blockDim.x*blockIdx.x + threadIdx.x
+C[x] = A[idx] + B[idx]
+</code>`</p>
+
 
       </div>
     </main><footer class="site-footer h-card">
