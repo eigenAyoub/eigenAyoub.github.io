@@ -4,22 +4,21 @@ layout: home
 
 
 $$\rightarrow$$ **CUDA/C++ learning series:** 
-* [GPU architecture and warp scheduling](/blogs/gpu-architecture/)
-* [Occupancy, Compute intensity, and Tiling](/blogs/on-chip-memory/)
-<!--* [Why block indexing in inverted in CUDA, and how it helps with memory coalescing.](/blogs/block-indexing/)-->
+* [GPU architecture and warp scheduling.](/blogs/gpu-architecture/)
+* [Occupancy, Compute intensity, and Tiling.](/blogs/on-chip-memory/)
+* [Performance optimization: DRAM, coalesced access, and why CUDA block indices are inverted?](/blogs/cuda-performance/)
 
 $$\rightarrow$$ **Random C++:** 
 * [Loading MNIST dataset in C++](/blogs/mnist-cpp/)
-
-$$\rightarrow$$ **LLMs** 
-* [Some notes on perplexity and beyond!](/blogs/ppl)
-* [Recent trends to speed up autoregressive inference of LLMs (unifinished).](/blogs/fastinference)
 
 $$\rightarrow$$ **Technical** 
 * [Handling checkpoints from terminal - some useful tricks.](/blogs/linux)
 * [Quick reset of my compute pod.](/blogs/container)
 * [Speed up your migration to VIM.](/blogs/vim)
-<!-- [Investigating Kronecker Products as  xx](/blogs/distill/main.pdf) -->
+
+$$\rightarrow$$ **LLMs** 
+* [Some notes on perplexity and beyond!](/blogs/ppl)
+* [Recent trends to speed up autoregressive inference of LLMs (unifinished).](/blogs/fastinference)
 
 $$\rightarrow$$ **Math:** 
 * [Matrix Differential Calculus.](/blogs/enter_the_matrix)

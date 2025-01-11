@@ -38,65 +38,69 @@
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <p>Based on lecture 06 and chapter 05.</p>
+        <p><strong>Optimizing performance of your CUDA code</strong></p>
 
-<p>Some obvious tricks that we’ve already discussed:</p>
+<h2 id="recap-of-the-obvious">Recap of the obvious:</h2>
 
 <ul>
-  <li>Maximizing occupancy (playing with your <code class="language-plaintext highlighter-rouge">blockDim</code>, <code class="language-plaintext highlighter-rouge">gridDim</code>).</li>
+  <li>Latency hiding by maximizing occupancy (playing with your <code class="language-plaintext highlighter-rouge">blockDim</code>, <code class="language-plaintext highlighter-rouge">gridDim</code>).
+    <ul>
+      <li>But careful how much shared memory (register memory) you assign per block (resp. per thread), as it might lower your occupancy.</li>
+    </ul>
+  </li>
+  <li>Data reuse: Shared memory usage and tiling.</li>
   <li>Minimizing control divergence (high SIMD utilization).</li>
-  <li>Shared memory usage and tiling.</li>
-</ul>
-
-<p>This time:</p>
-<ul>
-  <li>Memory coalescing.</li>
-  <li>Thread coarsening.</li>
 </ul>
 
 <h2 id="dram-bank">DRAM bank:</h2>
 
-<ul>
-  <li>How it works, on a high level:</li>
-</ul>
+<div align="center">
+	<img src="/src/media-gpu/dram/dram-bank-clear.png" width="300" />
+	<img src="/src/media-gpu/dram/row-col-adr.png" width="300" />
+</div>
 
-<p><img src="/src/media-gpu/dram/dram-bank-clear.png" alt="dram-bank" /></p>
+<p>On a higher level, a DRAM bank (sketched above) does the following:</p>
 
 <ol>
   <li>
     <p>The incoming row address is decoded by the Row Decoder, which activates the corresponding row in the DRAM array.</p>
   </li>
   <li>
-    <p>The contents of that row are sensed and amplified by the Sense Amps, temporarily stored in Column Latches, and then passed through a multiplexer (MUX) where the specific columns—selected by the column address—are read out in a burst.</p>
+    <p>The contents of that row are sensed and amplified by the Sense Amplifier, temporarily stored in Column Latches.</p>
+  </li>
+  <li>
+    <p>The Column Latches are then passed through a multiplexer (MAX) where the specific columns are selected based the Column address.</p>
   </li>
 </ol>
 
-<p><img src="/src/media-gpu/dram/row-col-adr.png" alt="dram-bank" /></p>
+<p>The key factor here is that <strong>if the next access</strong> corresponds to <strong>the same row address</strong>, then we can the latency of Step 1 and Step 2 (which are the longest ones), and directly jump to Step 3, by fetching the necessary column from the Multiplexer. This is called <strong>a memory coalesced access</strong>.</p>
 
-<ol>
-  <li>
-    <p>The second figure zooms in on the process of splitting the memory address: one portion selects the row while the other portion selects the columns within that row.</p>
-  </li>
-  <li>
-    <p>After the appropriate row is activated, the data from the selected columns is routed through the MUX to be sent back on the data lines, facilitating a complete memory read or write transaction.</p>
-  </li>
-</ol>
-
-<h2 id="dram-bank-1">DRAM bank:</h2>
-
-<h2 id="memory-coalescing">Memory coalescing:</h2>
+<h2 id="memory-coalescing-on-gpus">Memory coalescing on GPUs:</h2>
 
 <ul>
-  <li>Memory coalescing is when threads within the same warp access elements from the same DRAM burst.</li>
+  <li>
+    <p>Memory coalescing is when consecutive threads within the same warp access elements consecutive elements in the DRAM burst (hence, saving latency).</p>
+  </li>
+  <li>
+    <p>Again, always keep in mind how threads (within a block) are mapped to warps, and that <code class="language-plaintext highlighter-rouge">threadIdx.x</code> is the fastest moving dimension, followed by <code class="language-plaintext highlighter-rouge">threadIdx.y</code>, and then <code class="language-plaintext highlighter-rouge">threadIdx.z</code>:</p>
+    <ul>
+      <li>For a 2D block, <code class="language-plaintext highlighter-rouge">tid = threadIdx.x + blockDim.x*threadIdx.y</code>.</li>
+      <li>For a 3D block, <code class="language-plaintext highlighter-rouge">tid = threadIdx.x + blockDim.x*threadIdx.y + blockDim.x*blockDim.y*threadIdx.z</code>.</li>
+    </ul>
+  </li>
 </ul>
 
 <p>Let’s see a few examples of code:</p>
 
-<p><code class="language-plaintext highlighter-rouge">Cpp
-int idx = blockDim.x*blockIdx.x + threadIdx.x
+<pre><code class="language-Cpp">int idx = blockDim.x*blockIdx.x + threadIdx.x
 C[x] = A[idx] + B[idx]
-</code>`</p>
+</code></pre>
 
+<h2 id="credits">Credits:</h2>
+<ul>
+  <li><a href="https://ielhajj.github.io/courses.html">Izzat El Hajj @ CMPS 224/396AA</a></li>
+  <li><a href="https://safari.ethz.ch/projects_and_seminars/spring2023/doku.php?id=heterogeneous_systems">Juan Gómez Luna @ 227-0085-51L</a></li>
+</ul>
 
       </div>
     </main><footer class="site-footer h-card">
