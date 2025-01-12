@@ -2,7 +2,6 @@
 layout: home
 ---
 
-
 $$\rightarrow$$ **Some CUDA/C++ learning notes:** 
 * [GPU architecture and warp scheduling.](/blogs/gpu-architecture/)
 * [Occupancy, Compute intensity, and Tiling.](/blogs/on-chip-memory/)
