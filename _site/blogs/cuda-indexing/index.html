@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Kaizen | 10k</title>
+<meta name="generator" content="Jekyll v3.9.5" />
+<meta property="og:title" content="Kaizen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="10k" />
+<meta property="og:description" content="10k" />
+<link rel="canonical" href="http://localhost:4000/blogs/cuda-indexing/" />
+<meta property="og:url" content="http://localhost:4000/blogs/cuda-indexing/" />
+<meta property="og:site_name" content="Kaizen" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Kaizen" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Kaizen","url":"http://localhost:4000/blogs/cuda-indexing/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kaizen" /></head>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Kaizen</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/gal/">Cuties</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <p>This footnote from PMPP bothered me a lot (page 51).</p>
+
+<p><img src="/src/media-gpu/whywhywhy.png" alt="whywhywhy" /></p>
+
+<p>Like Why? Why complicate? Ok, some clarifications:</p>
+
+<p><strong>Grid and Block dimensions:</strong></p>
+
+<p>You always define <code class="language-plaintext highlighter-rouge">gridDim</code> and <code class="language-plaintext highlighter-rouge">blockDim</code> in the (x, y, z) order that CUDA expects.
+[Add an example here for an input of (256, 128), <code class="language-plaintext highlighter-rouge">gridDim.y</code> should equal <code class="language-plaintext highlighter-rouge">256/blockDim.y</code>]</p>
+
+<p><strong>Mapping to your problem:</strong></p>
+
+<p>Inside the kernel, you choose how to interpret <code class="language-plaintext highlighter-rouge">threadIdx.x</code>, <code class="language-plaintext highlighter-rouge">threadIdx.y</code>, and <code class="language-plaintext highlighter-rouge">threadIdx.z</code>. For a 2D array, a typical choice is:</p>
+
+<pre><code class="language-Cpp">// Map x -&gt; columns, y -&gt; rows
+int col = blockIdx.x * blockDim.x + threadIdx.x;
+int row = blockIdx.y * blockDim.y + threadIdx.y;
+</code></pre>
+<p>This tends to match row-major order, where columns (x) are the fastest-changing index in memory. And within a CUDA block, <code class="language-plaintext highlighter-rouge">threadIdx.x</code> is the fastest changing one, then It would better (for your mental health) to visualize the data within the kernel as (z,y,x).</p>
+
+<p><strong>The confusion:</strong>  lays in how in math/C++, the column dimension is usually mapped to the axis <code class="language-plaintext highlighter-rouge">y</code>. And it is the fastest changing one. For you mental health, forget about this. In CUDA programming, the x-axis is the last one (as it is the fastest changing), but we still declare <code class="language-plaintext highlighter-rouge">gridDim</code> and <code class="language-plaintext highlighter-rouge">blockDim</code> is the usual <code class="language-plaintext highlighter-rouge">(x,y,z)</code> order. But, it would be helpful – for instance for a 2D data, to visualize the y-axis as the vertical one, and the x-axis as the horizontal one.</p>
+
+<hr />
+<h3 id="what-is-a--coalesced-memory-access">What is a  Coalesced Memory Access?</h3>
+
+<ul>
+  <li>
+    <p>Coalesced memory access is (a pattern?, a property?) when consecutive threads in a warp access consecutive memory locations. E.g., if threads in a warp access memory locations like <code class="language-plaintext highlighter-rouge">A[0], A[1], A[2], ... A[31]</code>, the memory access is coalesced. If threads access scattered locations like <code class="language-plaintext highlighter-rouge">A[0], A[100], A[200], ...</code>, the access is non-coalesced and inefficient.</p>
+  </li>
+  <li>
+    <p>A CUDA block is split into <strong>warps</strong> of 32 threads, where <code class="language-plaintext highlighter-rouge">threadIdx.x</code> is the fastest-varying dimension. Hence, aligning <code class="language-plaintext highlighter-rouge">threadIdx.x</code> with the fastest-varying dimension of your data layout promotes coalesced access.</p>
+  </li>
+</ul>
+
+<hr />
+<h3 id="a-toy-example">A toy example.</h3>
+
+<p>Consider a 2D array stored in <strong>row-major order</strong>, where consecutive elements of a row are stored contiguously in memory:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Matrix A (3x4):
+[
+ [a00, a01, a02, a03],
+ [a10, a11, a12, a13],
+ [a20, a21, a22, a23]
+]
+
+Linear memory layout:
+[a00, a01, a02, a03, a10, a11, a12, a13, a20, a21, a22, a23]
+</code></pre></div></div>
+<hr />
+<h3 id="coalesced-memory-access-kernel">Coalesced Memory Access Kernel</h3>
+
+<p>Consider the following kernel:</p>
+
+<pre><code class="language-Cpp">#include &lt;stdio.h&gt;
+
+__global__
+void kernelCoalesced(float* d_data, int width, int height)
+{
+    int col = blockIdx.x * blockDim.x + threadIdx.x;
+    int row = blockIdx.y * blockDim.y + threadIdx.y;
+
+    if (row &lt; height &amp;&amp; col &lt; width)
+    {
+        int index = row * width + col;
+        d_data[index] += 1.0f;
+    }
+}
+</code></pre>
+
+<p><strong>Explanation:</strong></p>
+
+<ul>
+  <li>Consecutive threads (<code class="language-plaintext highlighter-rouge">threadIdx.x</code>) move to consecutive columns in the same row, which aligns with how data is laid out in memory, which promotes a coalesced memory access.</li>
+</ul>
+
+<hr />
+<h3 id="non-coalesced-access-example">Non-Coalesced Access Example</h3>
+
+<p>Now consider a kernel that accesses the <strong>same</strong> 2D array in <strong>column-major order</strong> (think of it as if we needed to operate on the <code class="language-plaintext highlighter-rouge">transpose</code> of a matrix that is originally laid-out in a row-major order):</p>
+
+<pre><code class="language-Cpp">__global__
+void kernelNonCoalesced(float* d_data, int width, int height)
+{
+    int col = blockIdx.x * blockDim.x + threadIdx.x;
+    int row = blockIdx.y * blockDim.y + threadIdx.y;
+
+    if (row &lt; height &amp;&amp; col &lt; width)
+    {
+        int index = col * height + row;
+        d_data[index] += 1.0f;
+    }
+}
+</code></pre>
+
+<p><strong>Explanation:</strong></p>
+<ul>
+  <li>thread 0 &gt; col = 0, row = 0, hence, it would access <code class="language-plaintext highlighter-rouge">d_data[0]</code></li>
+  <li>thread 1 &gt; col = 1, row = 0, hence, it would access <code class="language-plaintext highlighter-rouge">d_data[height]</code></li>
+  <li>This layout, indices map does not generally promote coalesced memory access.</li>
+</ul>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+  <div class="wrapper">
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+              Kaizen
+          </li>
+        </ul>
+      </div>
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/eigenAyoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">eigenAyoub</span></a></li><li><a href="https://instagram.com/curl.ayoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#instagram"></use></svg> <span class="username">curl.ayoub</span></a></li><li><a href="https://www.linkedin.com/in/benayad"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">benayad</span></a></li><li><a href="https://www.twitter.com/benayad_"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">benayad_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>10k</p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+</body>
+
+</html>

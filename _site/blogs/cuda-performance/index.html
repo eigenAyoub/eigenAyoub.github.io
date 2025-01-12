@@ -45,10 +45,10 @@
 <ul>
   <li>Latency hiding by maximizing occupancy (playing with your <code class="language-plaintext highlighter-rouge">blockDim</code>, <code class="language-plaintext highlighter-rouge">gridDim</code>).
     <ul>
-      <li>But careful how much shared memory (register memory) you assign per block (resp. per thread), as it might lower your occupancy.</li>
+      <li>Careful though how much shared memory (or register memory) you assign per block (resp. per thread) as it might lower your occupancy.</li>
     </ul>
   </li>
-  <li>Data reuse: Shared memory usage and tiling.</li>
+  <li>Data reuse, Shared memory usage and tiling.</li>
   <li>Minimizing control divergence (high SIMD utilization).</li>
 </ul>
 
@@ -73,28 +73,87 @@
   </li>
 </ol>
 
-<p>The key factor here is that <strong>if the next access</strong> corresponds to <strong>the same row address</strong>, then we can the latency of Step 1 and Step 2 (which are the longest ones), and directly jump to Step 3, by fetching the necessary column from the Multiplexer. This is called <strong>a memory coalesced access</strong>.</p>
+<p>The key factor here is that <strong>if the next access</strong> corresponds to <strong>the same row address</strong>, then we can save the latency of Step 1 and Step 2 (which are the longest ones), and directly jump to Step 3, by fetching the necessary column from the Multiplexer. This is called <strong>a memory coalesced access</strong>.</p>
+
+<div align="center">
+	<img src="/src/media-gpu/dram/burst.png" width="400" />
+</div>
 
 <h2 id="memory-coalescing-on-gpus">Memory coalescing on GPUs:</h2>
 
 <ul>
   <li>
-    <p>Memory coalescing is when consecutive threads within the same warp access elements consecutive elements in the DRAM burst (hence, saving latency).</p>
+    <p>Memory coalescing is when threads within the same warp access consecutive elements in the DRAM burst (hence, saving latency), and only one DRAM transaction would be needed.</p>
   </li>
-  <li>
-    <p>Again, always keep in mind how threads (within a block) are mapped to warps, and that <code class="language-plaintext highlighter-rouge">threadIdx.x</code> is the fastest moving dimension, followed by <code class="language-plaintext highlighter-rouge">threadIdx.y</code>, and then <code class="language-plaintext highlighter-rouge">threadIdx.z</code>:</p>
+  <li>Again, always keep in mind how threads (within a block) are mapped into warps, and that <code class="language-plaintext highlighter-rouge">threadIdx.x</code> is the fastest moving dimension, followed by <code class="language-plaintext highlighter-rouge">threadIdx.y</code>, and then <code class="language-plaintext highlighter-rouge">threadIdx.z</code>:
     <ul>
       <li>For a 2D block, <code class="language-plaintext highlighter-rouge">tid = threadIdx.x + blockDim.x*threadIdx.y</code>.</li>
       <li>For a 3D block, <code class="language-plaintext highlighter-rouge">tid = threadIdx.x + blockDim.x*threadIdx.y + blockDim.x*blockDim.y*threadIdx.z</code>.</li>
     </ul>
   </li>
+  <li>More on this here: <a href="/blogs/cuda-indexing/">Memory coalescing and block indexing</a>.</li>
 </ul>
 
-<p>Let’s see a few examples of code:</p>
+<p>Let’s see a few examples of code</p>
 
 <pre><code class="language-Cpp">int idx = blockDim.x*blockIdx.x + threadIdx.x
 C[x] = A[idx] + B[idx]
 </code></pre>
+
+<h2 id="banked-memories-and-channels">Banked memories and channels:</h2>
+
+<ul>
+  <li>
+    <p>The idea is to split memory into multiple banks that could be accessed simultaneously, but share the same buses. Or into independent channels that have separate data buses. One should be careful though of bank and channel conflicts.</p>
+  </li>
+  <li>
+    <p>Latency can be easily hidden with multiple banks. While <code class="language-plaintext highlighter-rouge">bank-x</code> is busy opening a row, another row from <code class="language-plaintext highlighter-rouge">bank-y</code> may already be ready for transfer. Hence why it’s good to aim for <strong>high occupancy</strong>.</p>
+  </li>
+</ul>
+
+<div align="center">
+	<img src="/src/media-gpu/dram/memory-banks.png" />
+</div>
+
+<ul>
+  <li>
+    <p><strong>Shared memory is a banked memory:</strong> Successive 32-bit words are assigned to successive banks (generally 32 banks in total).</p>
+  </li>
+  <li>
+    <p>Bank conflict can <strong>only</strong> happen within a warp, as all threads within a warp execute in lockstep.</p>
+  </li>
+</ul>
+
+<div align="center">
+	<img src="/src/media-gpu/dram/no-conflict.png" width="300" />
+	<img src="/src/media-gpu/dram/yes-conflict.png" width="300" />
+</div>
+
+<ul>
+  <li>Reducing bank conflicts:
+    <ul>
+      <li>Padding.</li>
+      <li>Randomized access.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="other-important-considerations">Other important considerations:</h2>
+
+<ul>
+  <li>SIMD utilization
+    <ul>
+      <li>Avoid divergence when possible.</li>
+      <li>Code in warp-minded way (<code class="language-plaintext highlighter-rouge">if (threadIdx.x &lt; 32) {...}</code>)</li>
+    </ul>
+  </li>
+  <li>Atomic Operations: useful to prevent <strong>data races</strong>.
+    <ul>
+      <li>If two different warps within the same block are trying to access the same memory location (shared or global).</li>
+      <li>Useful to sync, coordinate threads running together.</li>
+    </ul>
+  </li>
+</ul>
 
 <h2 id="credits">Credits:</h2>
 <ul>

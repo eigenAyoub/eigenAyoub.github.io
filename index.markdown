@@ -3,10 +3,11 @@ layout: home
 ---
 
 
-$$\rightarrow$$ **CUDA/C++ learning series:** 
+$$\rightarrow$$ **Some CUDA/C++ learning notes:** 
 * [GPU architecture and warp scheduling.](/blogs/gpu-architecture/)
 * [Occupancy, Compute intensity, and Tiling.](/blogs/on-chip-memory/)
-* [Performance optimization: DRAM, coalesced access, and why CUDA block indices are inverted?](/blogs/cuda-performance/)
+* [DRAM banks and why it matters for code optimization.](/blogs/cuda-performance/)
+* [CUDA block indexing, and coalesced memory accesses](/blogs/cuda-indexing/)
 
 $$\rightarrow$$ **Random C++:** 
 * [Loading MNIST dataset in C++](/blogs/mnist-cpp/)
