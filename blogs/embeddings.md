@@ -5,121 +5,53 @@ permalink: /blogs/embed-fusion/
 ---
 
 
+**Verified: all-4**
+
+| Model     | NFCorpus | SciFact  | ArguAna  | Dim |# Params |
+| :-------- | :------- | :------- | :------- | :-: |:-: 	 |
+| arctic-m  | 0.36201  | 0.71586  | 0.5953   | 768 | 109M    |
+| concat-4  | 0.37881  | 0.74585  | 0.62107  | 1920| 208M    |
+| Leader    | 0.35762  | 0.73472  | 0.74956  | 768 | 150M    |
+
+
+
+**Encoder-1024**
+
+| Epoch     | NFCorpus | SciFact  | ArguAna  | 
+| :-------- | :------- | :------- | :------- | 
+| 05	    | 0.37122  | 0.72673  | 0.60192  | 
+| 10        | 0.37345  | 0.72857  | 0.60424  | 
+| 20        | 0.37242  | 0.7298   | 0.60437  | 
+| **arctic-m**| 0.36201  | 0.71586  | 0.5953   | 
+| **concat-4**| 0.37881  | 0.74585  | 0.62107  | 
+
+
+
+**Encoder-1024, Truncated to 768 to match arctic-m:**
+
+| Model     | NFCorpus | SciFact  | ArguAna  | Dim |
+| :-------- | :------- | :------- | :------- | :-: |
+| arctic-m  | 0.36201  | 0.71586  | 0.5953   | 768 |
+| ep-10     | 0.36415  | 0.73006  | 0.60147  | 768 |
+| ep-20     | 0.36432  | 0.73051  | 0.60236   | 768 |
+| **arctic-m**| 0.36201  | 0.71586  | 0.5953   | 
 
 
 **Models:**
 
-| Model     | NFCorpus | SciFact  | Dim |# Params |
-| :-------- | :------- | :------- | :-: |:-: 	  |
-| bge-small | 0.33708  | 0.72	  | 384 | 33M     |
-| arctic-m  | 0.36201  | 0.71586  | 768 | 109M    |
-| concat    | 0.37287  | 0.73095  | 1152| 142M    |
-
-
-## Simple encoder:  1152 > 768 > 512 (`simple_m1`)
-
-<details>
-```python
-
-import torch.nn as nn
-
-class EncoderConfig:
-    DEFAULT = {
-        'input_dim': 1152,
-        'hidden_dim': 768,
-        'output_dim': 512,
-        'dropout': 0.1
-    }
-
-class EncoderOnly(nn.Module):
-    def __init__(self, config: dict = None):
-        super().__init__()
-        cfg = config or EncoderConfig.DEFAULT
-        
-        self.encoder = nn.Sequential(
-            nn.Linear(cfg['input_dim'], cfg['hidden_dim']),
-            nn.BatchNorm1d(cfg['hidden_dim']),
-            nn.LeakyReLU(0.2, inplace=True),
-            nn.Dropout(cfg['dropout']),
-            
-            nn.Linear(cfg['hidden_dim'], cfg['output_dim']),
-            nn.BatchNorm1d(cfg['output_dim']),
-            nn.LeakyReLU(0.2, inplace=True)
-        )
-        
-        self._initialize_weights()
-    
-    def _initialize_weights(self):
-        for m in self.modules():
-            if isinstance(m, nn.Linear):
-                nn.init.kaiming_normal_(m.weight, mode='fan_in', nonlinearity='leaky_relu')
-                if m.bias is not None:
-                    nn.init.zeros_(m.bias)
-            elif isinstance(m, nn.BatchNorm1d):
-                nn.init.constant_(m.weight, 1)
-                nn.init.constant_(m.bias, 0)
-    
-    def forward(self, x, dim):
-        return self.encoder(x)[:,:dim]
-```
-
-
-Output-dim = 512
-
-Numbers: 
-	* NFCorpus: 0.31671
-	* SciFact:  0.63541
-
-* Epoch 1/30:  Train Loss: 0.000102, Val Loss: 0.000053
-* Epoch 10/30: Train Loss: 0.000036, Val Loss: 0.000039
-
-
-### Simple model: 1152 > 512
-
-
-
-```python
-class EncoderConfig:
-    DEFAULT = {
-        'input_dim': 1152,
-        'output_dim': 512,
-        'dropout': 0.1
-    }
-
-class EncoderOnly(nn.Module):
-    def __init__(self, config: dict = None):
-        super().__init__()
-        cfg = config or EncoderConfig.DEFAULT
-        
-        self.encoder = nn.Sequential(
-            nn.Linear(cfg['input_dim'], cfg['output_dim']),
-            nn.BatchNorm1d(cfg['output_dim']),
-            nn.LeakyReLU(0.2, inplace=True),
-            nn.Dropout(cfg['dropout'])
-        )
-        
-        self._initialize_weights()
-    
-    def _initialize_weights(self):
-        for m in self.modules():
-            if isinstance(m, nn.Linear):
-                nn.init.kaiming_normal_(m.weight, mode='fan_in', nonlinearity='leaky_relu')
-                if m.bias is not None:
-                    nn.init.zeros_(m.bias)
-            elif isinstance(m, nn.BatchNorm1d):
-                nn.init.constant_(m.weight, 1)
-                nn.init.constant_(m.bias, 0)
-    
-    def forward(self, x, dim):
-        return self.encoder(x)[:,:dim]
-```
-</details>
+| Model     | NFCorpus | SciFact  | ArguAna  | Dim |# Params |
+| :-------- | :------- | :------- | :------- | :-: |:-: 	 |
+| bge-small | 0.33708  | 0.72	  | 0.59499  | 384 | 33M     |
+| gist      | 0.34691   | 0.70858 | 0.5912   | 384 | 33M     |
+| e5-small  | 0.31806  | 0.67965  | 0.46865 | 384 | 33M     |
 
 
 
 
-## Simple model: 1152 > 512 with Normalized, without dropout.
 
+
+
+## Baseline encoder: 1152 > 512
 
 ```python
 class EncoderConfig:
@@ -158,6 +90,10 @@ class EncoderOnly(nn.Module):
         out = self.encoder(x)
         return F.normalize(out[:,:dim], p=2, dim=1)
 ```
+
+<details>
+
+
 * Loss with MRL on `COMPRESSED_DIMENSIONS = [32, 64, 128, 256, 384, 512]`.  
 
 * Some numbers:
@@ -177,67 +113,45 @@ class EncoderOnly(nn.Module):
 
 
 
-<details>
+### Normalize the concatenated training data: e5-small-arctic-m:
+
+**Baseline -- naive concat:**
+
+| Model     | NFCorpus | SciFact  | ArguAna | Dim |# Params |
+| :-------- | :------- | :------- | :-------| :-: |:-: 	  |
+| e5-small  | 0.31806  | 0.67965  | 0.46865 | 384 | 33M     |
+| arctic-m  | 0.36201  | 0.71586  | 0.51724 | 768 | 109M    |
+| concat    | 0.37044  | 0.51902  | 0.52922 | 1152| 142M    |
+
+**Normed, with `[256, 512, 784]`:**
+
+| Epoch     | NFCorpus | SciFact | ArguAna    | Train / Val Loss   | 
+| :-------- | :------- | :------ | :------    | :----------------  | 
+| Epoch 005 | 0.34412  | 0.52015 | 0.52427    | 0.000014  0.000015 | 
+| Epoch 020 | 0.34194  | 0.52226 | 0.5248     | 12/15			   | 
+
+**Normed, with `[64, 128, 256, 512, 784]`:**
 
 
-## Auto-Encoder: 
+| Epoch     | NFCorpus | SciFact | ArguAna    | Train / Val Loss   |
+| :-------- | :------- | :------ | :------    | :----------------  |
+| Epoch 010 | 0.3279   | 0.45692 | 0.51755    | 12/15			   |
+| Epoch 015 | 0.33329  | 0.4868  | 0.52189    | 12/15			   |
 
-### With reconstruction loss:
+### Raw concatenation (no norm.) of training data: e5-small-arctic-m:
 
+**No-Norm, with `[256, 512, 784]`:**
 
+| Epoch     | NFCorpus | SciFact | ArguAna    | Train / Val Loss   |  NFCor-384 |
+| :-------- | :------- | :------ | :------    | :----------------  |  :-------  |
+| Epoch 005 | 0.34206  | 0.52015 | 0.52427    | 0.000014  0.000015 |  0.        |
+| Epoch 020 | 0.34194  | 0.52226 | 0.5248     | 12/15			   |  0.        |
 
+**No-Norm, with `[64, 128, 256, 512, 784]`:**
 
-### With MRL style loss:
+| Epoch     | NFCorpus | SciFact | ArguAna    | Train / Val Loss   |  NFCor-384 |
+| :-------- | :------- | :------ | :------    | :----------------  |  :-------  |
+| Epoch 005 | 0.34412  | 0.52015 | 0.52427    | 0.000014  0.000015 |  0.        |
+| Epoch 020 | 0.34194  | 0.52226 | 0.5248     | 12/15			   |  0.        |
 
-
-
-
-## Attention based:
-
-
-## TODO:
-
-* Understand transformer dimensions 
-* Throw a batch in it and see how it evolves.
-* Code the thing
-* to google ai studio: I have this bert model, I want to do surgery upon. and recover the outputs after layer 5. how can i do so?
-
-
-* Back to the model;
-* Back to AE, simple stuff.
-
-
-* Understand the data..
-
-
-
-<details>
-
-Try:
-
-```
-class ImprovedSimilarityLoss(nn.Module):
-    def __init__(self, weight: float = 1.0, margin: float = 0.1, temperature: float = 0.05):
-        super().__init__()
-        self.weight = weight
-        self.margin = margin
-        self.temperature = temperature
-
-    def forward(self, model_output: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
-        # Compute similarities
-        sim_outputs = F.cosine_similarity(model_output.unsqueeze(1), 
-                                        model_output.unsqueeze(0), dim=-1) / self.temperature
-        sim_targets = F.cosine_similarity(targets.unsqueeze(1), 
-                                        targets.unsqueeze(0), dim=-1) / self.temperature
-        
-        # Create mask for positive and negative pairs
-        batch_size = sim_outputs.size(0)
-        mask = torch.eye(batch_size, device=sim_outputs.device)
-        
-        # Compute loss with margin
-        pos_loss = ((sim_outputs - sim_targets) ** 2) * mask
-        neg_loss = torch.relu(sim_outputs - self.margin) * (1 - mask)
-        
-        loss = (pos_loss.sum() + neg_loss.sum()) / (batch_size * (batch_size - 1))
-        return self.weight * loss
-```
+</details>

@@ -38,7 +38,7 @@
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <p><strong>Models:</strong></p>
+        <p><strong>Verified: all-4</strong></p>
 
 <table>
   <thead>
@@ -46,6 +46,137 @@
       <th style="text-align: left">Model</th>
       <th style="text-align: left">NFCorpus</th>
       <th style="text-align: left">SciFact</th>
+      <th style="text-align: left">ArguAna</th>
+      <th style="text-align: center">Dim</th>
+      <th style="text-align: center"># Params</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">arctic-m</td>
+      <td style="text-align: left">0.36201</td>
+      <td style="text-align: left">0.71586</td>
+      <td style="text-align: left">0.5953</td>
+      <td style="text-align: center">768</td>
+      <td style="text-align: center">109M</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">concat-4</td>
+      <td style="text-align: left">0.37881</td>
+      <td style="text-align: left">0.74585</td>
+      <td style="text-align: left">0.62107</td>
+      <td style="text-align: center">1920</td>
+      <td style="text-align: center">208M</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Leader</td>
+      <td style="text-align: left">0.35762</td>
+      <td style="text-align: left">0.73472</td>
+      <td style="text-align: left">0.74956</td>
+      <td style="text-align: center">768</td>
+      <td style="text-align: center">150M</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Encoder-1024</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Epoch</th>
+      <th style="text-align: left">NFCorpus</th>
+      <th style="text-align: left">SciFact</th>
+      <th style="text-align: left">ArguAna</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">05</td>
+      <td style="text-align: left">0.37122</td>
+      <td style="text-align: left">0.72673</td>
+      <td style="text-align: left">0.60192</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">10</td>
+      <td style="text-align: left">0.37345</td>
+      <td style="text-align: left">0.72857</td>
+      <td style="text-align: left">0.60424</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">20</td>
+      <td style="text-align: left">0.37242</td>
+      <td style="text-align: left">0.7298</td>
+      <td style="text-align: left">0.60437</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>arctic-m</strong></td>
+      <td style="text-align: left">0.36201</td>
+      <td style="text-align: left">0.71586</td>
+      <td style="text-align: left">0.5953</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>concat-4</strong></td>
+      <td style="text-align: left">0.37881</td>
+      <td style="text-align: left">0.74585</td>
+      <td style="text-align: left">0.62107</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Encoder-1024, Truncated to 768 to match arctic-m:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Model</th>
+      <th style="text-align: left">NFCorpus</th>
+      <th style="text-align: left">SciFact</th>
+      <th style="text-align: left">ArguAna</th>
+      <th style="text-align: center">Dim</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">arctic-m</td>
+      <td style="text-align: left">0.36201</td>
+      <td style="text-align: left">0.71586</td>
+      <td style="text-align: left">0.5953</td>
+      <td style="text-align: center">768</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ep-10</td>
+      <td style="text-align: left">0.36415</td>
+      <td style="text-align: left">0.73006</td>
+      <td style="text-align: left">0.60147</td>
+      <td style="text-align: center">768</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ep-20</td>
+      <td style="text-align: left">0.36432</td>
+      <td style="text-align: left">0.73051</td>
+      <td style="text-align: left">0.60236</td>
+      <td style="text-align: center">768</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>arctic-m</strong></td>
+      <td style="text-align: left">0.36201</td>
+      <td style="text-align: left">0.71586</td>
+      <td style="text-align: left">0.5953</td>
+      <td style="text-align: center"> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Models:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Model</th>
+      <th style="text-align: left">NFCorpus</th>
+      <th style="text-align: left">SciFact</th>
+      <th style="text-align: left">ArguAna</th>
       <th style="text-align: center">Dim</th>
       <th style="text-align: center"># Params</th>
     </tr>
@@ -55,126 +186,30 @@
       <td style="text-align: left">bge-small</td>
       <td style="text-align: left">0.33708</td>
       <td style="text-align: left">0.72</td>
+      <td style="text-align: left">0.59499</td>
       <td style="text-align: center">384</td>
       <td style="text-align: center">33M</td>
     </tr>
     <tr>
-      <td style="text-align: left">arctic-m</td>
-      <td style="text-align: left">0.36201</td>
-      <td style="text-align: left">0.71586</td>
-      <td style="text-align: center">768</td>
-      <td style="text-align: center">109M</td>
+      <td style="text-align: left">gist</td>
+      <td style="text-align: left">0.34691</td>
+      <td style="text-align: left">0.70858</td>
+      <td style="text-align: left">0.5912</td>
+      <td style="text-align: center">384</td>
+      <td style="text-align: center">33M</td>
     </tr>
     <tr>
-      <td style="text-align: left">concat</td>
-      <td style="text-align: left">0.37287</td>
-      <td style="text-align: left">0.73095</td>
-      <td style="text-align: center">1152</td>
-      <td style="text-align: center">142M</td>
+      <td style="text-align: left">e5-small</td>
+      <td style="text-align: left">0.31806</td>
+      <td style="text-align: left">0.67965</td>
+      <td style="text-align: left">0.46865</td>
+      <td style="text-align: center">384</td>
+      <td style="text-align: center">33M</td>
     </tr>
   </tbody>
 </table>
 
-<h2 id="simple-encoder--1152--768--512-simple_m1">Simple encoder:  1152 &gt; 768 &gt; 512 (<code class="language-plaintext highlighter-rouge">simple_m1</code>)</h2>
-
-<details>
-```python
-
-import torch.nn as nn
-
-class EncoderConfig:
-    DEFAULT = {
-        'input_dim': 1152,
-        'hidden_dim': 768,
-        'output_dim': 512,
-        'dropout': 0.1
-    }
-
-class EncoderOnly(nn.Module):
-    def __init__(self, config: dict = None):
-        super().__init__()
-        cfg = config or EncoderConfig.DEFAULT
-        
-        self.encoder = nn.Sequential(
-            nn.Linear(cfg['input_dim'], cfg['hidden_dim']),
-            nn.BatchNorm1d(cfg['hidden_dim']),
-            nn.LeakyReLU(0.2, inplace=True),
-            nn.Dropout(cfg['dropout']),
-            
-            nn.Linear(cfg['hidden_dim'], cfg['output_dim']),
-            nn.BatchNorm1d(cfg['output_dim']),
-            nn.LeakyReLU(0.2, inplace=True)
-        )
-        
-        self._initialize_weights()
-    
-    def _initialize_weights(self):
-        for m in self.modules():
-            if isinstance(m, nn.Linear):
-                nn.init.kaiming_normal_(m.weight, mode='fan_in', nonlinearity='leaky_relu')
-                if m.bias is not None:
-                    nn.init.zeros_(m.bias)
-            elif isinstance(m, nn.BatchNorm1d):
-                nn.init.constant_(m.weight, 1)
-                nn.init.constant_(m.bias, 0)
-    
-    def forward(self, x, dim):
-        return self.encoder(x)[:,:dim]
-```
-
-
-Output-dim = 512
-
-Numbers: 
-	* NFCorpus: 0.31671
-	* SciFact:  0.63541
-
-* Epoch 1/30:  Train Loss: 0.000102, Val Loss: 0.000053
-* Epoch 10/30: Train Loss: 0.000036, Val Loss: 0.000039
-
-
-### Simple model: 1152 &gt; 512
-
-
-
-```python
-class EncoderConfig:
-    DEFAULT = {
-        'input_dim': 1152,
-        'output_dim': 512,
-        'dropout': 0.1
-    }
-
-class EncoderOnly(nn.Module):
-    def __init__(self, config: dict = None):
-        super().__init__()
-        cfg = config or EncoderConfig.DEFAULT
-        
-        self.encoder = nn.Sequential(
-            nn.Linear(cfg['input_dim'], cfg['output_dim']),
-            nn.BatchNorm1d(cfg['output_dim']),
-            nn.LeakyReLU(0.2, inplace=True),
-            nn.Dropout(cfg['dropout'])
-        )
-        
-        self._initialize_weights()
-    
-    def _initialize_weights(self):
-        for m in self.modules():
-            if isinstance(m, nn.Linear):
-                nn.init.kaiming_normal_(m.weight, mode='fan_in', nonlinearity='leaky_relu')
-                if m.bias is not None:
-                    nn.init.zeros_(m.bias)
-            elif isinstance(m, nn.BatchNorm1d):
-                nn.init.constant_(m.weight, 1)
-                nn.init.constant_(m.bias, 0)
-    
-    def forward(self, x, dim):
-        return self.encoder(x)[:,:dim]
-```
-</details>
-
-<h2 id="simple-model-1152--512-with-normalized-without-dropout">Simple model: 1152 &gt; 512 with Normalized, without dropout.</h2>
+<h2 id="baseline-encoder-1152--512">Baseline encoder: 1152 &gt; 512</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">EncoderConfig</span><span class="p">:</span>
     <span class="n">DEFAULT</span> <span class="o">=</span> <span class="p">{</span>
@@ -212,164 +247,71 @@ class EncoderOnly(nn.Module):
         <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">F</span><span class="p">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">out</span><span class="p">[:,:</span><span class="n">dim</span><span class="p">],</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div></div>
-<ul>
-  <li>
-    <p>Loss with MRL on <code class="language-plaintext highlighter-rouge">COMPRESSED_DIMENSIONS = [32, 64, 128, 256, 384, 512]</code>.</p>
-  </li>
-  <li>
-    <p>Some numbers:</p>
-  </li>
-</ul>
-
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: left">Epoch</th>
-      <th style="text-align: left">SciFact</th>
-      <th style="text-align: left">NFCorpus</th>
-      <th style="text-align: left">Train / Val Loss</th>
-      <th style="text-align: left">NFCor-384</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left">Epoch 001</td>
-      <td style="text-align: left">0.x</td>
-      <td style="text-align: left">0.34725</td>
-      <td style="text-align: left">0.000778  0.000317</td>
-      <td style="text-align: left">0.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Epoch 003</td>
-      <td style="text-align: left">0.x</td>
-      <td style="text-align: left">0.3592</td>
-      <td style="text-align: left">0.000258  0.000274</td>
-      <td style="text-align: left">0.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Epoch 005</td>
-      <td style="text-align: left">0.70568</td>
-      <td style="text-align: left">0.36465</td>
-      <td style="text-align: left">0.000225  0.000253</td>
-      <td style="text-align: left">0.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Epoch 007</td>
-      <td style="text-align: left">0.x</td>
-      <td style="text-align: left">0.3639</td>
-      <td style="text-align: left">0.000222  0.000250</td>
-      <td style="text-align: left">0.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Epoch 009</td>
-      <td style="text-align: left">0.x</td>
-      <td style="text-align: left">0.36421</td>
-      <td style="text-align: left">0.000219  0.000247</td>
-      <td style="text-align: left">0.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Epoch 012</td>
-      <td style="text-align: left">0.x</td>
-      <td style="text-align: left">0.36438</td>
-      <td style="text-align: left">0.000218  0.000246</td>
-      <td style="text-align: left">0.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Epoch 015</td>
-      <td style="text-align: left">0.70823</td>
-      <td style="text-align: left"><strong>0.36441</strong></td>
-      <td style="text-align: left">0.000218  0.000247</td>
-      <td style="text-align: left">0.36485</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">[bge-small]</td>
-      <td style="text-align: left">0.72</td>
-      <td style="text-align: left">0.33708</td>
-      <td style="text-align: left"> </td>
-      <td style="text-align: left"> </td>
-    </tr>
-    <tr>
-      <td style="text-align: left">[arctic-m]</td>
-      <td style="text-align: left">0.71586</td>
-      <td style="text-align: left">0.36201</td>
-      <td style="text-align: left"> </td>
-      <td style="text-align: left"> </td>
-    </tr>
-    <tr>
-      <td style="text-align: left">[Concat]</td>
-      <td style="text-align: left">0.73095</td>
-      <td style="text-align: left">0.37287</td>
-      <td style="text-align: left"> </td>
-      <td style="text-align: left"> </td>
-    </tr>
-  </tbody>
-</table>
 
 <details>
 
 
-## Auto-Encoder: 
+* Loss with MRL on `COMPRESSED_DIMENSIONS = [32, 64, 128, 256, 384, 512]`.  
 
-### With reconstruction loss:
+* Some numbers:
 
-
-
-
-### With MRL style loss:
-
-
-
-
-## Attention based:
-
-
-## TODO:
-
-* Understand transformer dimensions 
-* Throw a batch in it and see how it evolves.
-* Code the thing
-* to google ai studio: I have this bert model, I want to do surgery upon. and recover the outputs after layer 5. how can i do so?
-
-
-* Back to the model;
-* Back to AE, simple stuff.
-
-
-* Understand the data..
+| Epoch     | SciFact | NFCorpus   | Train / Val Loss   |  NFCor-384 |
+| :-------- | :------ | :-------   | :----------------  |  :-------  |
+| Epoch 001 | 0.x     | 0.34725	   | 0.000778  0.000317 |  0.        |
+| Epoch 003 | 0.x     | 0.3592     | 0.000258  0.000274 |  0.        |
+| Epoch 005 | 0.70568 | 0.36465    | 0.000225  0.000253 |  0.        |
+| Epoch 007 | 0.x     | 0.3639     | 0.000222  0.000250 |  0.        |
+| Epoch 009 | 0.x     | 0.36421    | 0.000219  0.000247 |  0.        |
+| Epoch 012 | 0.x     | 0.36438    | 0.000218  0.000246 |  0.        |
+| Epoch 015 | 0.70823 | **0.36441**| 0.000218  0.000247 |  0.36485   |
+|[bge-small]| 0.72	  | 0.33708    | 
+| [arctic-m]| 0.71586 | 0.36201    | 
+| [Concat]  | 0.73095 | 0.37287    | 
 
 
 
-<details>
+### Normalize the concatenated training data: e5-small-arctic-m:
 
-Try:
+**Baseline -- naive concat:**
 
-```
-class ImprovedSimilarityLoss(nn.Module):
-    def __init__(self, weight: float = 1.0, margin: float = 0.1, temperature: float = 0.05):
-        super().__init__()
-        self.weight = weight
-        self.margin = margin
-        self.temperature = temperature
+| Model     | NFCorpus | SciFact  | ArguAna | Dim |# Params |
+| :-------- | :------- | :------- | :-------| :-: |:-: 	  |
+| e5-small  | 0.31806  | 0.67965  | 0.46865 | 384 | 33M     |
+| arctic-m  | 0.36201  | 0.71586  | 0.51724 | 768 | 109M    |
+| concat    | 0.37044  | 0.51902  | 0.52922 | 1152| 142M    |
 
-    def forward(self, model_output: torch.Tensor, targets: torch.Tensor) -&gt; torch.Tensor:
-        # Compute similarities
-        sim_outputs = F.cosine_similarity(model_output.unsqueeze(1), 
-                                        model_output.unsqueeze(0), dim=-1) / self.temperature
-        sim_targets = F.cosine_similarity(targets.unsqueeze(1), 
-                                        targets.unsqueeze(0), dim=-1) / self.temperature
-        
-        # Create mask for positive and negative pairs
-        batch_size = sim_outputs.size(0)
-        mask = torch.eye(batch_size, device=sim_outputs.device)
-        
-        # Compute loss with margin
-        pos_loss = ((sim_outputs - sim_targets) ** 2) * mask
-        neg_loss = torch.relu(sim_outputs - self.margin) * (1 - mask)
-        
-        loss = (pos_loss.sum() + neg_loss.sum()) / (batch_size * (batch_size - 1))
-        return self.weight * loss
-```
-</details></details>
+**Normed, with `[256, 512, 784]`:**
+
+| Epoch     | NFCorpus | SciFact | ArguAna    | Train / Val Loss   | 
+| :-------- | :------- | :------ | :------    | :----------------  | 
+| Epoch 005 | 0.34412  | 0.52015 | 0.52427    | 0.000014  0.000015 | 
+| Epoch 020 | 0.34194  | 0.52226 | 0.5248     | 12/15			   | 
+
+**Normed, with `[64, 128, 256, 512, 784]`:**
+
+
+| Epoch     | NFCorpus | SciFact | ArguAna    | Train / Val Loss   |
+| :-------- | :------- | :------ | :------    | :----------------  |
+| Epoch 010 | 0.3279   | 0.45692 | 0.51755    | 12/15			   |
+| Epoch 015 | 0.33329  | 0.4868  | 0.52189    | 12/15			   |
+
+### Raw concatenation (no norm.) of training data: e5-small-arctic-m:
+
+**No-Norm, with `[256, 512, 784]`:**
+
+| Epoch     | NFCorpus | SciFact | ArguAna    | Train / Val Loss   |  NFCor-384 |
+| :-------- | :------- | :------ | :------    | :----------------  |  :-------  |
+| Epoch 005 | 0.34206  | 0.52015 | 0.52427    | 0.000014  0.000015 |  0.        |
+| Epoch 020 | 0.34194  | 0.52226 | 0.5248     | 12/15			   |  0.        |
+
+**No-Norm, with `[64, 128, 256, 512, 784]`:**
+
+| Epoch     | NFCorpus | SciFact | ArguAna    | Train / Val Loss   |  NFCor-384 |
+| :-------- | :------- | :------ | :------    | :----------------  |  :-------  |
+| Epoch 005 | 0.34412  | 0.52015 | 0.52427    | 0.000014  0.000015 |  0.        |
+| Epoch 020 | 0.34194  | 0.52226 | 0.5248     | 12/15			   |  0.        |
+
+</details>
 
       </div>
     </main><footer class="site-footer h-card">
