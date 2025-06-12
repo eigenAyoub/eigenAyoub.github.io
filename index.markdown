@@ -2,8 +2,6 @@
 layout: home
 ---
 
-
-
 $$\rightarrow$$ **Some CUDA/C++ learning notes:** 
 * [GPU architecture and warp scheduling.](/blogs/gpu-architecture/)
 * [Occupancy, Compute intensity, and Tiling.](/blogs/on-chip-memory/)
@@ -34,8 +32,7 @@ $$\rightarrow$$ **Math:**
 
 <ins>**Bio/Contact:**</ins>  <a name="bio">
 
-* I'm based in Passau, Germany (I'm also based).
+* I'm based in Passau, Germany.
 * I graduated with a software engineering master’s degree in 2019. 
 * I'm currently pursuing a [second Master's degree](https://www.uni-passau.de/en/msc-compmaths), and I'm a part-time research assistant [@UniPassau](https://www.fim.uni-passau.de/data-science/team). 
-* Yes, I like a lot of bullet points, and you?
 * **Gmail:** `ayoub.benayad.467`;  [LinkedIn](https://www.linkedin.com/in/benayad/); [Instagram](https://www.instagram.com/curl.ayoub/).
