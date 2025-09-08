@@ -1,3 +1,10 @@
+---
+layout: default
+title:
+permalink: /blogs/softmax/
+---
+
+
 - **Paper:** Scalable-Softmax Is Superior for Attention
 - **Link:** [https://arxiv.org/abs/2501.19399](https://arxiv.org/abs/2501.19399)
 - **Why read:** Was referenced in Lamma 4
