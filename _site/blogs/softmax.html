@@ -9,14 +9,14 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="10k" />
 <meta property="og:description" content="10k" />
-<link rel="canonical" href="http://localhost:4000/" />
-<meta property="og:url" content="http://localhost:4000/" />
+<link rel="canonical" href="http://localhost:4000/blogs/softmax.html" />
+<meta property="og:url" content="http://localhost:4000/blogs/softmax.html" />
 <meta property="og:site_name" content="Kaizen" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Kaizen" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","description":"10k","headline":"Kaizen","name":"Kaizen","url":"http://localhost:4000/"}</script>
+{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Kaizen","url":"http://localhost:4000/blogs/softmax.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kaizen" /></head>
 
@@ -38,56 +38,68 @@
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <div class="home"><p>\(\rightarrow\) <strong>Transformer series</strong></p>
+        <article class="post">
 
-<ul>
-  <li><a href="/blogs/softmax/">Scalable Softmax</a></li>
-  <li><a href="/blogs/fastinference">[Not Ready!] Some trends to speed up autoregressive inference of LLMs (unifinished).</a></li>
+  <header class="post-header">
+    <h1 class="post-title"></h1>
+  </header>
+
+  <div class="post-content">
+    <ul>
+  <li><strong>Paper:</strong> Scalable-Softmax Is Superior for Attention</li>
+  <li><strong>Link:</strong> <a href="https://arxiv.org/abs/2501.19399">https://arxiv.org/abs/2501.19399</a></li>
+  <li><strong>Why read:</strong> Was referenced in Lamma 4
+    <blockquote>
+      <p>Additionally, we employ inference time temperature scaling of attention to enhance length generalization</p>
+    </blockquote>
+  </li>
 </ul>
 
-<p>\(\rightarrow\) <strong>Some CUDA/C++ learning notes:</strong></p>
-<ul>
-  <li><a href="/blogs/gpu-architecture/">GPU architecture and warp scheduling.</a></li>
-  <li><a href="/blogs/on-chip-memory/">Occupancy, Compute intensity, and Tiling.</a></li>
-  <li><a href="/blogs/cuda-performance/">DRAM banks and why it matters for code optimization.</a></li>
-</ul>
-
-<p>\(\rightarrow\) <strong>Random C++:</strong></p>
-<ul>
-  <li><a href="/blogs/mnist-cpp/">Loading MNIST dataset in C++</a></li>
-</ul>
-
-<p>\(\rightarrow\) <strong>Technical</strong></p>
-<ul>
-  <li><a href="/blogs/linux">Handling checkpoints from terminal - some useful tricks.</a></li>
-  <li><a href="/blogs/container">Quick reset of my compute pod.</a></li>
-  <li><a href="/blogs/vim">Speed up your migration to VIM.</a></li>
-</ul>
-
-<p>\(\rightarrow\) <strong>Math:</strong></p>
-<ul>
-  <li><a href="/blogs/enter_the_matrix">Matrix Differential Calculus.</a></li>
-  <li><a href="/blogs/SGD">Convergence Rates of SGD in convex and non-convex cases.</a></li>
-</ul>
-
-<p><ins><strong>Some GitHub repos:</strong></ins></p>
+<h3 id="map">Map:</h3>
 
 <ul>
-  <li>Training ML models with CUDA/C++: \(\rightarrow\) <a href="https://github.com/eigenAyoub/cuda-linear-alg">Github link</a>.</li>
-  <li>GPT2 factorized with (multiple) Kronecker Factors: \(\rightarrow\) <a href="https://github.com/eigenAyoub/krony-PT">Github link</a>.</li>
-  <li>Backpropagation from scratch \(\rightarrow\) <a href="https://github.com/eigenAyoub/check-your-gradients">Github link</a>.</li>
-  <li>Randomized Algorithms \(\rightarrow\) <a href="https://github.com/eigenAyoub/randomised-algorithms">Github link</a>.</li>
-  <li>Reinforcement Learning \(\rightarrow\) <a href="https://github.com/eigenAyoub/reinforcement-learning">Github link</a>.</li>
+  <li><a href="#motivation">Motivation</a></li>
+  <li><a href="#details">Details</a></li>
+  <li><a href="#how">How</a></li>
 </ul>
 
-<p><ins><strong>Bio/Contact:</strong></ins>  <a name="bio"></a></p>
+<h3 id="motivation">Motivation:</h3>
 
 <ul>
-  <li>I’m based in Passau, Germany.</li>
-  <li>I graduated with a software engineering master’s degree in 2019, and  currently pursuing a <a href="https://www.uni-passau.de/en/msc-compmaths">second Master’s degree</a>.</li>
-  <li><strong>Gmail:</strong> <code class="language-plaintext highlighter-rouge">ayoub.benayad.467</code>;  <a href="https://www.linkedin.com/in/benayad/">LinkedIn</a>; <a href="https://www.instagram.com/curl.ayoub/">Instagram</a>.</li>
+  <li>Paper enhances softmax within attention blocks as a mean to improve context length generalization.</li>
+  <li>Solves the <code class="language-plaintext highlighter-rouge">Attention fading</code> problem: as the size of the input grows, softmax scores flatten, hence, poorly detects important tokens.</li>
 </ul>
-</div>
+
+<h3 id="details">Details:</h3>
+
+<p>For an input vector \(z\) of size \(n\), Softmax is defined as follows:</p>
+
+\[z_i \mapsto \frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}}\]
+
+<p>The proposed Scalable Softmax (SSMax):</p>
+
+\[z_i \mapsto \frac{n^{s z_i}}{\sum_{j=1}^{n} n^{s z_j}} = \frac{e^{(s \log n) z_i}}{\sum_{j=1}^{n} e^{(s \log n) z_j}},\]
+
+<p>with \(s\) being “the” scalar parameter (a learned one per head/layer).</p>
+
+<ul>
+  <li>In the new formulation of SSMax, the exponential depends on \(n\) as well, i.e., even if the input size grows, the nominator also follows.</li>
+</ul>
+
+<h3 id="how">How?</h3>
+
+<p>Experimentally set the softmax for all layers/heads for each input size \(n\) as:</p>
+
+\[z_i \mapsto \frac{e^{(sp_n+b)z_i}}{\sum_{j=1}^{n} e^{(sp_n+b)z_j}},\]
+
+<p>with \(s\), \(b\) being learnable parameters per layer/head, and \({p_n}\) learnable but shared between all layers/heads, and depending only on context size \(N\).</p>
+
+<p>Experimentally they noticed that \(p_n\) follows a logarithmic scale: \(p_n \approx a_n \log(n) + b_n\). They decided to drop the \(\{b_n\}_n\) and only learn the \(\{a_n\}_n\) per head/layer.</p>
+
+
+  </div>
+
+</article>
 
       </div>
     </main><footer class="site-footer h-card">

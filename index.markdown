@@ -2,6 +2,11 @@
 layout: home
 ---
 
+$$\rightarrow$$ **Transformer series** 
+
+* [Scalable Softmax](/blogs/softmax/)
+* [[Not Ready!] Some trends to speed up autoregressive inference of LLMs (unifinished).](/blogs/fastinference)
+
 $$\rightarrow$$ **Some CUDA/C++ learning notes:** 
 * [GPU architecture and warp scheduling.](/blogs/gpu-architecture/)
 * [Occupancy, Compute intensity, and Tiling.](/blogs/on-chip-memory/)
@@ -14,9 +19,6 @@ $$\rightarrow$$ **Technical**
 * [Handling checkpoints from terminal - some useful tricks.](/blogs/linux)
 * [Quick reset of my compute pod.](/blogs/container)
 * [Speed up your migration to VIM.](/blogs/vim)
-
-$$\rightarrow$$ **LLMs** 
-* [Some trends to speed up autoregressive inference of LLMs (unifinished).](/blogs/fastinference)
 
 $$\rightarrow$$ **Math:** 
 * [Matrix Differential Calculus.](/blogs/enter_the_matrix)
@@ -33,6 +35,5 @@ $$\rightarrow$$ **Math:**
 <ins>**Bio/Contact:**</ins>  <a name="bio">
 
 * I'm based in Passau, Germany.
-* I graduated with a software engineering master’s degree in 2019. 
-* I'm currently pursuing a [second Master's degree](https://www.uni-passau.de/en/msc-compmaths), and I'm a part-time research assistant [@UniPassau](https://www.fim.uni-passau.de/data-science/team). 
+* I graduated with a software engineering master’s degree in 2019, and  currently pursuing a [second Master's degree](https://www.uni-passau.de/en/msc-compmaths).
 * **Gmail:** `ayoub.benayad.467`;  [LinkedIn](https://www.linkedin.com/in/benayad/); [Instagram](https://www.instagram.com/curl.ayoub/).
