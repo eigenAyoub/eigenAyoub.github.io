@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Kaizen | 10k</title>
+<meta name="generator" content="Jekyll v3.9.5" />
+<meta property="og:title" content="Kaizen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="10k" />
+<meta property="og:description" content="10k" />
+<link rel="canonical" href="http://localhost:4000/blogs/rope/" />
+<meta property="og:url" content="http://localhost:4000/blogs/rope/" />
+<meta property="og:site_name" content="Kaizen" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Kaizen" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Kaizen","url":"http://localhost:4000/blogs/rope/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kaizen" /></head>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Kaizen</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <ul>
+  <li><strong>Paper:</strong> RoPE (RoFormer: Enhanced Transformer with Rotary Position Embedding)</li>
+  <li><strong>Link:</strong> <a href="https://arxiv.org/abs/2104.09864">https://arxiv.org/abs/2104.09864</a></li>
+</ul>
+
+<hr />
+<h3 id="setting">Setting:</h3>
+
+<p>Let \(\{\boldsymbol{x}_i\}_{i=1}^N\), denote the embedding vectors (of d-dim) without positional information. Usually, the self-attention first incorporates position information to each \(\boldsymbol{q}, \boldsymbol{k}\) and (optionally) \(\boldsymbol{v}\), before computing the attention weights. Most methods (<a href="https://arxiv.org/abs/2102.11090">review</a>) before RoPE <strong>add</strong> some* positional information to some** representation of the context.</p>
+
+<ul>
+  <li>(*) Absolute or relative; learned or fixed.</li>
+  <li>(**) Either the initial embedding vector, intermediate, or baked into the attention logits as a bias term.</li>
+</ul>
+
+<p>For instance, for \(t\in\{q,k,v\}\), a typical choice would be to add the positional encoding as follows:</p>
+
+\[f_{t}(\boldsymbol{x}_i, i) := \boldsymbol{W}_{t}(\boldsymbol{x}_i + \boldsymbol{p}_i)\]
+
+<p>or to encode a positional bias into the attention logits in an additive (the usual case) or multiplicative (less usual) way as shown in <a href="https://arxiv.org/pdf/2009.13658">this paper</a>:</p>
+
+\[e_{ij} = \frac{(x_i W^Q)(x_j W^K)^T a_{ij}}{\sqrt{d_k}}\]
+
+<p>Where \(a_{ij}\) is a learned scalar that encodes the relative position between \(i\) and \(j\).</p>
+
+<p>Note: While this method uses a multiplicative term in the logits, it separates content from position.</p>
+
+<p>RoPE couples content with position via rotations at <strong>multiple frequencies</strong> (see expansion per block below for details). In one line: RoPE rotates the <strong>queries</strong> and <strong>keys</strong> in 2D blocks so the plain dot product becomes a function of relative offset.</p>
+
+<hr />
+<h2 id="details">Details:</h2>
+
+<p><strong>For</strong> \(d=2\), RoPE does the following (\(\theta\) is a constant):</p>
+
+\[q_m=R(m\theta)\,W_q x_m,\quad k_n=R(n\theta)\,W_k x_n.\]
+
+<p>with</p>
+
+\[R(\phi)=\begin{pmatrix}\cos\phi&amp;-\sin\phi\\ \sin\phi&amp;\cos\phi\end{pmatrix},\quad  
+J=\begin{pmatrix}0&amp;-1\\[2pt]1&amp;0\end{pmatrix},\]
+
+<p>So the idea here is to rotate the key/query by an angle proportional to its position index. This implies incorporating the relative position in the dot product between the query and the key:</p>
+
+\[\begin{aligned}
+q_m^\top k_n
+&amp;= (W_q x_m)^\top R((n-m)\theta)\,(W_k x_n) \\[6pt]
+&amp;= x_m^\top W_q^\top\!\, R((n-m)\theta)\, W_k x_n.
+\end{aligned}\]
+
+<p>In the <strong>general</strong> case, let \(d\) be the head dim (must be even), the \(q\)’s (and resp. \(k\)’s) are rotated as follows:</p>
+
+\[q_m = \boldsymbol{R}_{\Theta,m}^d \boldsymbol{W}_q \boldsymbol{x}_m\]
+
+<p>where \(\boldsymbol{R}_{\Theta,m}^d\) is the rotary matrix with pre-defined \(\Theta = \{\theta_i = 10000^{-2(i-1)/d}, i \in [1:d/2]\}\):</p>
+
+\[\boldsymbol{R}_{\Theta,m}^d = \text{diag}(\boldsymbol{R}(m\theta_1), \boldsymbol{R}(m\theta_2), \dots, \boldsymbol{R}(m\theta_{d/2}))
+\quad \text{s.t.:} \quad
+\boldsymbol{R}(m\theta_i) = 
+\begin{pmatrix}
+\cos m\theta_i &amp; -\sin m\theta_i \\
+\sin m\theta_i &amp; \cos m\theta_i
+\end{pmatrix}\]
+
+<p>Applying RoPE to self-attention, we obtain:</p>
+
+\[\boldsymbol{q}_m^{\!\top}\boldsymbol{k}_n
+= \hat{\boldsymbol{q}}_m^{\!\top}\,\boldsymbol{R}_{\Theta,n-m}^d\,\hat{\boldsymbol{k}}_n,\]
+
+<p>with:</p>
+
+\[\hat{\boldsymbol{q}}_m := \boldsymbol{W}_q \boldsymbol{x}_m,\qquad
+\hat{\boldsymbol{k}}_n := \boldsymbol{W}_k \boldsymbol{x}_n.\]
+
+<hr />
+<h2 id="blockwise-expansion">Blockwise expansion:</h2>
+
+<p>Let the \(i\)-th 2D slices of \(\hat{\boldsymbol{q}}_m,\hat{\boldsymbol{k}}_n\) be:</p>
+
+\[\hat{\boldsymbol{q}}_m^{(i)}=\begin{pmatrix}q_{i,1}\\ q_{i,2}\end{pmatrix},\quad
+\hat{\boldsymbol{k}}_n^{(i)}=\begin{pmatrix}k_{i,1}\\ k_{i,2}\end{pmatrix},
+\qquad i=1,\dots,\tfrac{d}{2},\]
+
+<p>Since</p>
+
+\[\boldsymbol{R}(m\theta_i)^{\!\top}\boldsymbol{R}(n\theta_i)
+=\boldsymbol{R}((n-m)\theta_i)
+=\cos(\Delta\theta_i)\,\boldsymbol{I}_2+\sin(\Delta\theta_i)\,\boldsymbol{J},\]
+
+<p>we obtain</p>
+
+\[\hat{\boldsymbol{q}}_m^{\!\top}\boldsymbol{R}_{\Theta,\Delta}^d\hat{\boldsymbol{k}}_n
+=\sum_{i=1}^{d/2}\!\Big(
+\hat{\boldsymbol{q}}_m^{(i)}\!\cdot \hat{\boldsymbol{k}}_n^{(i)}
+\cos(\Delta\theta_i)
+\;+\;
+\hat{\boldsymbol{q}}_m^{(i)\top}\!\boldsymbol{J}\,\hat{\boldsymbol{k}}_n^{(i)}
+\sin(\Delta\theta_i)
+\Big).\]
+
+<p><strong>Non-separability:</strong> 
+The coefficients depend on \(q\)/\(k\) and on block index \(i\).
+In general it cannot factor as
+\(\big(\hat{\boldsymbol{q}}_m^{\!\top}\hat{\boldsymbol{k}}_n\big)\,a(i,j).\)</p>
+
+<hr />
+<h2 id="how-is-it-implemented">How is it implemented?</h2>
+
+<h4 id="hugging-face--llama">Hugging Face / Llama:</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">apply_rotary_pos_emb</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">position_ids</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">unsqueeze_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+    <span class="c1">#[...]
+</span>
+    <span class="n">cos</span> <span class="o">=</span> <span class="n">cos</span><span class="p">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">unsqueeze_dim</span><span class="p">)</span>
+    <span class="n">sin</span> <span class="o">=</span> <span class="n">sin</span><span class="p">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">unsqueeze_dim</span><span class="p">)</span>
+    <span class="n">q_embed</span> <span class="o">=</span> <span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="n">cos</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">rotate_half</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin</span><span class="p">)</span>
+    <span class="n">k_embed</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">cos</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">rotate_half</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">q_embed</span><span class="p">,</span> <span class="n">k_embed</span>
+</code></pre></div></div>
+
+<h4 id="mistral-7b">Mistral 7B</h4>
+
+<p>Obviously the French (math supremacy) will <strong>complexicate</strong> things!</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">apply_rotary_emb</span><span class="p">(</span>
+    <span class="n">xq</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">xk</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">freqs_cis</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">]:</span>
+    <span class="n">xq_</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">view_as_complex</span><span class="p">(</span><span class="n">xq</span><span class="p">.</span><span class="nb">float</span><span class="p">().</span><span class="n">reshape</span><span class="p">(</span><span class="o">*</span><span class="n">xq</span><span class="p">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">xk_</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">view_as_complex</span><span class="p">(</span><span class="n">xk</span><span class="p">.</span><span class="nb">float</span><span class="p">().</span><span class="n">reshape</span><span class="p">(</span><span class="o">*</span><span class="n">xk</span><span class="p">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">freqs_cis</span> <span class="o">=</span> <span class="n">freqs_cis</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">xq_out</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">view_as_real</span><span class="p">(</span><span class="n">xq_</span> <span class="o">*</span> <span class="n">freqs_cis</span><span class="p">).</span><span class="n">flatten</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">xk_out</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">view_as_real</span><span class="p">(</span><span class="n">xk_</span> <span class="o">*</span> <span class="n">freqs_cis</span><span class="p">).</span><span class="n">flatten</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">xq_out</span><span class="p">.</span><span class="n">type_as</span><span class="p">(</span><span class="n">xq</span><span class="p">),</span> <span class="n">xk_out</span><span class="p">.</span><span class="n">type_as</span><span class="p">(</span><span class="n">xk</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="todo">TODO:</h4>
+
+<ul>
+  <li>RoPE scaling in YaRN?</li>
+</ul>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+  <div class="wrapper">
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+              Kaizen
+          </li>
+        </ul>
+      </div>
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/eigenAyoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">eigenAyoub</span></a></li><li><a href="https://instagram.com/curl.ayoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#instagram"></use></svg> <span class="username">curl.ayoub</span></a></li><li><a href="https://www.linkedin.com/in/benayad"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">benayad</span></a></li><li><a href="https://www.twitter.com/benayad_"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">benayad_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>10k</p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+</body>
+
+</html>

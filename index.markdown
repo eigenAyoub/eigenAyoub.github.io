@@ -4,6 +4,7 @@ layout: home
 
 $$\rightarrow$$ **Transformer series** 
 
+* [RoPE: details, block expansion, and code](/blogs/rope/)
 * [Scalable Softmax](/blogs/softmax/)
 * [[Not Ready!] Some trends to speed up autoregressive inference of LLMs (unifinished).](/blogs/fastinference)
 
