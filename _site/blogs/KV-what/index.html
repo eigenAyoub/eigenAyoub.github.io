@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Kaizen | 10k</title>
+<meta name="generator" content="Jekyll v3.9.5" />
+<meta property="og:title" content="Kaizen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="10k" />
+<meta property="og:description" content="10k" />
+<link rel="canonical" href="http://localhost:4000/blogs/KV-what/" />
+<meta property="og:url" content="http://localhost:4000/blogs/KV-what/" />
+<meta property="og:site_name" content="Kaizen" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Kaizen" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Kaizen","url":"http://localhost:4000/blogs/KV-what/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kaizen" /></head>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Kaizen</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <p>This started with a question: <strong>why is it called a \(\text{KV}\) cache and not a \(\text{QKV}\) cache?</strong>  My (dumb) confusion came from mixing up <strong>training</strong> and <strong>inference</strong> modes.</p>
+
+<ul>
+  <li><strong>Training.</strong> We compute \(Q,K,V\) for <strong>all tokens</strong> (per head x layer) and use them accordingly per head to compute the attention matrices. The whole sequence is processed in a single forward pass, hence why, we don’t need to cache.</li>
+  <li><strong>Inference.</strong> We generate tokens autoregressively (optionally after a prefill of the prompt). At each decode step \(t\), there is an obvious opportunity to <strong>reuse past \(K,V\)</strong> from positions \(1..t\), as the new query will attend over them. But my skill issues screamed at me: <strong>don’t you also reuse \(Q\)?</strong></li>
+  <li>To make my point, I’ll assume we cache everything, and I’ll start from the final layer backwards, then discard every cache/intermediate state that we don’t need along the way.</li>
+</ul>
+
+<hr />
+
+<h2 id="notation">Notation</h2>
+
+<ul>
+  <li>Decoder-only Transformer with \(L\) layers, vocabulary size \(\lvert \mathcal V \rvert\).</li>
+  <li>\(d_{\text{model}}\): model dim, \(d_h\): head dim, and \(n_h\): number of heads per layer.</li>
+  <li><strong>Timeline:</strong> we’ve produced \(t\) tokens; and we’re about to generate token \(x_{t+1}\).</li>
+  <li>Per layer \(\ell\): queries \(Q^{(\ell)}\), keys \(K^{(\ell)}\), values \(V^{(\ell)}\).</li>
+</ul>
+
+<p>For the sake of the argument, assume we cached all three, per head x layer (to simplify notation, I will omit the head subscript from head specific matrices, unless if we’re zooming in per head):</p>
+
+<ul>
+  <li>\(Q^{(\ell)}_{1:t}\in\mathbb{R}^{t\times d_h}\), \(K^{(\ell)}_{1:t}\in\mathbb{R}^{t\times d_h}\), \(V^{(\ell)}_{1:t}\in\mathbb{R}^{t\times d_h}\)</li>
+</ul>
+
+<p>Note: It is safe to discard all other operations (attention projection, ffn), as they all operate token-wise. For MHA, we can solely focus on per head logic, as detailed below.</p>
+
+<hr />
+<h3 id="sampling-x_t1-from-hl_1tinmathbbrttimes-d_textmodel-">Sampling \(x_{t+1}\) from \(H^{(L)}_{1:t}\in\mathbb{R}^{t\times d_{\text{model}}}\) :</h3>
+
+<p>Assume we are at step \(t\) (we’re about to generate token \(x_{t+1}\)). Obviously we only need the last hidden representation here \(H^{(L)}\).</p>
+
+<p>To sample the next token, we only require the last row \(h_t^{(L)}\), and it’s usually done using unembedding \(W_U\in\mathbb{R}^{d_{\text{model}}\times \lvert\mathcal V\rvert}\) (most likely the same as the embedding matrix, with weight tying):</p>
+
+\[\text{logits}_{t+1} \;=\; h^{(L)}_t\, W_U \;\in\; \mathbb{R}^{1\times \lvert\mathcal V\rvert}, 
+\qquad
+x_{t+1}\ \sim\ \mathrm{softmax}(\text{logits}_{t+1}).\]
+
+<p>In training, we pick the negative log likelihood of the correct token (true next token) for all positions (the labels are exactly the input shifted left with one step). A few snippets from <a href="https://github.com/karpathy/nanoGPT/tree/master">nanoGPT</a>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">get_batch</span><span class="p">(</span><span class="n">split</span><span class="p">):</span>
+    <span class="c1"># [...]
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">stack</span><span class="p">([</span><span class="n">torch</span><span class="p">.</span><span class="n">from_numpy</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">block_size</span><span class="p">]).</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">int64</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ix</span><span class="p">])</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">stack</span><span class="p">([</span><span class="n">torch</span><span class="p">.</span><span class="n">from_numpy</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">block_size</span><span class="p">]).</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">int64</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ix</span><span class="p">])</span>
+    <span class="c1"># [...]
+</span>    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+</code></pre></div></div>
+
+<p>The forward pass of the model:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="c1"># [...]
+</span>        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">transformer</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="n">tok_emb</span> <span class="o">+</span> <span class="n">pos_emb</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">transformer</span><span class="p">.</span><span class="n">h</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">block</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">transformer</span><span class="p">.</span><span class="n">ln_f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c1"># if we are given some desired targets also calculate the loss
+</span>            <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">lm_head</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">F</span><span class="p">.</span><span class="n">cross_entropy</span><span class="p">(</span><span class="n">logits</span><span class="p">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">logits</span><span class="p">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)),</span> <span class="n">targets</span><span class="p">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">ignore_index</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># inference-time mini-optimization: only forward the lm_head on the very last position
+</span>            <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">lm_head</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">:])</span> <span class="c1"># note: using list [-1] to preserve the time dim
+</span>            <span class="n">loss</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="k">return</span> <span class="n">logits</span><span class="p">,</span> <span class="n">loss</span>
+</code></pre></div></div>
+
+<p>The <strong>conclusion</strong> here, is that to generate the next token, we only need to save the last row of the last hidden representation. Now we move backward, at each transformer layer, we know that we only need the last row of the output (of the layer), let’s see what do need from the layer itself to compute the last row.</p>
+
+<hr />
+<h2 id="at-layer-ell">At layer \(\ell\):</h2>
+
+<p>Let \(H^{(\ell)}_{1:t}\in\mathbb{R}^{t\times d_{\text{model}}}\) be
+the output of the <strong>layer \(\ell\)</strong>; we care <strong>only</strong> about the last row \(h^{(\ell)}_t\in\mathbb{R}^{1\times d_{\text{model}}}\). So let’s see what it depends on:</p>
+
+<h3 id="1-strip-position-wise-parts-they-dont-mix-tokens"><strong>1) Strip position-wise parts (they don’t mix tokens)</strong></h3>
+
+<p>The tail of layer \(\ell\) is position-wise (concat heads \(\to\) \(W_O^{(\ell)}\) \(\to\) residual/norm \(\to\) FFN). For the last row:</p>
+
+<p>\(h^{(\ell)}_t
+=\underbrace{\mathrm{FFN}^{(\ell)}\!\big(\mathrm{LN}(h^{(\ell-1)}_t + o^{(\ell)}_t)\big)}_{\text{position-wise}}
++\,(h^{(\ell-1)}_t + o^{(\ell)}_t),\)
+with
+\(o^{(\ell)}_t \;=\; \big[z^{(\ell,1)}_t \,\|\, \cdots \,\|\, z^{(\ell,n_h)}_t\big]\, W_O^{(\ell)}.\)</p>
+
+<p><strong>Takeaway:</strong> to get \(h^{(\ell)}_t\) we need \(h^{(\ell-1)}_t\) and the \(\{z^{(\ell,k)}_t\}_k\). Hence, only the last rows are needed of \(H^{(l-1)}\), and of each head \(Z^{(\ell,k)}\).</p>
+
+<h3 id="2-within-a-single-head"><strong>2) Within a single head:</strong></h3>
+
+<p>For a single head \(k\) of layer \(\ell\) (\(k\) to refer to a head is an ugly choice, but I’ve already referred to the activation per layer as \(h\)/\(H\), and I’m too lazy now to change everything), the last-row of its output is \(z^{(\ell,k)}_t\in\mathbb{R}^{1\times d_h}\), defined by:</p>
+
+\[z^{(\ell,k)}_t \;=\; \alpha^{(\ell,k)}_{t,1:t}\, V^{(\ell,k)}_{1:t} \;\in\; \mathbb{R}^{1\times d_h}.\]
+
+\[\alpha^{(\ell,k)}_{t,1:t} \;=\; \mathrm{softmax}\!\left(\frac{q^{(\ell,k)}_t \left(K^{(\ell,k)}_{1:t}\right)^\top}{\sqrt{d_h}}\right) \;\in\; \mathbb{R}^{1\times t}\]
+
+\[q^{(\ell,k)}_t \;=\; h^{(\ell-1)}_t\, W_Q^{(\ell,k)} \;\in\; \mathbb{R}^{1\times d_h}\]
+
+<p><strong>Conclusion:</strong></p>
+
+<ul>
+  <li>To form \(z^{(\ell,k)}_t\) you need <strong>all values up to \(t\)</strong>, \(V^{(\ell,k)}_{1:t}\).</li>
+  <li>To form \(\alpha^{(\ell,k)}_{t,1:t}\) you need that <strong>single</strong> \(q^{(\ell,k)}_t\) and <strong>all keys up to \(t\)</strong>, \(K^{(\ell,k)}_{1:t}\).</li>
+  <li>To form \(q^{(\ell,k)}_t\) you need <strong>only</strong> the <strong>last input row</strong> \(h^{(\ell-1)}_t\) and \(W_Q^{(\ell,k)}\).</li>
+</ul>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+  <div class="wrapper">
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+              Kaizen
+          </li>
+        </ul>
+      </div>
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/eigenAyoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">eigenAyoub</span></a></li><li><a href="https://instagram.com/curl.ayoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#instagram"></use></svg> <span class="username">curl.ayoub</span></a></li><li><a href="https://www.linkedin.com/in/benayad"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">benayad</span></a></li><li><a href="https://www.twitter.com/benayad_"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">benayad_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>10k</p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+</body>
+
+</html>
