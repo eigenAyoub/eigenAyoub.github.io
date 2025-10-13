@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Some scattered notes on asyncio. | Kaizen</title>
+<meta name="generator" content="Jekyll v3.9.5" />
+<meta property="og:title" content="Some scattered notes on asyncio." />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="10k" />
+<meta property="og:description" content="10k" />
+<link rel="canonical" href="http://localhost:4000/blogs/asyncio/" />
+<meta property="og:url" content="http://localhost:4000/blogs/asyncio/" />
+<meta property="og:site_name" content="Kaizen" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Some scattered notes on asyncio." />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"Some scattered notes on asyncio.","url":"http://localhost:4000/blogs/asyncio/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kaizen" /></head>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Kaizen</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blogs/asyncio/">Some scattered notes on asyncio.</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <h2 id="some-scattered-notes-on-asyncio">Some scattered notes on <code class="language-plaintext highlighter-rouge">asyncio</code>.</h2>
+
+<p>gpt, thanks for all the discussions, code snippets, and for polishing this.</p>
+
+<ul>
+  <li>Main references:
+    <ul>
+      <li><a href="https://docs.python.org/3/library/asyncio-task.html">https://docs.python.org/3/library/asyncio-task.html</a></li>
+      <li><a href="https://realpython.com/async-io-python/?utm_source=chatgpt.com">https://realpython.com/async-io-python/?utm_source=chatgpt.com</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="task-scheduling--awaiting">Task scheduling &amp; awaiting</h2>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">await coro()</code> <strong>pauses the current coroutine</strong> until <code class="language-plaintext highlighter-rouge">coro()</code> completes or raises.</li>
+  <li><code class="language-plaintext highlighter-rouge">task = asyncio.create_task(coro())</code> <strong>schedules</strong> <code class="language-plaintext highlighter-rouge">coro()</code> to run immediately (next loop tick).</li>
+  <li>You <em>should usually</em> <code class="language-plaintext highlighter-rouge">await task</code> to:
+    <ul>
+      <li>observe exceptions (avoid “Task exception was never retrieved”),</li>
+      <li>enforce ordering (join point),</li>
+      <li>coordinate shutdown (cancellation + cleanup).</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">work</span><span class="p">():</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">42</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">work</span><span class="p">())</span>  <span class="c1"># starts promptly
+</span>    <span class="c1"># ... do other work ...
+</span>    <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="n">t</span>                    <span class="c1"># join, get exceptions/result
+</span>    <span class="k">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h2 id="asyncioqueue-vs-queuequeue"><code class="language-plaintext highlighter-rouge">asyncio.Queue</code> vs <code class="language-plaintext highlighter-rouge">queue.Queue</code></h2>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">asyncio.Queue</code>: <code class="language-plaintext highlighter-rouge">await q.get()</code> suspends <strong>only the coroutine</strong> (thread keeps serving other tasks).</li>
+  <li><code class="language-plaintext highlighter-rouge">queue.Queue</code>: <code class="language-plaintext highlighter-rouge">q.get()</code> <strong>blocks the OS thread</strong> (unsuitable inside async code).</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># asyncio (non-blocking thread)
+</span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">consumer</span><span class="p">(</span><span class="n">q</span><span class="p">):</span> <span class="n">item</span> <span class="o">=</span> <span class="k">await</span> <span class="n">q</span><span class="p">.</span><span class="n">get</span><span class="p">()</span>
+
+<span class="c1"># threading (blocks thread)
+</span><span class="kn">import</span> <span class="nn">queue</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">queue</span><span class="p">.</span><span class="n">Queue</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">consumer_thread</span><span class="p">():</span> <span class="n">item</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">get</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h2 id="why-await-qputx">Why <code class="language-plaintext highlighter-rouge">await q.put(x)</code></h2>
+<ul>
+  <li>Natural <strong>backpressure</strong>: if the queue is full (bounded <code class="language-plaintext highlighter-rouge">maxsize</code>), the producer <strong>awaits</strong> until a consumer frees a slot, without blocking the thread.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">Queue</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">prod</span><span class="p">():</span>
+    <span class="k">await</span> <span class="n">q</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"P: waiting for space"</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">q</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>            <span class="c1"># waits here until a get() frees space
+</span>    <span class="k">print</span><span class="p">(</span><span class="s">"P: resumed"</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">cons</span><span class="p">():</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="n">q</span><span class="p">.</span><span class="n">get</span><span class="p">()</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">gather</span><span class="p">(</span><span class="n">prod</span><span class="p">(),</span> <span class="n">cons</span><span class="p">())</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h2 id="graceful-cancellation">Graceful cancellation:</h2>
+
+<p><strong>Rule:</strong> cancel, then <strong>await the task</strong> so its cleanup runs and the exception is observed.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">worker</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"worker: start"</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>          <span class="c1"># cancellation lands here
+</span>        <span class="k">print</span><span class="p">(</span><span class="s">"worker: done"</span><span class="p">)</span>            <span class="c1"># not reached if cancelled
+</span>    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"worker: cleanup"</span><span class="p">)</span>
+        <span class="k">raise</span>                            <span class="c1"># re-raise so caller sees cancellation
+</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">worker</span><span class="p">())</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>             <span class="c1"># let it start
+</span>    <span class="n">task</span><span class="p">.</span><span class="n">cancel</span><span class="p">()</span>                        <span class="c1"># request cancellation
+</span>    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">task</span>                       <span class="c1"># join -&gt; runs cleanup, then raises here
+</span>    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"main: saw cancellation"</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h3 id="cpu-loops-need-explicit-cancellation-points">CPU loops need explicit cancellation points</h3>
+<p>Cancellation is <strong>cooperative</strong>. Add <code class="language-plaintext highlighter-rouge">await asyncio.sleep(0)</code> (or another await) in long loops.</p>
+
+<ul>
+  <li>Cooperative here means that an asyncio task is not force-killed. The event loop <strong>requests</strong> cancellation and the coroutine <strong>must reach a cancellation point</strong> (an <code class="language-plaintext highlighter-rouge">await</code> that can suspend) to observe it.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">tight_loop_no_yield</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50_000_000</span><span class="p">):</span>
+        <span class="k">pass</span>  <span class="c1"># no await -&gt; cannot be cancelled until loop ends
+</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">tight_loop_with_yield</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50_000_000</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">1_000_000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># cancellation point
+</span></code></pre></div></div>
+
+<h2 id="cancellation-behaviors-compared">Cancellation behaviors compared</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="c1"># A) Catch + re-raise  -&gt; caller sees cancellation (recommended for custom cleanup)
+</span><span class="k">async</span> <span class="k">def</span> <span class="nf">w_reraise</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"cleanup A"</span><span class="p">)</span>
+        <span class="k">raise</span>                      <span class="c1"># keep cancellation visible
+</span>
+<span class="c1"># B) Catch + swallow   -&gt; caller thinks success (only if intentional)
+</span><span class="k">async</span> <span class="k">def</span> <span class="nf">w_swallow</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"cleanup B (swallowed)"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">"ok"</span>                <span class="c1"># hides cancellation
+</span>
+<span class="c1"># C) No except         -&gt; finally still runs; cancellation propagates
+</span><span class="k">async</span> <span class="k">def</span> <span class="nf">w_noexcept</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"cleanup C (finally)"</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">demo</span><span class="p">(</span><span class="n">worker</span><span class="p">):</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">worker</span><span class="p">())</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="n">task</span><span class="p">.</span><span class="n">cancel</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"awaiting task..."</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="k">await</span> <span class="n">task</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"result:"</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"caller: saw cancellation"</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">(</span><span class="n">w_reraise</span><span class="p">))</span>   <span class="c1"># raises -&gt; caller sees cancellation
+</span><span class="n">asyncio</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">(</span><span class="n">w_swallow</span><span class="p">))</span>   <span class="c1"># prints "result: ok" (cancellation hidden)
+</span><span class="n">asyncio</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">(</span><span class="n">w_noexcept</span><span class="p">))</span>  <span class="c1"># raises -&gt; caller sees cancellation
+</span></code></pre></div></div>
+
+<h2 id="asynciogather-ordering--failures"><code class="language-plaintext highlighter-rouge">asyncio.gather</code> (ordering &amp; failures)</h2>
+<ul>
+  <li>Starts all awaitables concurrently; <strong>results are returned in the same order as arguments</strong>.</li>
+  <li>On first exception it cancels the rest (default). Use <code class="language-plaintext highlighter-rouge">return_exceptions=True</code> to collect errors.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">slow</span><span class="p">(</span><span class="n">t</span><span class="p">):</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">t</span><span class="p">);</span> <span class="k">return</span> <span class="n">t</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">gather</span><span class="p">(</span><span class="n">slow</span><span class="p">(</span><span class="mf">0.2</span><span class="p">),</span> <span class="n">slow</span><span class="p">(</span><span class="mf">0.05</span><span class="p">),</span> <span class="n">slow</span><span class="p">(</span><span class="mf">0.1</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>  <span class="c1"># [0.2, 0.05, 0.1] — argument order
+</span><span class="n">asyncio</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>Refs to explore:</strong> sglang, vLLM, and Aleph Alpha repos use these patterns (queues, tasks, cancellation) in inference services.</p>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+  <div class="wrapper">
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+              Kaizen
+          </li>
+        </ul>
+      </div>
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/eigenAyoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">eigenAyoub</span></a></li><li><a href="https://instagram.com/curl.ayoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#instagram"></use></svg> <span class="username">curl.ayoub</span></a></li><li><a href="https://www.linkedin.com/in/benayad"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">benayad</span></a></li><li><a href="https://www.twitter.com/benayad_"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">benayad_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>10k</p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+</body>
+
+</html>
