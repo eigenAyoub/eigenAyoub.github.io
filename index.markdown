@@ -3,9 +3,11 @@ layout: home
 ---
 
 
+$$\rightarrow$$ **Inference series:** 
+
 * [Some notes on `asyncio`](/blogs/asyncio/)
 
-$$\rightarrow$$ **Transformer series** 
+$$\rightarrow$$ **Transformer series:** 
 
 * [Why is it called KV cache: and not QKV cache](/blogs/KV-what/)
 * [RoPE: details, block expansion, and code](/blogs/rope/)
@@ -17,10 +19,10 @@ $$\rightarrow$$ **Some CUDA/C++ learning notes:**
 * [Occupancy, Compute intensity, and Tiling.](/blogs/on-chip-memory/)
 * [DRAM banks and why it matters for code optimization.](/blogs/cuda-performance/)
 
-$$\rightarrow$$ **Random C++:** 
-* [Loading MNIST dataset in C++](/blogs/mnist-cpp/)
 
-$$\rightarrow$$ **Technical** 
+$$\rightarrow$$ **Technical:** 
+
+* [Loading MNIST dataset in C++](/blogs/mnist-cpp/)
 * [Handling checkpoints from terminal - some useful tricks.](/blogs/linux)
 * [Quick reset of my compute pod.](/blogs/container)
 * [Speed up your migration to VIM.](/blogs/vim)
@@ -39,6 +41,5 @@ $$\rightarrow$$ **Math:**
 
 <ins>**Bio/Contact:**</ins>  <a name="bio">
 
-* I'm based in Passau, Germany.
-* I graduated with a software engineering master’s degree in 2019, and  currently pursuing a [second Master's degree](https://www.uni-passau.de/en/msc-compmaths).
+I'm based in Passau, Germany. I graduated with a software engineering master’s degree in 2019, and  currently pursuing a [second Master's degree](https://www.uni-passau.de/en/msc-compmaths).
 * **Gmail:** `ayoub.benayad.467`;  [LinkedIn](https://www.linkedin.com/in/benayad/); [Instagram](https://www.instagram.com/curl.ayoub/).

@@ -6,7 +6,7 @@ permalink: /blogs/asyncio/
 
 
 
-## Some scattered notes on `asyncio`.
+**Some scattered notes on `asyncio`:**
 
 gpt, thanks for all the discussions, code snippets, and for polishing this.
 
