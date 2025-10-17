@@ -4,18 +4,36 @@ title:
 permalink: /blogs/asyncio/
 ---
 
-
-
 **Some scattered notes on `asyncio`:**
 
 gpt, thanks for all the discussions, code snippets, and for polishing this.
 
 * Main references: 
-	* [https://docs.python.org/3/library/asyncio-task.html](https://docs.python.org/3/library/asyncio-task.html)
-	* [https://realpython.com/async-io-python/?utm_source=chatgpt.com](https://realpython.com/async-io-python/?utm_source=chatgpt.com)
+  * [https://docs.python.org/3/library/asyncio-task.html](https://docs.python.org/3/library/asyncio-task.html)
+  * [https://realpython.com/async-io-python/](https://realpython.com/async-io-python/?utm_source=chatgpt.com)
+
+## Table of contents
+
+- [Task scheduling & awaiting](#task-scheduling-awaiting)
+- [`asyncio.Queue` vs `queue.Queue`](#asyncio-queue-vs-queue-queue)
+- [Why `await q.put(x)`](#why-await-q-put)
+- [Graceful cancellation](#graceful-cancellation)
+  - [CPU loops need explicit cancellation points](#cpu-cancellation-points)
+- [Cancellation behaviors compared](#cancellation-behaviors-compared)
+- [`asyncio.gather` (ordering & failures)](#asyncio-gather)
+- [`asyncio.TaskGroup`](#taskgroup)
 
 
-## Task scheduling & awaiting
+## Difference between `asyncio.wait()` and `asyncio.wait_for()`:
+
+`wait()` doesn't cancel the futures when a timeout occurs, `wait_for()` does.
+
+
+
+
+
+## Task scheduling & awaiting {#task-scheduling-awaiting}
+
 - `await coro()` **pauses the current coroutine** until `coro()` completes or raises.
 - `task = asyncio.create_task(coro())` **schedules** `coro()` to run immediately (next loop tick).
 - You *should usually* `await task` to:
@@ -39,7 +57,8 @@ async def main():
 asyncio.run(main())
 ```
 
-## `asyncio.Queue` vs `queue.Queue`
+## `asyncio.Queue` vs `queue.Queue` {#asyncio-queue-vs-queue-queue}
+
 - `asyncio.Queue`: `await q.get()` suspends **only the coroutine** (thread keeps serving other tasks).
 - `queue.Queue`: `q.get()` **blocks the OS thread** (unsuitable inside async code).
 
@@ -54,7 +73,8 @@ q = queue.Queue()
 def consumer_thread(): item = q.get()
 ```
 
-## Why `await q.put(x)`
+## Why `await q.put(x)` {#why-await-q-put}
+
 - Natural **backpressure**: if the queue is full (bounded `maxsize`), the producer **awaits** until a consumer frees a slot, without blocking the thread.
 
 ```python
@@ -77,7 +97,7 @@ async def main():
 asyncio.run(main())
 ```
 
-## Graceful cancellation:
+## Graceful cancellation: {#graceful-cancellation}
 
 **Rule:** cancel, then **await the task** so its cleanup runs and the exception is observed.
 
@@ -105,10 +125,11 @@ async def main():
 asyncio.run(main())
 ```
 
-### CPU loops need explicit cancellation points
+### CPU loops need explicit cancellation points {#cpu-cancellation-points}
+
 Cancellation is **cooperative**. Add `await asyncio.sleep(0)` (or another await) in long loops.
 
-* Cooperative here means that an asyncio task is not force-killed. The event loop **requests** cancellation and the coroutine **must reach a cancellation point** (an `await` that can suspend) to observe it.
+*Cooperative* here means an asyncio task is not force-killed. The event loop **requests** cancellation and the coroutine **must reach a cancellation point** (an `await` that can suspend) to observe it.
 
 ```python
 import asyncio
@@ -123,7 +144,7 @@ async def tight_loop_with_yield():
             await asyncio.sleep(0)  # cancellation point
 ```
 
-## Cancellation behaviors compared
+## Cancellation behaviors compared {#cancellation-behaviors-compared}
 
 ```python
 import asyncio
@@ -167,7 +188,8 @@ asyncio.run(demo(w_swallow))   # prints "result: ok" (cancellation hidden)
 asyncio.run(demo(w_noexcept))  # raises -> caller sees cancellation
 ```
 
-## `asyncio.gather` (ordering & failures)
+## `asyncio.gather` (ordering & failures) {#asyncio-gather}
+
 - Starts all awaitables concurrently; **results are returned in the same order as arguments**.
 - On first exception it cancels the rest (default). Use `return_exceptions=True` to collect errors.
 
@@ -177,6 +199,39 @@ async def slow(t): await asyncio.sleep(t); return t
 async def main():
     res = await asyncio.gather(slow(0.2), slow(0.05), slow(0.1))
     print(res)  # [0.2, 0.05, 0.1] — argument order
+asyncio.run(main())
+```
+
+
+## `asyncio.TaskGroup`: structured concurrency {#taskgroup}
+
+**Why:** own a group of tasks with a clear lifetime. On any failure, siblings are **cancelled**, **awaited** for cleanup, and an `ExceptionGroup` is raised. Hence, no need for manual cancel/join loops, and prevents orphaned tasks.
+
+**Use when:** supervising concurrent work you must finish/cancel **before** leaving a scope (e.g., multiple model backends, parallel pre/post-processing, multi-shard fetches).
+
+```python
+import asyncio
+
+async def step(i):
+    await asyncio.sleep(0.1 * i)
+    if i == 2:
+        raise RuntimeError("step 2 failed")
+    return i
+
+async def main():
+    results = [None] * 4
+    try:
+        async with asyncio.TaskGroup() as tg:
+            for i in range(4):
+                t = tg.create_task(step(i))
+                t.add_done_callback(lambda f, k=i: (
+                    None if f.cancelled() or f.exception() else results.__setitem__(k, f.result())
+                ))
+        # Reached only if all tasks completed successfully
+        print("all done:", results)
+    except* RuntimeError as eg:
+        print("TaskGroup caught:", eg)   # siblings already cancelled & cleaned
+
 asyncio.run(main())
 ```
 

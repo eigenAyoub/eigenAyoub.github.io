@@ -33,7 +33,7 @@
           </span>
         </label>
 
-        <div class="trigger"></div>
+        <div class="trigger"><a class="page-link" href="/blogs/blog-glossary-anki/">Anki</a></div>
       </nav></div>
 </header>
 <main class="page-content" aria-label="Content">
@@ -46,12 +46,33 @@
   <li>Main references:
     <ul>
       <li><a href="https://docs.python.org/3/library/asyncio-task.html">https://docs.python.org/3/library/asyncio-task.html</a></li>
-      <li><a href="https://realpython.com/async-io-python/?utm_source=chatgpt.com">https://realpython.com/async-io-python/?utm_source=chatgpt.com</a></li>
+      <li><a href="https://realpython.com/async-io-python/?utm_source=chatgpt.com">https://realpython.com/async-io-python/</a></li>
     </ul>
   </li>
 </ul>
 
-<h2 id="task-scheduling--awaiting">Task scheduling &amp; awaiting</h2>
+<h2 id="table-of-contents">Table of contents</h2>
+
+<ul>
+  <li><a href="#task-scheduling-awaiting">Task scheduling &amp; awaiting</a></li>
+  <li><a href="#asyncio-queue-vs-queue-queue"><code class="language-plaintext highlighter-rouge">asyncio.Queue</code> vs <code class="language-plaintext highlighter-rouge">queue.Queue</code></a></li>
+  <li><a href="#why-await-q-put">Why <code class="language-plaintext highlighter-rouge">await q.put(x)</code></a></li>
+  <li><a href="#graceful-cancellation">Graceful cancellation</a>
+    <ul>
+      <li><a href="#cpu-cancellation-points">CPU loops need explicit cancellation points</a></li>
+    </ul>
+  </li>
+  <li><a href="#cancellation-behaviors-compared">Cancellation behaviors compared</a></li>
+  <li><a href="#asyncio-gather"><code class="language-plaintext highlighter-rouge">asyncio.gather</code> (ordering &amp; failures)</a></li>
+  <li><a href="#taskgroup"><code class="language-plaintext highlighter-rouge">asyncio.TaskGroup</code></a></li>
+</ul>
+
+<h2 id="difference-between-asynciowait-and-asynciowait_for">Difference between <code class="language-plaintext highlighter-rouge">asyncio.wait()</code> and <code class="language-plaintext highlighter-rouge">asyncio.wait_for()</code>:</h2>
+
+<p><code class="language-plaintext highlighter-rouge">wait()</code> doesn’t cancel the futures when a timeout occurs, <code class="language-plaintext highlighter-rouge">wait_for()</code> does.</p>
+
+<h2 id="task-scheduling-awaiting">Task scheduling &amp; awaiting</h2>
+
 <ul>
   <li><code class="language-plaintext highlighter-rouge">await coro()</code> <strong>pauses the current coroutine</strong> until <code class="language-plaintext highlighter-rouge">coro()</code> completes or raises.</li>
   <li><code class="language-plaintext highlighter-rouge">task = asyncio.create_task(coro())</code> <strong>schedules</strong> <code class="language-plaintext highlighter-rouge">coro()</code> to run immediately (next loop tick).</li>
@@ -79,7 +100,8 @@
 <span class="n">asyncio</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </code></pre></div></div>
 
-<h2 id="asyncioqueue-vs-queuequeue"><code class="language-plaintext highlighter-rouge">asyncio.Queue</code> vs <code class="language-plaintext highlighter-rouge">queue.Queue</code></h2>
+<h2 id="asyncio-queue-vs-queue-queue"><code class="language-plaintext highlighter-rouge">asyncio.Queue</code> vs <code class="language-plaintext highlighter-rouge">queue.Queue</code></h2>
+
 <ul>
   <li><code class="language-plaintext highlighter-rouge">asyncio.Queue</code>: <code class="language-plaintext highlighter-rouge">await q.get()</code> suspends <strong>only the coroutine</strong> (thread keeps serving other tasks).</li>
   <li><code class="language-plaintext highlighter-rouge">queue.Queue</code>: <code class="language-plaintext highlighter-rouge">q.get()</code> <strong>blocks the OS thread</strong> (unsuitable inside async code).</li>
@@ -95,7 +117,8 @@
 <span class="k">def</span> <span class="nf">consumer_thread</span><span class="p">():</span> <span class="n">item</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">get</span><span class="p">()</span>
 </code></pre></div></div>
 
-<h2 id="why-await-qputx">Why <code class="language-plaintext highlighter-rouge">await q.put(x)</code></h2>
+<h2 id="why-await-q-put">Why <code class="language-plaintext highlighter-rouge">await q.put(x)</code></h2>
+
 <ul>
   <li>Natural <strong>backpressure</strong>: if the queue is full (bounded <code class="language-plaintext highlighter-rouge">maxsize</code>), the producer <strong>awaits</strong> until a consumer frees a slot, without blocking the thread.</li>
 </ul>
@@ -146,12 +169,11 @@
 <span class="n">asyncio</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </code></pre></div></div>
 
-<h3 id="cpu-loops-need-explicit-cancellation-points">CPU loops need explicit cancellation points</h3>
+<h3 id="cpu-cancellation-points">CPU loops need explicit cancellation points</h3>
+
 <p>Cancellation is <strong>cooperative</strong>. Add <code class="language-plaintext highlighter-rouge">await asyncio.sleep(0)</code> (or another await) in long loops.</p>
 
-<ul>
-  <li>Cooperative here means that an asyncio task is not force-killed. The event loop <strong>requests</strong> cancellation and the coroutine <strong>must reach a cancellation point</strong> (an <code class="language-plaintext highlighter-rouge">await</code> that can suspend) to observe it.</li>
-</ul>
+<p><em>Cooperative</em> here means an asyncio task is not force-killed. The event loop <strong>requests</strong> cancellation and the coroutine <strong>must reach a cancellation point</strong> (an <code class="language-plaintext highlighter-rouge">await</code> that can suspend) to observe it.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">asyncio</span>
 
@@ -208,7 +230,8 @@
 </span><span class="n">asyncio</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">(</span><span class="n">w_noexcept</span><span class="p">))</span>  <span class="c1"># raises -&gt; caller sees cancellation
 </span></code></pre></div></div>
 
-<h2 id="asynciogather-ordering--failures"><code class="language-plaintext highlighter-rouge">asyncio.gather</code> (ordering &amp; failures)</h2>
+<h2 id="asyncio-gather"><code class="language-plaintext highlighter-rouge">asyncio.gather</code> (ordering &amp; failures)</h2>
+
 <ul>
   <li>Starts all awaitables concurrently; <strong>results are returned in the same order as arguments</strong>.</li>
   <li>On first exception it cancels the rest (default). Use <code class="language-plaintext highlighter-rouge">return_exceptions=True</code> to collect errors.</li>
@@ -220,6 +243,37 @@
     <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">gather</span><span class="p">(</span><span class="n">slow</span><span class="p">(</span><span class="mf">0.2</span><span class="p">),</span> <span class="n">slow</span><span class="p">(</span><span class="mf">0.05</span><span class="p">),</span> <span class="n">slow</span><span class="p">(</span><span class="mf">0.1</span><span class="p">))</span>
     <span class="k">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>  <span class="c1"># [0.2, 0.05, 0.1] — argument order
 </span><span class="n">asyncio</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h2 id="taskgroup"><code class="language-plaintext highlighter-rouge">asyncio.TaskGroup</code>: structured concurrency</h2>
+
+<p><strong>Why:</strong> own a group of tasks with a clear lifetime. On any failure, siblings are <strong>cancelled</strong>, <strong>awaited</strong> for cleanup, and an <code class="language-plaintext highlighter-rouge">ExceptionGroup</code> is raised. Hence, no need for manual cancel/join loops, and prevents orphaned tasks.</p>
+
+<p><strong>Use when:</strong> supervising concurrent work you must finish/cancel <strong>before</strong> leaving a scope (e.g., multiple model backends, parallel pre/post-processing, multi-shard fetches).</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">i</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="nb">RuntimeError</span><span class="p">(</span><span class="s">"step 2 failed"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">i</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">TaskGroup</span><span class="p">()</span> <span class="k">as</span> <span class="n">tg</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">tg</span><span class="p">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">step</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+                <span class="n">t</span><span class="p">.</span><span class="n">add_done_callback</span><span class="p">(</span><span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">i</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="bp">None</span> <span class="k">if</span> <span class="n">f</span><span class="p">.</span><span class="n">cancelled</span><span class="p">()</span> <span class="ow">or</span> <span class="n">f</span><span class="p">.</span><span class="n">exception</span><span class="p">()</span> <span class="k">else</span> <span class="n">results</span><span class="p">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">f</span><span class="p">.</span><span class="n">result</span><span class="p">())</span>
+                <span class="p">))</span>
+        <span class="c1"># Reached only if all tasks completed successfully
+</span>        <span class="k">print</span><span class="p">(</span><span class="s">"all done:"</span><span class="p">,</span> <span class="n">results</span><span class="p">)</span>
+    <span class="k">except</span><span class="o">*</span> <span class="nb">RuntimeError</span> <span class="k">as</span> <span class="n">eg</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"TaskGroup caught:"</span><span class="p">,</span> <span class="n">eg</span><span class="p">)</span>   <span class="c1"># siblings already cancelled &amp; cleaned
+</span>
+<span class="n">asyncio</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </code></pre></div></div>
 
 <hr />
