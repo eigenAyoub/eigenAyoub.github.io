@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>mnf | Kaizen</title>
+<meta name="generator" content="Jekyll v3.9.5" />
+<meta property="og:title" content="mnf" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="10k" />
+<meta property="og:description" content="10k" />
+<link rel="canonical" href="http://localhost:4000/blogs/mnf/" />
+<meta property="og:url" content="http://localhost:4000/blogs/mnf/" />
+<meta property="og:site_name" content="Kaizen" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="mnf" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"10k","headline":"mnf","url":"http://localhost:4000/blogs/mnf/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kaizen" /></head>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Kaizen</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blogs/anki-v2/">anki-v2</a><a class="page-link" href="/blogs/blog-glossary-anki/">Anki</a><a class="page-link" href="/blogs/mnf/">mnf</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --w: 980px;
+      --blue: #2b64ff;
+      --border: #d0d7de;
+      --muted: #666;
+      --bg-soft: #f8f9fb;
+      --ok: #1a7f37;
+      --bad: #cf222e;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .wrap {
+      max-width: var(--w);
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .bar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin: 10px 0 16px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 0;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      cursor: pointer;
+      background: var(--blue);
+      color: #fff;
+    }
+
+    button.secondary {
+      background: #e9ecef;
+      color: #111;
+      border: 1px solid var(--border);
+    }
+
+    button.ghost {
+      background: #fff;
+      color: #111;
+      border: 1px solid var(--border);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .quiz-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .word {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.2;
+      word-break: break-word;
+    }
+
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .choices button {
+      width: 100%;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 12px 10px;
+    }
+
+    .result {
+      min-height: 1.25rem;
+      font-weight: 700;
+    }
+
+    .result.ok { color: var(--ok); }
+    .result.bad { color: var(--bad); }
+
+    .panel {
+      display: none;
+      border: 1px dashed #ced4da;
+      background: var(--bg-soft);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .panel.open { display: block; }
+
+    .story-tag {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .line-grid {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 8px 12px;
+    }
+
+    .line-grid div {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f3f4f6;
+    }
+
+    strong {
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="bar">
+      <button id="btn-next">Nächstes Wort</button>
+    </div>
+
+    <div id="quiz" class="quiz-card" aria-live="polite"></div>
+  </div>
+<script src="/blogs/assets/mnf.js"></script>
+<script>
+(function () {
+  var DB = window.ANKI_DB || {};
+  var current = null;
+  var ALL_WORDS = buildWordPool(DB);
+
+  function $(selector, root) {
+    return (root || document).querySelector(selector);
+  }
+
+  function randomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+
+  function buildWordPool(db) {
+    var out = [];
+    var packKeys = Object.keys(db);
+
+    for (var i = 0; i < packKeys.length; i++) {
+      var packKey = packKeys[i];
+      var pack = db[packKey];
+      if (!pack || !pack.words) continue;
+
+      for (var j = 0; j < pack.words.length; j++) {
+        var w = pack.words[j];
+        out.push({
+          packKey: packKey,
+          de: w.de,
+          en: w.en,
+          gender: w.gender,
+          storyId: w.storyId
+        });
+      }
+    }
+
+    return out;
+  }
+
+  function pickRandomEntry(previousKey) {
+    if (!ALL_WORDS.length) return null;
+    if (ALL_WORDS.length === 1) return ALL_WORDS[0];
+
+    var next = null;
+    var nextKey = null;
+
+    do {
+      next = ALL_WORDS[randomInt(ALL_WORDS.length)];
+      nextKey = next.packKey + '|' + next.de + '|' + next.storyId;
+    } while (previousKey && nextKey === previousKey);
+
+    return next;
+  }
+
+  function findStoryLine(packKey, id) {
+    var pack = DB[packKey];
+    if (!pack || !pack.story) return null;
+
+    for (var i = 0; i < pack.story.length; i++) {
+      if (pack.story[i].id === id) return pack.story[i];
+    }
+    return null;
+  }
+
+  function buildStoryTable(packKey) {
+    var pack = DB[packKey];
+    var table = document.createElement('table');
+
+    var thead = document.createElement('thead');
+    thead.innerHTML = '<tr><th>English</th><th>Deutsch</th></tr>';
+    table.appendChild(thead);
+
+    var tbody = document.createElement('tbody');
+
+    if (pack && pack.story) {
+      for (var i = 0; i < pack.story.length; i++) {
+        var tr = document.createElement('tr');
+
+        var tdEn = document.createElement('td');
+        var tdDe = document.createElement('td');
+
+        tdEn.innerHTML = pack.story[i].en;
+        tdDe.innerHTML = pack.story[i].de;
+
+        tr.appendChild(tdEn);
+        tr.appendChild(tdDe);
+        tbody.appendChild(tr);
+      }
+    }
+
+    table.appendChild(tbody);
+    return table;
+  }
+
+  function buildChoiceButton(label, value, onClick) {
+    var btn = document.createElement('button');
+    btn.className = 'ghost';
+    btn.textContent = label;
+    btn.setAttribute('data-value', value);
+    btn.addEventListener('click', onClick);
+    return btn;
+  }
+
+  function renderQuiz(entry) {
+    current = entry;
+    var quiz = $('#quiz');
+    quiz.innerHTML = '';
+
+    var line = findStoryLine(entry.packKey, entry.storyId);
+
+    var label = document.createElement('div');
+    label.className = 'label';
+    label.textContent = 'Artikel wählen';
+
+    var word = document.createElement('div');
+    word.className = 'word';
+    word.textContent = entry.de;
+
+    var choices = document.createElement('div');
+    choices.className = 'choices';
+
+    var result = document.createElement('div');
+    result.className = 'result';
+
+    var examplePanel = document.createElement('div');
+    examplePanel.className = 'panel';
+
+    var storyTag = document.createElement('div');
+    storyTag.className = 'story-tag';
+    storyTag.textContent = 'Geschichte >> ' + entry.packKey;
+
+    var lineGrid = document.createElement('div');
+    lineGrid.className = 'line-grid';
+
+    var enLabel = document.createElement('div');
+    enLabel.className = 'label';
+    enLabel.textContent = 'English';
+
+    var deLabel = document.createElement('div');
+    deLabel.className = 'label';
+    deLabel.textContent = 'Deutsch';
+
+    var enLine = document.createElement('div');
+    enLine.innerHTML = line ? line.en : '';
+
+    var deLine = document.createElement('div');
+    deLine.innerHTML = line ? line.de : '';
+
+    lineGrid.appendChild(enLabel);
+    lineGrid.appendChild(enLine);
+    lineGrid.appendChild(deLabel);
+    lineGrid.appendChild(deLine);
+
+    examplePanel.appendChild(storyTag);
+    examplePanel.appendChild(lineGrid);
+
+    var actions = document.createElement('div');
+    actions.className = 'actions';
+
+    var revealBtn = document.createElement('button');
+    revealBtn.className = 'secondary';
+    revealBtn.textContent = 'Ganze Geschichte zeigen';
+    revealBtn.style.display = 'none';
+
+    var storyPanel = document.createElement('div');
+    storyPanel.className = 'panel';
+
+    var storyBuilt = false;
+
+    function lockChoices() {
+      var btns = choices.querySelectorAll('button');
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].disabled = true;
+      }
+    }
+
+    function onPick(ev) {
+      var picked = ev.currentTarget.getAttribute('data-value');
+      var ok = picked === entry.gender;
+
+      lockChoices();
+
+      if (ok) {
+        result.className = 'result ok';
+        result.textContent = 'Richtig: ' + entry.gender;
+      } else {
+        result.className = 'result bad';
+        result.textContent = 'Falsch. Richtig: ' + entry.gender;
+      }
+
+      examplePanel.className = 'panel open';
+      revealBtn.style.display = 'inline-block';
+    }
+
+    choices.appendChild(buildChoiceButton('M', 'M', onPick));
+    choices.appendChild(buildChoiceButton('F', 'F', onPick));
+    choices.appendChild(buildChoiceButton('N', 'N', onPick));
+
+    revealBtn.addEventListener('click', function () {
+      var isOpen = storyPanel.className.indexOf('open') !== -1;
+
+      if (!storyBuilt) {
+        storyPanel.appendChild(buildStoryTable(entry.packKey));
+        storyBuilt = true;
+      }
+
+      if (isOpen) {
+        storyPanel.className = 'panel';
+        revealBtn.textContent = 'Ganze Geschichte zeigen';
+      } else {
+        storyPanel.className = 'panel open';
+        revealBtn.textContent = 'Ganze Geschichte ausblenden';
+      }
+    });
+
+    actions.appendChild(revealBtn);
+
+    quiz.appendChild(label);
+    quiz.appendChild(word);
+    quiz.appendChild(choices);
+    quiz.appendChild(result);
+    quiz.appendChild(examplePanel);
+    quiz.appendChild(actions);
+    quiz.appendChild(storyPanel);
+  }
+
+  function nextWord() {
+    var previousKey = current ? (current.packKey + '|' + current.de + '|' + current.storyId) : null;
+    var entry = pickRandomEntry(previousKey);
+    renderQuiz(entry);
+  }
+
+  if (!ALL_WORDS.length) {
+    $('#quiz').innerHTML = '<div class=\"result bad\">Fehler: Keine Daten gefunden.</div>';
+    return;
+  }
+
+  $('#btn-next').addEventListener('click', nextWord);
+  nextWord();
+})();
+</script>
+</body>
+</html>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+  <div class="wrapper">
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+              Kaizen
+          </li>
+        </ul>
+      </div>
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/eigenAyoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">eigenAyoub</span></a></li><li><a href="https://instagram.com/curl.ayoub"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#instagram"></use></svg> <span class="username">curl.ayoub</span></a></li><li><a href="https://www.linkedin.com/in/benayad"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">benayad</span></a></li><li><a href="https://www.twitter.com/benayad_"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">benayad_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>10k</p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+</body>
+
+</html>
