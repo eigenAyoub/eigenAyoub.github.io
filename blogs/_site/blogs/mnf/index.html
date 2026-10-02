@@ -1,0 +1,414 @@
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --w: 980px;
+      --blue: #2b64ff;
+      --border: #d0d7de;
+      --muted: #666;
+      --bg-soft: #f8f9fb;
+      --ok: #1a7f37;
+      --bad: #cf222e;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .wrap {
+      max-width: var(--w);
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .bar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin: 10px 0 16px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 0;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      cursor: pointer;
+      background: var(--blue);
+      color: #fff;
+    }
+
+    button.secondary {
+      background: #e9ecef;
+      color: #111;
+      border: 1px solid var(--border);
+    }
+
+    button.ghost {
+      background: #fff;
+      color: #111;
+      border: 1px solid var(--border);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .quiz-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .word {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.2;
+      word-break: break-word;
+    }
+
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .choices button {
+      width: 100%;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 12px 10px;
+    }
+
+    .result {
+      min-height: 1.25rem;
+      font-weight: 700;
+    }
+
+    .result.ok { color: var(--ok); }
+    .result.bad { color: var(--bad); }
+
+    .panel {
+      display: none;
+      border: 1px dashed #ced4da;
+      background: var(--bg-soft);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .panel.open { display: block; }
+
+    .story-tag {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .line-grid {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 8px 12px;
+    }
+
+    .line-grid div {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f3f4f6;
+    }
+
+    strong {
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="bar">
+      <button id="btn-next">Nächstes Wort</button>
+    </div>
+
+    <div id="quiz" class="quiz-card" aria-live="polite"></div>
+  </div>
+<script src="/blogs/assets/mnf.js"></script>
+<script>
+(function () {
+  var DB = window.ANKI_DB || {};
+  var current = null;
+  var ALL_WORDS = buildWordPool(DB);
+
+  function $(selector, root) {
+    return (root || document).querySelector(selector);
+  }
+
+  function randomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+
+  function buildWordPool(db) {
+    var out = [];
+    var packKeys = Object.keys(db);
+
+    for (var i = 0; i < packKeys.length; i++) {
+      var packKey = packKeys[i];
+      var pack = db[packKey];
+      if (!pack || !pack.words) continue;
+
+      for (var j = 0; j < pack.words.length; j++) {
+        var w = pack.words[j];
+        out.push({
+          packKey: packKey,
+          de: w.de,
+          en: w.en,
+          gender: w.gender,
+          storyId: w.storyId
+        });
+      }
+    }
+
+    return out;
+  }
+
+  function pickRandomEntry(previousKey) {
+    if (!ALL_WORDS.length) return null;
+    if (ALL_WORDS.length === 1) return ALL_WORDS[0];
+
+    var next = null;
+    var nextKey = null;
+
+    do {
+      next = ALL_WORDS[randomInt(ALL_WORDS.length)];
+      nextKey = next.packKey + '|' + next.de + '|' + next.storyId;
+    } while (previousKey && nextKey === previousKey);
+
+    return next;
+  }
+
+  function findStoryLine(packKey, id) {
+    var pack = DB[packKey];
+    if (!pack || !pack.story) return null;
+
+    for (var i = 0; i < pack.story.length; i++) {
+      if (pack.story[i].id === id) return pack.story[i];
+    }
+    return null;
+  }
+
+  function buildStoryTable(packKey) {
+    var pack = DB[packKey];
+    var table = document.createElement('table');
+
+    var thead = document.createElement('thead');
+    thead.innerHTML = '<tr><th>English</th><th>Deutsch</th></tr>';
+    table.appendChild(thead);
+
+    var tbody = document.createElement('tbody');
+
+    if (pack && pack.story) {
+      for (var i = 0; i < pack.story.length; i++) {
+        var tr = document.createElement('tr');
+
+        var tdEn = document.createElement('td');
+        var tdDe = document.createElement('td');
+
+        tdEn.innerHTML = pack.story[i].en;
+        tdDe.innerHTML = pack.story[i].de;
+
+        tr.appendChild(tdEn);
+        tr.appendChild(tdDe);
+        tbody.appendChild(tr);
+      }
+    }
+
+    table.appendChild(tbody);
+    return table;
+  }
+
+  function buildChoiceButton(label, value, onClick) {
+    var btn = document.createElement('button');
+    btn.className = 'ghost';
+    btn.textContent = label;
+    btn.setAttribute('data-value', value);
+    btn.addEventListener('click', onClick);
+    return btn;
+  }
+
+  function renderQuiz(entry) {
+    current = entry;
+    var quiz = $('#quiz');
+    quiz.innerHTML = '';
+
+    var line = findStoryLine(entry.packKey, entry.storyId);
+
+    var label = document.createElement('div');
+    label.className = 'label';
+    label.textContent = 'Artikel wählen';
+
+    var word = document.createElement('div');
+    word.className = 'word';
+    word.textContent = entry.de;
+
+    var choices = document.createElement('div');
+    choices.className = 'choices';
+
+    var result = document.createElement('div');
+    result.className = 'result';
+
+    var examplePanel = document.createElement('div');
+    examplePanel.className = 'panel';
+
+    var storyTag = document.createElement('div');
+    storyTag.className = 'story-tag';
+    storyTag.textContent = 'Geschichte >> ' + entry.packKey;
+
+    var lineGrid = document.createElement('div');
+    lineGrid.className = 'line-grid';
+
+    var enLabel = document.createElement('div');
+    enLabel.className = 'label';
+    enLabel.textContent = 'English';
+
+    var deLabel = document.createElement('div');
+    deLabel.className = 'label';
+    deLabel.textContent = 'Deutsch';
+
+    var enLine = document.createElement('div');
+    enLine.innerHTML = line ? line.en : '';
+
+    var deLine = document.createElement('div');
+    deLine.innerHTML = line ? line.de : '';
+
+    lineGrid.appendChild(enLabel);
+    lineGrid.appendChild(enLine);
+    lineGrid.appendChild(deLabel);
+    lineGrid.appendChild(deLine);
+
+    examplePanel.appendChild(storyTag);
+    examplePanel.appendChild(lineGrid);
+
+    var actions = document.createElement('div');
+    actions.className = 'actions';
+
+    var revealBtn = document.createElement('button');
+    revealBtn.className = 'secondary';
+    revealBtn.textContent = 'Ganze Geschichte zeigen';
+    revealBtn.style.display = 'none';
+
+    var storyPanel = document.createElement('div');
+    storyPanel.className = 'panel';
+
+    var storyBuilt = false;
+
+    function lockChoices() {
+      var btns = choices.querySelectorAll('button');
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].disabled = true;
+      }
+    }
+
+    function onPick(ev) {
+      var picked = ev.currentTarget.getAttribute('data-value');
+      var ok = picked === entry.gender;
+
+      lockChoices();
+
+      if (ok) {
+        result.className = 'result ok';
+        result.textContent = 'Richtig: ' + entry.gender;
+      } else {
+        result.className = 'result bad';
+        result.textContent = 'Falsch. Richtig: ' + entry.gender;
+      }
+
+      examplePanel.className = 'panel open';
+      revealBtn.style.display = 'inline-block';
+    }
+
+    choices.appendChild(buildChoiceButton('M', 'M', onPick));
+    choices.appendChild(buildChoiceButton('F', 'F', onPick));
+    choices.appendChild(buildChoiceButton('N', 'N', onPick));
+
+    revealBtn.addEventListener('click', function () {
+      var isOpen = storyPanel.className.indexOf('open') !== -1;
+
+      if (!storyBuilt) {
+        storyPanel.appendChild(buildStoryTable(entry.packKey));
+        storyBuilt = true;
+      }
+
+      if (isOpen) {
+        storyPanel.className = 'panel';
+        revealBtn.textContent = 'Ganze Geschichte zeigen';
+      } else {
+        storyPanel.className = 'panel open';
+        revealBtn.textContent = 'Ganze Geschichte ausblenden';
+      }
+    });
+
+    actions.appendChild(revealBtn);
+
+    quiz.appendChild(label);
+    quiz.appendChild(word);
+    quiz.appendChild(choices);
+    quiz.appendChild(result);
+    quiz.appendChild(examplePanel);
+    quiz.appendChild(actions);
+    quiz.appendChild(storyPanel);
+  }
+
+  function nextWord() {
+    var previousKey = current ? (current.packKey + '|' + current.de + '|' + current.storyId) : null;
+    var entry = pickRandomEntry(previousKey);
+    renderQuiz(entry);
+  }
+
+  if (!ALL_WORDS.length) {
+    $('#quiz').innerHTML = '<div class=\"result bad\">Fehler: Keine Daten gefunden.</div>';
+    return;
+  }
+
+  $('#btn-next').addEventListener('click', nextWord);
+  nextWord();
+})();
+</script>
+</body>
+</html>

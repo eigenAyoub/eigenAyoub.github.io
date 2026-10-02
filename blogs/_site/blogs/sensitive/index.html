@@ -1,0 +1,64 @@
+<p>Title: Floating point arithmetic, from Ariane flight V88 to LLMs training.</p>
+
+<h2 id="motivation">Motivation:</h2>
+
+<p>From, <a href="https://en.wikipedia.org/wiki/Ariane_flight_V88">Ariane flight V88</a>, To, LLMs training.</p>
+
+<h2 id="sources-of-error">Sources of error:</h2>
+
+<p>Generally speaking, there two main sources of error induced by numerical approximations (ignoring errors induced by modeling assumptions):</p>
+
+<ol>
+  <li>Rounding: Computers can only do finite precision arithmetic.</li>
+  <li>Discretization: We approximate continues phenomenons with discrete counterparts.</li>
+</ol>
+
+<p>While <code class="language-plaintext highlighter-rouge">Rounding</code> usually gets all the blame, errors stemming from discretization are as important if not even more.</p>
+
+<p><strong>Example:</strong> We want to approximate \(\quad f'(x) \quad\) using \(\quad f_{\text{diff}}(x; h) \equiv \frac{f(x+h) - f(x)}{h} \quad\) for some small \(h\).</p>
+
+<p>Assuming that \(f\) is nice enough (twice diff and \(f''\) is \(M\)-bounded) and using Taylor’s theorem with a remainder, there exists some \(\theta \in [x , x+h]\) :</p>
+
+\[f(x+h) = f(x) + hf'(x) + f''(\theta) \frac{h^2}{2}\]
+
+<p>Which yields the following <strong>discretization error</strong>:</p>
+
+\[f_{\text{diff}}(x; h) =   f'(x) + f''(\theta) \frac{h}{2}
+\implies \left| f'(x) - f_{\text{diff}}(x; h) \right| \leq \frac{Mh}{2}.\]
+
+<p>Additionally, we can introduce a <strong>rounding error</strong>. The numerator of \(f_{\text{diff}}\) can not be computed exactly. Say we approximate it with \(\tilde{f}_{\text{diff}}(x; h) = \frac{f(x+h) - f(x) + \epsilon f(x)}{h}\) with \(\epsilon \approx 10^{-16}\). We get the following upper bound:</p>
+
+\[\left| f'(x) - \tilde{f}_{\text{diff}}(x; h) \right|
+\leq
+\underbrace{\frac{Mh}{2}}_{\text{discretization err.}}
++ 
+\underbrace{\frac{\epsilon f(x)}{h}}_{\text{rounding err.}}\]
+
+<h2 id="numerical-sensitivity">Numerical sensitivity:</h2>
+
+<p>Say \(y = f(x)\), the idea is to measure how a small perturbation to the input \(x\) reflects on the output \(y\). Obviously, we want this rate of change to be small. For now, and w.l.o.g we define <strong>the condition number</strong> (of \(f\))as follows:</p>
+
+\[C = \frac{\left|\Delta y  / y \right|}{\left|\Delta x  / x \right|}\]
+
+<ul>
+  <li>Condition number » 1</li>
+</ul>
+
+<h2 id="finite-precision-arithmetic">Finite precision arithmetic:</h2>
+
+<p>Check the section from Matrix computation.</p>
+
+<h3 id="link-to-llms-and-host-providers">Link to LLMs and host providers.</h3>
+
+<ul>
+  <li>This is the interesting part</li>
+  <li>Link to LLMs training, and hosting companies..</li>
+  <li>Why training requires full precision, but hosting/inference is Ok?</li>
+</ul>
+
+<h2 id="references">References:</h2>
+
+<ul>
+  <li><a href="https://people.math.wisc.edu/~chr/am205/">Harvard Applied Math 205</a></li>
+  <li>Matrix Computation.</li>
+</ul>

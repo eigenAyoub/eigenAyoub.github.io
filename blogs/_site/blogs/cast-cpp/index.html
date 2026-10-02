@@ -1,0 +1,68 @@
+<p>Casting Operators: <code class="language-plaintext highlighter-rouge">static_cast</code> <code class="language-plaintext highlighter-rouge">reinterpret_cast</code>.</p>
+
+<p>Both these two operators deal with <code class="language-plaintext highlighter-rouge">void *</code> pointers.</p>
+
+<p>** <code class="language-plaintext highlighter-rouge">void*</code> - The Universal Pointer**</p>
+
+<p>A <code class="language-plaintext highlighter-rouge">void*</code> pointer can hold the address of any data type. However, you can’t directly dereference it because the compiler doesn’t know the underlying type it points to. To use the data, you must cast it back to the appropriate type.</p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">static_cast</code> - The Safe Bet (Usually)</strong></p>
+
+<p><code class="language-plaintext highlighter-rouge">static_cast</code> is generally considered the safer option when dealing with related types. It performs compile-time checks and ensures that the conversion is at least somewhat plausible.</p>
+
+<p><strong>When <code class="language-plaintext highlighter-rouge">static_cast</code> works with <code class="language-plaintext highlighter-rouge">void*</code>:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Casting to <code class="language-plaintext highlighter-rouge">void*</code>:</strong> You can safely cast any pointer type to <code class="language-plaintext highlighter-rouge">void*</code> using <code class="language-plaintext highlighter-rouge">static_cast</code>. This is an implicit conversion, so <code class="language-plaintext highlighter-rouge">static_cast</code> is not strictly required, but using it can make it clear what you are doing.</p>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kt">int</span><span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">int</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+ <span class="kt">void</span><span class="o">*</span> <span class="n">vptr</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span> <span class="c1">// Upcast to void*</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>Casting from <code class="language-plaintext highlighter-rouge">void*</code> back to the <em>original</em> type:</strong>  If you know the original type a <code class="language-plaintext highlighter-rouge">void*</code> was cast from, you can safely use <code class="language-plaintext highlighter-rouge">static_cast</code> to convert it back.</p>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kt">int</span><span class="o">*</span> <span class="n">originalPtr</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">vptr</span><span class="p">);</span> <span class="c1">// Downcast back to int*</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p><strong>When <code class="language-plaintext highlighter-rouge">static_cast</code> might fail:</strong></p>
+
+<p><code class="language-plaintext highlighter-rouge">static_cast</code> will not let you directly cast a <code class="language-plaintext highlighter-rouge">void*</code> to an unrelated pointer type. If you made a mistake and <code class="language-plaintext highlighter-rouge">vptr</code> doesn’t actually hold an <code class="language-plaintext highlighter-rouge">int*</code>, but <code class="language-plaintext highlighter-rouge">static_cast</code> it back to an <code class="language-plaintext highlighter-rouge">int*</code>, you will get undefined behavior.</p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">reinterpret_cast</code> - The Power (and Peril) of Reinterpretation</strong></p>
+
+<p><code class="language-plaintext highlighter-rouge">reinterpret_cast</code> is the most powerful and potentially dangerous casting operator. It essentially tells the compiler, “Treat this memory address as if it holds data of this other type,” without any real checks.</p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">reinterpret_cast</code> and <code class="language-plaintext highlighter-rouge">void*</code>:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Casting between <code class="language-plaintext highlighter-rouge">void*</code> and any pointer type:</strong> You can use <code class="language-plaintext highlighter-rouge">reinterpret_cast</code> to cast between <code class="language-plaintext highlighter-rouge">void*</code> and any other pointer type, even unrelated ones.</p>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kt">char</span><span class="o">*</span> <span class="n">charPtr</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">vptr</span><span class="p">);</span> <span class="c1">// Reinterpreting int* as char*</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p><strong>The Dangers of <code class="language-plaintext highlighter-rouge">reinterpret_cast</code>:</strong></p>
+
+<ul>
+  <li><strong>Undefined Behavior:</strong> If you <code class="language-plaintext highlighter-rouge">reinterpret_cast</code> a <code class="language-plaintext highlighter-rouge">void*</code> to an incorrect type, your program will likely exhibit undefined behavior, leading to crashes or unpredictable results. This is because <code class="language-plaintext highlighter-rouge">reinterpret_cast</code> does not check if the cast actually makes sense, it just forces it to happen.</li>
+  <li><strong>Portability Issues:</strong> <code class="language-plaintext highlighter-rouge">reinterpret_cast</code> can lead to code that is less portable, as the results might depend on the specific memory layout and architecture.</li>
+</ul>
+
+<p><strong>Key Takeaways:</strong></p>
+
+<ul>
+  <li>Prefer <code class="language-plaintext highlighter-rouge">static_cast</code> when casting to <code class="language-plaintext highlighter-rouge">void*</code> and back to the <em>original</em> type. It provides some level of safety.</li>
+  <li>Use <code class="language-plaintext highlighter-rouge">reinterpret_cast</code> with extreme caution when dealing with <code class="language-plaintext highlighter-rouge">void*</code>. Only use it when you are absolutely sure about the underlying type and the implications of reinterpreting the memory.</li>
+  <li>Always double-check your logic when using <code class="language-plaintext highlighter-rouge">reinterpret_cast</code>. One wrong move can lead to hard-to-debug issues.</li>
+</ul>
+
+<p><strong>In essence, <code class="language-plaintext highlighter-rouge">static_cast</code> is like a guided conversion, while <code class="language-plaintext highlighter-rouge">reinterpret_cast</code> is like a forceful override. Choose wisely!</strong></p>
+
+<p>An interesting point:</p>
+

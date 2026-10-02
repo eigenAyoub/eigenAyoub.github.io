@@ -1,0 +1,55 @@
+<p>Demystifying Random Numbers and Uniform Distribution in C++</p>
+
+<p>Random number generation is a cornerstone of many applications, from simulations and games to, importantly, machine learning. In this post, we’ll dive into how C++ handles random numbers and explore how to generate numbers following a uniform distribution.</p>
+
+<h3 id="the-foundation-random">The Foundation: <code class="language-plaintext highlighter-rouge">&lt;random&gt;</code></h3>
+
+<p>Before C++11, generating truly random numbers wasn’t straightforward. You’d often rely on <code class="language-plaintext highlighter-rouge">rand()</code> from <code class="language-plaintext highlighter-rouge">&lt;cstdlib&gt;</code>, which had limitations in terms of randomness quality and distribution control. C++11 revolutionized this with the <code class="language-plaintext highlighter-rouge">&lt;random&gt;</code> header.</p>
+
+<p><code class="language-plaintext highlighter-rouge">&lt;random&gt;</code> introduces two key concepts:</p>
+
+<ol>
+  <li>
+    <p><strong>Engines:</strong> These are the heart of random number generation. They produce sequences of pseudo-random numbers based on an internal state. C++ provides various engines like <code class="language-plaintext highlighter-rouge">std::mt19937</code> (Mersenne Twister, generally preferred for its good statistical properties) and <code class="language-plaintext highlighter-rouge">std::linear_congruential_engine</code> (faster but potentially lower quality).</p>
+  </li>
+  <li>
+    <p><strong>Distributions:</strong> Engines generate raw numbers. Distributions transform these raw numbers into numbers that follow a specific probability distribution (e.g., uniform, normal, Poisson).</p>
+  </li>
+</ol>
+
+<h3 id="generating-uniformly-distributed-random-numbers">Generating Uniformly Distributed Random Numbers</h3>
+
+<p>The uniform distribution is one of the simplest yet most fundamental distributions. It means every number within a given range has an equal probability of being generated. Here’s how to do it in C++:</p>
+
+<p>```c++
+#include <iostream>
+#include <random></random></iostream></p>
+
+<p>int main() {
+  // 1. Create a random number engine (Mersenne Twister in this case)
+  std::random_device rd;  // Obtain a seed from the operating system
+  std::mt19937 gen(rd()); // Seed the engine</p>
+
+<p>// 2. Define a uniform distribution
+  //    - For integers between 1 and 10 (inclusive):
+  std::uniform_int_distribution&lt;&gt; distrib_int(1, 10);
+  //    - For real numbers (doubles) between 0.0 and 1.0:
+  std::uniform_real_distribution&lt;&gt; distrib_real(0.0, 1.0);</p>
+
+<p>// 3. Generate and print some random numbers
+  std::cout « “Uniform integers: “;
+  for (int n = 0; n &lt; 5; ++n) {
+    std::cout « distrib_int(gen) « ” “;
+  }
+  std::cout « std::endl;</p>
+
+<p>std::cout « “Uniform real numbers: “;
+  for (int n = 0; n &lt; 5; ++n) {
+    std::cout « distrib_real(gen) « ” “;
+  }
+  std::cout « std::endl;</p>
+
+<p>return 0;
+}</p>
+
+<h2 id="bonus-xavier-and">Bonus: Xavier, and</h2>

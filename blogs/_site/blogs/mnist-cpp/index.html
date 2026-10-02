@@ -1,0 +1,128 @@
+<ul>
+  <li>A quick workaround to get started with <code class="language-plaintext highlighter-rouge">mnist</code> dataset in C++.</li>
+  <li>Next: Train a small MLP from scratch in CUDA/C++.</li>
+</ul>
+
+<h3 id="get-the-data"><strong>Get the data:</strong></h3>
+
+<p>Sadly you can’t download it from Yann Lecun’s website anymore, it is hosted by Hugging Face now.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget https://huggingface.co/datasets/ylecun/mnist/resolve/main/mnist/train-00000-of-00001.parquet
+wget https://huggingface.co/datasets/ylecun/mnist/resolve/main/mnist/test-00000-of-00001.parquet
+</code></pre></div></div>
+
+<h3 id="decoding-and-saving-the-images-with-python"><strong>Decoding and saving the images with Python:</strong></h3>
+
+<ul>
+  <li>Some requirements and a check-up of the files:</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>pandas pyarrow
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+
+<span class="c1"># Load the MNIST Parquet files
+</span><span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s">'path/to/train_mnist.parquet'</span><span class="p">)</span>
+<span class="n">test_df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s">'path/to/test_mnist.parquet'</span><span class="p">)</span>
+
+<span class="c1"># Save to CSV (simple text format)
+</span><span class="n">train_df</span><span class="p">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s">'train_mnist.csv'</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">test_df</span><span class="p">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s">'test_mnist.csv'</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Giving the <code class="language-plaintext highlighter-rouge">train_df.head()</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                                               image  label
+0  <span class="o">{</span><span class="s1">'bytes'</span>: b<span class="s1">'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHD...      5
+1  {'</span>bytes<span class="s1">': b'</span><span class="se">\x</span>89PNG<span class="se">\r\n\x</span>1a<span class="se">\n\x</span>00<span class="se">\x</span>00<span class="se">\x</span>00<span class="se">\r</span>IHD...      0
+2  <span class="o">{</span><span class="s1">'bytes'</span>: b<span class="s1">'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHD...      4
+3  {'</span>bytes<span class="s1">': b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHD...      1
+4  {'</span>bytes<span class="s1">': b'</span><span class="se">\x</span>89PNG<span class="se">\r\n\x</span>1a<span class="se">\n\x</span>00<span class="se">\x</span>00<span class="se">\x</span>00<span class="se">\r</span>IHD...      9
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">.parquet</code> files are contains the PNG images (encoded in bytes) with the associated labels. Some more magic, we’ll basically decode them in raw pixels, then store as bytes.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+<span class="c1"># Load the DataFrame
+</span><span class="n">train</span> <span class="o">=</span> <span class="s">"train-00000-of-00001.parquet"</span>
+<span class="n">test</span>  <span class="o">=</span> <span class="s">"test-00000-of-00001.parquet"</span>
+
+<span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="sa">f</span><span class="s">'../mlp/</span><span class="si">{</span><span class="n">train</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+<span class="n">test_df</span>  <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="sa">f</span><span class="s">'../mlp/</span><span class="si">{</span><span class="n">test</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">save_images_and_labels_to_binary</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">output_path</span><span class="p">):</span>
+    <span class="c1"># Open binary files for writing
+</span>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_path</span> <span class="o">+</span> <span class="s">'_images.bin'</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">img_file</span><span class="p">,</span> \
+         <span class="nb">open</span><span class="p">(</span><span class="n">output_path</span> <span class="o">+</span> <span class="s">'_labels.bin'</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">lbl_file</span><span class="p">:</span>
+        
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="p">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="c1"># Decode PNG bytes to an image
+</span>            <span class="n">image_data</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s">'image'</span><span class="p">][</span><span class="s">'bytes'</span><span class="p">]</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">image_data</span><span class="p">))</span>
+
+            <span class="c1"># Convert image to numpy array and normalize the pixel values
+</span>            <span class="n">image_array</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="p">.</span><span class="n">uint8</span><span class="p">)</span>  <span class="c1"># 28 x 28 (and not flattened)
+</span>            
+            <span class="c1"># Write the raw image data and the label to binary files
+</span>            <span class="n">img_file</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">image_array</span><span class="p">.</span><span class="n">tobytes</span><span class="p">())</span>
+            <span class="n">lbl_file</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="n">row</span><span class="p">[</span><span class="s">'label'</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="p">.</span><span class="n">uint8</span><span class="p">))</span>
+            <span class="k">break</span>
+            
+
+<span class="c1"># Save data to binary files
+</span><span class="n">save_images_and_labels_to_binary</span><span class="p">(</span><span class="n">train_df</span><span class="p">,</span> <span class="s">'train_mnist'</span><span class="p">)</span>
+<span class="n">save_images_and_labels_to_binary</span><span class="p">(</span><span class="n">test_df</span><span class="p">,</span> <span class="s">'test_mnist'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>By now you should have something like this in your working directory:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>coding <span class="nv">$ </span><span class="nb">ls</span> | <span class="nb">grep</span> <span class="s2">".bin$"</span>
+test_mnist_images.bin
+test_mnist_labels.bin
+train_mnist_images.bin
+train_mnist_labels.bin
+</code></pre></div></div>
+
+<h3 id="loading-in-c"><strong>Loading in C++:</strong></h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">std</span><span class="o">::</span><span class="n">ifstream</span> <span class="nf">X_train_file</span><span class="p">(</span><span class="s">"data/train_mnist_images.bin"</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">ifstream</span> <span class="nf">y_train_file</span><span class="p">(</span><span class="s">"data/train_mnist_labels.bin"</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">X_train_file</span> <span class="o">||</span> <span class="o">!</span><span class="n">y_train_file</span><span class="p">){</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Oupsie"</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+        <span class="c1">//return -1;</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span> <span class="n">X_train_buff</span><span class="p">(</span><span class="n">NUM_IMAGES</span><span class="o">*</span><span class="n">IMAGE_SIZE</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span> <span class="n">y_train_buff</span><span class="p">(</span><span class="n">NUM_IMAGES</span><span class="p">);</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">X_train</span><span class="p">(</span><span class="n">NUM_IMAGES</span><span class="o">*</span><span class="n">IMAGE_SIZE</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">y_train</span><span class="p">(</span><span class="n">NUM_IMAGES</span><span class="p">);</span>
+
+    <span class="c1">// ignore multiplying by `sizeof(uint8_t)` as it's = 1</span>
+    <span class="n">X_train_file</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">char</span> <span class="o">*&gt;</span><span class="p">(</span><span class="n">X_train_buff</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span> <span class="n">IMAGE_SIZE</span><span class="o">*</span><span class="n">NUM_IMAGES</span><span class="p">);</span>
+    <span class="n">y_train_file</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">char</span> <span class="o">*&gt;</span><span class="p">(</span><span class="n">y_train_buff</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span> <span class="n">NUM_IMAGES</span><span class="p">);</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">X_train_buff</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">X_train_buff</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">X_train</span><span class="p">.</span><span class="n">begin</span><span class="p">());</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">y_train_buff</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">y_train_buff</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">y_train</span><span class="p">.</span><span class="n">begin</span><span class="p">());</span>
+
+    <span class="kt">int</span> <span class="n">image_id</span> <span class="o">=</span> <span class="mi">27</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">y_train</span><span class="p">[</span><span class="mi">27</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">IMAGE_WIDTH</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">IMAGE_WIDTH</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
+            <span class="kt">int</span> <span class="n">pix</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[</span><span class="n">image_id</span><span class="o">*</span><span class="n">IMAGE_SIZE</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="n">IMAGE_WIDTH</span> <span class="o">+</span> <span class="n">j</span><span class="p">];</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="o">!</span><span class="n">pix</span> <span class="o">?</span> <span class="s">"#"</span> <span class="o">:</span> <span class="s">" "</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Now you get this cool illustration from your terminal:</p>
+
+<p><img src="/src/mnist-blog-cpp/mnist01.png" alt="mnist01" /></p>
+

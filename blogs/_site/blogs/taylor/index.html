@@ -1,0 +1,68 @@
+<p>Problem setting and terminology:</p>
+
+<p>We position ourselves in a classic supervised learning setting, and we are given:</p>
+
+<ul>
+  <li>A finite training set \({(x_i, t_i)}\) (drawn i.i.d from a \(p_{\text{data}}\)) .</li>
+  <li>A loss function</li>
+  <li>A class of parametric functions \({f_w(.)}\)</li>
+</ul>
+
+<p>And we do so by minimizing the empirical risk over the training set:</p>
+
+<p>\[</p>
+
+<p>\]</p>
+
+<p>Ideally though, we are interested in finding \(w\) that minimizes the true risk:
+\[
+R(w) = 
+\]</p>
+
+<h2 id="first-order-taylor-approximation">First order Taylor Approximation:</h2>
+
+<p>Generally speaking:</p>
+
+<p>In most cases in DL, \(f\) is real valued, hence \(J\) represents the gradient:</p>
+
+<p>\[</p>
+
+<p>\]</p>
+
+<h2 id="jax--mini">Jax – mini:</h2>
+
+<ol>
+  <li>The gradient:</li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> 
+</code></pre></div></div>
+
+<h2 id="good-questions">Good questions:</h2>
+
+<ol>
+  <li>
+    <p>Reverse mode autodiff, i.e., backprop (to compute gradients for instance in the case where f is a scalar function.</p>
+  </li>
+  <li>
+    <p>Forward mode autodiff:  compute the directional derivative</p>
+  </li>
+  <li>
+    <p>Computing with the Jacobian.</p>
+  </li>
+</ol>
+
+<ul>
+  <li>
+    <p>How can the directional derivative determine how the network would change if the weights are slightly perturbed?</p>
+  </li>
+  <li>
+    <p>How a model would change if we slightly perturb the training data?</p>
+  </li>
+  <li>
+    <p>Hessian and inverse Hessian, check that section on Bishop</p>
+  </li>
+</ul>
+
+<h2 id="the-networks-jacobian">The network’s Jacobian:</h2>
+

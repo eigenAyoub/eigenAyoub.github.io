@@ -1,0 +1,51 @@
+<ul>
+  <li><strong>Paper:</strong> Scalable-Softmax Is Superior for Attention</li>
+  <li><strong>Link:</strong> <a href="https://arxiv.org/abs/2501.19399">https://arxiv.org/abs/2501.19399</a></li>
+  <li><strong>Why read:</strong> Was referenced in Lamma 4
+    <blockquote>
+      <p>Additionally, we employ inference time temperature scaling of attention to enhance length generalization</p>
+    </blockquote>
+  </li>
+</ul>
+
+<h3 id="map">Map:</h3>
+
+<ul>
+  <li><a href="#motivation">Motivation</a></li>
+  <li><a href="#details">Details</a></li>
+  <li><a href="#how">How</a></li>
+</ul>
+
+<h3 id="motivation">Motivation:</h3>
+
+<ul>
+  <li>Paper enhances softmax within attention blocks as a mean to improve context length generalization.</li>
+  <li>Solves the <code class="language-plaintext highlighter-rouge">Attention fading</code> problem: as the size of the input grows, softmax scores flatten, hence, poorly detects important tokens.</li>
+</ul>
+
+<h3 id="details">Details:</h3>
+
+<p>For an input vector \(z\) of size \(n\), Softmax is defined as follows:</p>
+
+\[z_i \mapsto \frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}}\]
+
+<p>The proposed Scalable Softmax (SSMax):</p>
+
+\[z_i \mapsto \frac{n^{s z_i}}{\sum_{j=1}^{n} n^{s z_j}} = \frac{e^{(s \log n) z_i}}{\sum_{j=1}^{n} e^{(s \log n) z_j}},\]
+
+<p>with \(s\) being “the” scalar parameter (a learned one per head/layer).</p>
+
+<ul>
+  <li>In the new formulation of SSMax, the exponential depends on \(n\) as well, i.e., even if the input size grows, the nominator also follows.</li>
+</ul>
+
+<h3 id="how">How?</h3>
+
+<p>Experimentally set the softmax for all layers/heads for each input size \(n\) as:</p>
+
+\[z_i \mapsto \frac{e^{(sp_n+b)z_i}}{\sum_{j=1}^{n} e^{(sp_n+b)z_j}},\]
+
+<p>with \(s\), \(b\) being learnable parameters per layer/head, and \({p_n}\) learnable but shared between all layers/heads, and depending only on context size \(N\).</p>
+
+<p>Experimentally they noticed that \(p_n\) follows a logarithmic scale: \(p_n \approx a_n \log(n) + b_n\). They decided to drop the \(\{b_n\}_n\) and only learn the \(\{a_n\}_n\) per head/layer.</p>
+

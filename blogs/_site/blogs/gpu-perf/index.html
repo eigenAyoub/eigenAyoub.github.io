@@ -1,0 +1,56 @@
+<p>Performance considerations.</p>
+
+<p><strong>Content:</strong></p>
+<ul>
+  <li>*</li>
+</ul>
+
+<p>The main bottlenecks in GPU computing are CPU-GPU data transfer, and global memory (DRAM) access, for each thread, DRAM access is usually 500x clocks cycles, registers access takes 1 clock cycle.</p>
+
+<h2 id="memory-access">Memory access:</h2>
+
+<h3 id="latency-hiding-and-occupancy">Latency hiding and occupancy.</h3>
+
+<p>To hide latency, it is important to have enough warps in the SM Sub-Partition (SMSP). Occupancy is the ratio of active warps per max (can you even write english bro?).</p>
+
+<p>Add an example of the occupancy calculator.</p>
+<blockquote>
+  <p>use NSIGHT or .xls idgaf. Do it!</p>
+</blockquote>
+
+<h3 id="coalescing-memory-accesses">Coalescing memory accesses:</h3>
+
+<p>How tf does a DRAM work?
+<img src="/src/gpu-media/dram01.png" alt="dram-top-down" /></p>
+
+<ul>
+  <li><strong>Channels</strong> connect the CPU/GPU to the memory itself.</li>
+  <li>The memory itself is composed by DIMMs.</li>
+  <li>Inside each <strong>DIMM</strong>, we have <strong>ranks</strong> which are composed of <strong>chips</strong> which contains memory <strong>ebanks</strong>.</li>
+  <li>Banks are 2D-organized (rows/columns) memory cells.</li>
+</ul>
+
+<p>Closer threads need to access data in the same regions.</p>
+
+<h3 id="shared-memory-usage-avoid-conflict-related-to-bankingstrides">Shared memory usage, avoid conflict related to banking/strides:</h3>
+
+<h2 id="execution-simd-and-divergence">Execution, SIMD and divergence.</h2>
+
+<p>Title:  Memory coalescing and thread coarsening.</p>
+
+<h2 id="memory-coalescing">Memory coalescing:</h2>
+
+<p>DRAM cell:</p>
+
+<p>Capacitor stores a charge, and three-state transistor based IC allowing data to be read/written.A</p>
+
+<p>If the value stored is 1 » it will discharge.</p>
+
+<p>DRAM array:</p>
+
+<p>Multiple DRAM cells, connected to a column wire. At a point of time, you can only read one DRAM cell of the array.</p>
+
+<p>DRAM bank; is a 2D-array of DRAM cells // a stack of DRAM arrays, activated one row at a time, and red at the column.</p>
+
+<p>How many elements can you fit in one array of a single DRAM bank?</p>
+

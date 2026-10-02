@@ -1,0 +1,149 @@
+<p>Lot of cool things written with <code class="language-plaintext highlighter-rouge">asyncio</code>:</p>
+
+<ul>
+  <li>sglang</li>
+  <li>vllm?</li>
+  <li>check some of aleph alpha shit.</li>
+</ul>
+
+<h3 id="await-core--await-task">await core(),  await task</h3>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">await task</code> and <code class="language-plaintext highlighter-rouge">await coro()</code> both pause the current coroutine until the task finishes or raises.</p>
+  </li>
+  <li>
+    <p>When you create a task, you automatically schedule it to run.</p>
+    <ul>
+      <li>Technically you don’t to <code class="language-plaintext highlighter-rouge">await</code> it, but do it regardless to enforce order and catch exceptions.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="asyncioqueue-vs-queuequeue"><code class="language-plaintext highlighter-rouge">asyncio.Queue</code> vs <code class="language-plaintext highlighter-rouge">queue.Queue</code></h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">asyncio.Queue</code> is non-blocking for the thread;</li>
+  <li><code class="language-plaintext highlighter-rouge">await q.get()</code> suspends only the coroutine, and yields control to the loop.</li>
+  <li><code class="language-plaintext highlighter-rouge">queue.Queue.get()</code> blocks the thread.</li>
+</ul>
+
+<h3 id="await-qputx"><code class="language-plaintext highlighter-rouge">await q.put(x)</code>:</h3>
+
+<ul>
+  <li>Natural backpressure, if the queue is full, it just waits until space is free.</li>
+</ul>
+
+<h3 id="example">example:</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">Queue</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">prod</span><span class="p">():</span>
+    <span class="k">await</span> <span class="n">q</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"P: waiting for space"</span><span class="p">)</span>
+	<span class="k">await</span> <span class="n">q</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+	<span class="k">print</span><span class="p">(</span><span class="s">"P: resumed"</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">cons</span><span class="p">():</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+	<span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="n">q</span><span class="p">.</span><span class="n">get</span><span class="p">()</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+	<span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">gather</span><span class="p">(</span><span class="n">prod</span><span class="p">(),</span> <span class="n">cons</span><span class="p">())</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h3 id="graceful-cancellation">graceful cancellation</h3>
+
+<p>What’s the proper way of cancelling a task:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">tight_loop_no_yield</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50_000_000</span><span class="p">):</span>
+            <span class="k">pass</span>  <span class="c1"># no await -&gt; not cancellable until loop ends
+</span>        <span class="k">print</span><span class="p">(</span><span class="s">"finished without yielding"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"cleanup (never reached here)"</span><span class="p">)</span>
+        <span class="k">raise</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">tight_loop_with_yield</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50_000_000</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">1_000_000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># cancellation point
+</span>    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"cleanup (with yield)"</span><span class="p">)</span>
+        <span class="k">raise</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># Case 1: no yield -&gt; cancel request is delayed
+</span>    <span class="n">t1</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">tight_loop_no_yield</span><span class="p">())</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="n">t1</span><span class="p">.</span><span class="n">cancel</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">t1</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"caller saw cancellation (likely only if loop finished first)"</span><span class="p">)</span>
+
+    <span class="c1"># Case 2: yield -&gt; cancels quickly
+</span>    <span class="n">t2</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">tight_loop_with_yield</span><span class="p">())</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="n">t2</span><span class="p">.</span><span class="n">cancel</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">t2</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"caller saw cancellation promptly"</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h3 id="some-funsies-with-cancellation">some funsies with cancellation:</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="c1"># A) catch + RE-RAISE  -&gt; caller sees cancellation
+</span><span class="k">async</span> <span class="k">def</span> <span class="nf">w_reraise</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"cleanup A"</span><span class="p">)</span>
+        <span class="k">raise</span>  <span class="c1"># &lt;-- re-raise same CancelledError
+</span>
+<span class="c1"># B) catch + SWALLOW  -&gt; caller thinks success (BAD unless intentional)
+</span><span class="k">async</span> <span class="k">def</span> <span class="nf">w_swallow</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"cleanup B (swallowed)"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">"ok"</span>  <span class="c1"># &lt;-- cancellation hidden
+</span>
+<span class="c1"># C) NO except -&gt; finally still runs; cancellation propagates
+</span><span class="k">async</span> <span class="k">def</span> <span class="nf">w_noexcept</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"cleanup C (finally)"</span><span class="p">)</span>
+
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">demo</span><span class="p">(</span><span class="n">worker</span><span class="p">):</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">worker</span><span class="p">())</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="n">task</span><span class="p">.</span><span class="n">cancel</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"awaiting task..."</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="k">await</span> <span class="n">task</span>              <span class="c1"># joins; if cancelled properly, raises here
+</span>        <span class="k">print</span><span class="p">(</span><span class="s">"result:"</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"caller: saw cancellation"</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">(</span><span class="n">w_reraise</span><span class="p">))</span>  <span class="c1"># raises -&gt; caller sees cancellation
+</span><span class="n">asyncio</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">(</span><span class="n">w_swallow</span><span class="p">))</span>  <span class="c1"># prints "result: ok" (cancellation hidden)
+</span><span class="n">asyncio</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">(</span><span class="n">w_noexcept</span><span class="p">))</span> <span class="c1"># raises -&gt; caller sees cancellation
+</span></code></pre></div></div>
+

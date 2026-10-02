@@ -3,16 +3,18 @@ layout: home
 ---
 
 
-$$\rightarrow$$ **Inference series:** 
+$$\rightarrow$$ **Algorithmic stuff:** 
 
-* [Some notes on `asyncio`](/blogs/asyncio/)
+* [Boyer–Moore majority vote algorithm](/blogs/algo/boyer-moore).
 
-$$\rightarrow$$ **Transformer series:** 
+
+$$\rightarrow$$ **Transformer stuff:** 
 
 * [Why is it called KV cache: and not QKV cache](/blogs/KV-what/)
 * [RoPE: details, block expansion, and code](/blogs/rope/)
 * [Scalable Softmax](/blogs/softmax/)
 * [[Not Ready!] Some trends to speed up autoregressive inference of LLMs (unifinished).](/blogs/fastinference)
+* [Some notes on `asyncio`](/blogs/asyncio/)
 
 $$\rightarrow$$ **Some CUDA/C++ learning notes:** 
 * [GPU architecture and warp scheduling.](/blogs/gpu-architecture/)
@@ -38,8 +40,3 @@ $$\rightarrow$$ **Math:**
 * Backpropagation from scratch $$\rightarrow$$ [Github link](https://github.com/eigenAyoub/check-your-gradients).
 * Randomized Algorithms $$\rightarrow$$ [Github link](https://github.com/eigenAyoub/randomised-algorithms). 
 * Reinforcement Learning $$\rightarrow$$ [Github link](https://github.com/eigenAyoub/reinforcement-learning).
-
-<ins>**Bio/Contact:**</ins>  <a name="bio">
-
-I'm based in Passau, Germany. I graduated with a software engineering master’s degree in 2019, and  currently pursuing a [second Master's degree](https://www.uni-passau.de/en/msc-compmaths).
-* **Gmail:** `ayoub.benayad.467`;  [LinkedIn](https://www.linkedin.com/in/benayad/); [Instagram](https://www.instagram.com/curl.ayoub/).

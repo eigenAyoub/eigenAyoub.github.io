@@ -1,0 +1,263 @@
+<p><strong>Verified: all-4</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Model</th>
+      <th style="text-align: left">NFCorpus</th>
+      <th style="text-align: left">SciFact</th>
+      <th style="text-align: left">ArguAna</th>
+      <th style="text-align: center">Dim</th>
+      <th style="text-align: center"># Params</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">arctic-m</td>
+      <td style="text-align: left">0.36201</td>
+      <td style="text-align: left">0.71586</td>
+      <td style="text-align: left">0.5953</td>
+      <td style="text-align: center">768</td>
+      <td style="text-align: center">109M</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">concat-4</td>
+      <td style="text-align: left">0.37881</td>
+      <td style="text-align: left">0.74585</td>
+      <td style="text-align: left">0.62107</td>
+      <td style="text-align: center">1920</td>
+      <td style="text-align: center">208M</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Leader</td>
+      <td style="text-align: left">0.35762</td>
+      <td style="text-align: left">0.73472</td>
+      <td style="text-align: left">0.74956</td>
+      <td style="text-align: center">768</td>
+      <td style="text-align: center">150M</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Encoder-1024</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Epoch</th>
+      <th style="text-align: left">NFCorpus</th>
+      <th style="text-align: left">SciFact</th>
+      <th style="text-align: left">ArguAna</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">05</td>
+      <td style="text-align: left">0.37122</td>
+      <td style="text-align: left">0.72673</td>
+      <td style="text-align: left">0.60192</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">10</td>
+      <td style="text-align: left">0.37345</td>
+      <td style="text-align: left">0.72857</td>
+      <td style="text-align: left">0.60424</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">20</td>
+      <td style="text-align: left">0.37242</td>
+      <td style="text-align: left">0.7298</td>
+      <td style="text-align: left">0.60437</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>arctic-m</strong></td>
+      <td style="text-align: left">0.36201</td>
+      <td style="text-align: left">0.71586</td>
+      <td style="text-align: left">0.5953</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>concat-4</strong></td>
+      <td style="text-align: left">0.37881</td>
+      <td style="text-align: left">0.74585</td>
+      <td style="text-align: left">0.62107</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Encoder-1024, Truncated to 768 to match arctic-m:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Model</th>
+      <th style="text-align: left">NFCorpus</th>
+      <th style="text-align: left">SciFact</th>
+      <th style="text-align: left">ArguAna</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">ep-10</td>
+      <td style="text-align: left">0.36415</td>
+      <td style="text-align: left">0.73006</td>
+      <td style="text-align: left">0.60147</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ep-20</td>
+      <td style="text-align: left">0.36432</td>
+      <td style="text-align: left">0.73051</td>
+      <td style="text-align: left">0.60236</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>arctic-m</strong></td>
+      <td style="text-align: left">0.36201</td>
+      <td style="text-align: left">0.71586</td>
+      <td style="text-align: left">0.5953</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Models:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Model</th>
+      <th style="text-align: left">NFCorpus</th>
+      <th style="text-align: left">SciFact</th>
+      <th style="text-align: left">ArguAna</th>
+      <th style="text-align: center">Dim</th>
+      <th style="text-align: center"># Params</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">bge-small</td>
+      <td style="text-align: left">0.33708</td>
+      <td style="text-align: left">0.72</td>
+      <td style="text-align: left">0.59499</td>
+      <td style="text-align: center">384</td>
+      <td style="text-align: center">33M</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">gist</td>
+      <td style="text-align: left">0.34691</td>
+      <td style="text-align: left">0.70858</td>
+      <td style="text-align: left">0.5912</td>
+      <td style="text-align: center">384</td>
+      <td style="text-align: center">33M</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">e5-small</td>
+      <td style="text-align: left">0.31806</td>
+      <td style="text-align: left">0.67965</td>
+      <td style="text-align: left">0.46865</td>
+      <td style="text-align: center">384</td>
+      <td style="text-align: center">33M</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="baseline-encoder-1152--512">Baseline encoder: 1152 &gt; 512</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">EncoderConfig</span><span class="p">:</span>
+    <span class="n">DEFAULT</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'input_dim'</span><span class="p">:</span> <span class="mi">1152</span><span class="p">,</span>
+        <span class="s">'output_dim'</span><span class="p">:</span> <span class="mi">512</span><span class="p">,</span>
+        <span class="s">'dropout'</span><span class="p">:</span> <span class="mf">0.1</span>
+    <span class="p">}</span>
+<span class="k">class</span> <span class="nc">EncoderOnly</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="n">cfg</span> <span class="o">=</span> <span class="n">config</span> <span class="ow">or</span> <span class="n">EncoderConfig</span><span class="p">.</span><span class="n">DEFAULT</span>
+        
+        <span class="bp">self</span><span class="p">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="p">.</span><span class="n">LayerNorm</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s">'input_dim'</span><span class="p">]),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s">'input_dim'</span><span class="p">],</span> <span class="n">cfg</span><span class="p">[</span><span class="s">'output_dim'</span><span class="p">]),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="n">BatchNorm1d</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s">'output_dim'</span><span class="p">]),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+            
+            <span class="n">nn</span><span class="p">.</span><span class="n">LayerNorm</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s">'output_dim'</span><span class="p">]),</span>
+        <span class="p">)</span>
+        
+        <span class="bp">self</span><span class="p">.</span><span class="n">_initialize_weights</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">_initialize_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">modules</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">):</span>
+                <span class="n">nn</span><span class="p">.</span><span class="n">init</span><span class="p">.</span><span class="n">kaiming_normal_</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">'fan_in'</span><span class="p">,</span> <span class="n">nonlinearity</span><span class="o">=</span><span class="s">'leaky_relu'</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">nn</span><span class="p">.</span><span class="n">init</span><span class="p">.</span><span class="n">zeros_</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">bias</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">nn</span><span class="p">.</span><span class="n">BatchNorm1d</span><span class="p">):</span>
+                <span class="n">nn</span><span class="p">.</span><span class="n">init</span><span class="p">.</span><span class="n">constant_</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">weight</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">nn</span><span class="p">.</span><span class="n">init</span><span class="p">.</span><span class="n">constant_</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">bias</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">F</span><span class="p">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">out</span><span class="p">[:,:</span><span class="n">dim</span><span class="p">],</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<details>
+
+
+* Loss with MRL on `COMPRESSED_DIMENSIONS = [32, 64, 128, 256, 384, 512]`.  
+
+* Some numbers:
+
+| Epoch     | SciFact | NFCorpus   | Train / Val Loss   |  NFCor-384 |
+| :-------- | :------ | :-------   | :----------------  |  :-------  |
+| Epoch 001 | 0.x     | 0.34725	   | 0.000778  0.000317 |  0.        |
+| Epoch 003 | 0.x     | 0.3592     | 0.000258  0.000274 |  0.        |
+| Epoch 005 | 0.70568 | 0.36465    | 0.000225  0.000253 |  0.        |
+| Epoch 007 | 0.x     | 0.3639     | 0.000222  0.000250 |  0.        |
+| Epoch 009 | 0.x     | 0.36421    | 0.000219  0.000247 |  0.        |
+| Epoch 012 | 0.x     | 0.36438    | 0.000218  0.000246 |  0.        |
+| Epoch 015 | 0.70823 | **0.36441**| 0.000218  0.000247 |  0.36485   |
+|[bge-small]| 0.72	  | 0.33708    | 
+| [arctic-m]| 0.71586 | 0.36201    | 
+| [Concat]  | 0.73095 | 0.37287    | 
+
+
+
+### Normalize the concatenated training data: e5-small-arctic-m:
+
+**Baseline -- naive concat:**
+
+| Model     | NFCorpus | SciFact  | ArguAna | Dim |# Params |
+| :-------- | :------- | :------- | :-------| :-: |:-: 	  |
+| e5-small  | 0.31806  | 0.67965  | 0.46865 | 384 | 33M     |
+| arctic-m  | 0.36201  | 0.71586  | 0.51724 | 768 | 109M    |
+| concat    | 0.37044  | 0.51902  | 0.52922 | 1152| 142M    |
+
+**Normed, with `[256, 512, 784]`:**
+
+| Epoch     | NFCorpus | SciFact | ArguAna    | Train / Val Loss   | 
+| :-------- | :------- | :------ | :------    | :----------------  | 
+| Epoch 005 | 0.34412  | 0.52015 | 0.52427    | 0.000014  0.000015 | 
+| Epoch 020 | 0.34194  | 0.52226 | 0.5248     | 12/15			   | 
+
+**Normed, with `[64, 128, 256, 512, 784]`:**
+
+
+| Epoch     | NFCorpus | SciFact | ArguAna    | Train / Val Loss   |
+| :-------- | :------- | :------ | :------    | :----------------  |
+| Epoch 010 | 0.3279   | 0.45692 | 0.51755    | 12/15			   |
+| Epoch 015 | 0.33329  | 0.4868  | 0.52189    | 12/15			   |
+
+### Raw concatenation (no norm.) of training data: e5-small-arctic-m:
+
+**No-Norm, with `[256, 512, 784]`:**
+
+| Epoch     | NFCorpus | SciFact | ArguAna    | Train / Val Loss   |  NFCor-384 |
+| :-------- | :------- | :------ | :------    | :----------------  |  :-------  |
+| Epoch 005 | 0.34206  | 0.52015 | 0.52427    | 0.000014  0.000015 |  0.        |
+| Epoch 020 | 0.34194  | 0.52226 | 0.5248     | 12/15			   |  0.        |
+
+**No-Norm, with `[64, 128, 256, 512, 784]`:**
+
+| Epoch     | NFCorpus | SciFact | ArguAna    | Train / Val Loss   |  NFCor-384 |
+| :-------- | :------- | :------ | :------    | :----------------  |  :-------  |
+| Epoch 005 | 0.34412  | 0.52015 | 0.52427    | 0.000014  0.000015 |  0.        |
+| Epoch 020 | 0.34194  | 0.52226 | 0.5248     | 12/15			   |  0.        |
+
+</details>
